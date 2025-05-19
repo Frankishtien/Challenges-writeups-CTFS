@@ -479,3 +479,15 @@ ssh -i id_rsa root@10.10.180.156
 
 
 
+
+Booooooooom !!!!  i'm rooooot 
+
+
+https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExcThoa3AybXl5MXJ5ZWhnYnYyeGNlajBrcDZvZDVrYjY5MXl4NXBnNCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/MOWPkhRAUbR7i/giphy.gif
+
+
+
+
+
+
+
