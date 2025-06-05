@@ -224,6 +224,12 @@ after run linpeas found
 
 
 
+---
+---
+---
+check this writeup
+
+https://xhuntr3ss.gitbook.io/xhuntr3sss-hack-vault/usd-vault/vaultusd-walkthroughs/htb-titanic#exploit
 
 
 
