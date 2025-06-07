@@ -1,5 +1,6 @@
 # Crack the hash
 
+https://hashcat.net/wiki/doku.php?id=example_hashes
 
 <details>
   <summary>Level 1</summary>
@@ -133,9 +134,60 @@ paule
 ---
 ---
 
+``NTLM``
+
+```
+1DFECA0C002AE40B8619ECF94819CC1B
+```
+
+``output``
+
+```
+n63umy8lkf4i
+```
+
+> used ``https://crackstation.net/``
+
+
+-----
+-----
+
+
+``sha512crypt $6$, SHA512 (Unix) 2``
+
+> used to know type ``https://hashcat.net/wiki/doku.php?id=example_hashes``
+
+
+```
+$6$aReallyHardSalt$6WKUTqzq.UQQmrm0p/T7MPpMbGNnzXPMAXi4bJMl9be.cfi3/qxIf.hsGpS41BqMhSrHVXgMpdjS6xeKZAs02
+```
+
+![image](https://github.com/user-attachments/assets/351d4ec3-8320-47da-a7a5-ed54f95a3794)
+
+```
+waka99
+```
+
+
+----
+----
 
 
 
+``hmac-sha1``
+
+```
+e5d8870e5bdd26602cab8dbe07a942c8669e56d6
+```
+
+
+```
+481616481616
+```
+
+> ``hashcat -a 0 -m 160 hash.txt /usr/share/wordlists/rockyou.txt --force ``
+
+![image](https://github.com/user-attachments/assets/02f6567c-4e81-454c-82ff-a1a49a2f0ace)
 
   
 </details>
