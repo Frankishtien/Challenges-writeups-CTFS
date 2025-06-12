@@ -187,6 +187,109 @@ Nmap done: 1 IP address (1 host up) scanned in 244.47 seconds
 
 
 
+![image](https://github.com/user-attachments/assets/ed501f05-1c56-41fe-b5db-f6b132f01ea3)
+
+
+## ``gobuster``
+
+```
+gobuster dir -u http://10.10.195.194/ -w /home/kali/Downloads/wordlists/directory-list-2.3-medium.txt
+```
+
+```
+===============================================================
+Gobuster v3.6
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://10.10.195.194/
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /home/kali/Downloads/wordlists/directory-list-2.3-medium.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.6
+[+] Timeout:                 10s
+===============================================================
+Starting gobuster in directory enumeration mode
+===============================================================
+/images               (Status: 301) [Size: 236] [--> http://10.10.195.194/images/]
+/blog                 (Status: 301) [Size: 234] [--> http://10.10.195.194/blog/]
+/rss                  (Status: 301) [Size: 0] [--> http://10.10.195.194/feed/]
+/sitemap              (Status: 200) [Size: 0]
+/login                (Status: 302) [Size: 0] [--> http://10.10.195.194/wp-login.php]
+/0                    (Status: 301) [Size: 0] [--> http://10.10.195.194/0/]
+/feed                 (Status: 301) [Size: 0] [--> http://10.10.195.194/feed/]
+/video                (Status: 301) [Size: 235] [--> http://10.10.195.194/video/]
+/image                (Status: 301) [Size: 0] [--> http://10.10.195.194/image/]
+/atom                 (Status: 301) [Size: 0] [--> http://10.10.195.194/feed/atom/]
+/wp-content           (Status: 301) [Size: 240] [--> http://10.10.195.194/wp-content/]
+/admin                (Status: 301) [Size: 235] [--> http://10.10.195.194/admin/]
+/audio                (Status: 301) [Size: 235] [--> http://10.10.195.194/audio/]
+/intro                (Status: 200) [Size: 516314]
+/wp-login             (Status: 200) [Size: 2613]
+/css                  (Status: 301) [Size: 233] [--> http://10.10.195.194/css/]
+/rss2                 (Status: 301) [Size: 0] [--> http://10.10.195.194/feed/]
+/license              (Status: 200) [Size: 309]
+/wp-includes          (Status: 301) [Size: 241] [--> http://10.10.195.194/wp-includes/]
+/js                   (Status: 301) [Size: 232] [--> http://10.10.195.194/js/]
+/Image                (Status: 301) [Size: 0] [--> http://10.10.195.194/Image/]
+/rdf                  (Status: 301) [Size: 0] [--> http://10.10.195.194/feed/rdf/]
+/page1                (Status: 301) [Size: 0] [--> http://10.10.195.194/]
+/readme               (Status: 200) [Size: 64]
+/robots               (Status: 200) [Size: 41]
+/dashboard            (Status: 302) [Size: 0] [--> http://10.10.195.194/wp-admin/]
+/%20                  (Status: 301) [Size: 0] [--> http://10.10.195.194/]
+Progress: 5014 / 220561 (2.27%)[ERROR] Get "http://10.10.195.194/kudos": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+Progress: 5629 / 220561 (2.55%)^C
+[!] Keyboard interrupt detected, terminating.
+Progress: 5634 / 220561 (2.55%)
+===============================================================
+Finished
+===============================================================
+```
+
+```
+https://10.10.195.194/robots
+```
+
+```
+User-agent: *
+fsocity.dic
+key-1-of-3.txt
+```
+
+
+---
+
+```
+https://10.10.195.194/key-1-of-3.txt
+```
+
+```
+073403c8a58a1f80d943455fb30724b9
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ```
 Elliot
