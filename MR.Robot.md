@@ -268,33 +268,36 @@ https://10.10.195.194/key-1-of-3.txt
 073403c8a58a1f80d943455fb30724b9
 ```
 
+---
+
+```
+https://10.10.195.194/fsocity.dic
+```
+
+![image](https://github.com/user-attachments/assets/b3ab514a-49a8-4a0d-afa5-ab57c635d085)
 
 
 
+i notice that if i enter wrong usernanme page say ``invalid suername`` but when doing brute force if username valid it say ``The password you entered for the username``
 
 
+![image](https://github.com/user-attachments/assets/262b08ef-57fb-427e-a15a-4cdc7285a6c4)
+
+![image](https://github.com/user-attachments/assets/55773854-ef9e-4c9a-a118-35a0c595964e)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+so username is: 
 
 ```
 Elliot
 ```
 
+now do the same brute force but on passowrd
+
+
+![image](https://github.com/user-attachments/assets/ebb70d54-f68f-4867-8b56-2712a643e06b)
+
+so the password is:
 
 ```
 ER28-0652
