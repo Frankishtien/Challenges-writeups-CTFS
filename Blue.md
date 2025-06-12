@@ -1,5 +1,5 @@
 
-# TryHackMe Blue Walkthrough (MS17-010 Exploitation)   (not ready) ❌
+# TryHackMe Blue Walkthrough (MS17-010 Exploitation)   
 
 [TOC]
 
@@ -371,7 +371,8 @@ session
 search -f flag*.txt
 
 
-![Screenshot 2025-04-12 213737](https://hackmd.io/_uploads/BJaEbBd01g.png)
+![image](https://github.com/user-attachments/assets/66f739bb-29ed-4c66-9cae-e7628ab4180d)
+
 
 
 
