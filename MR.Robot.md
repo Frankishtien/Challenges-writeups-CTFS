@@ -1,4 +1,4 @@
-# Mr.Robot (not-completed) ⚠️
+# Mr.Robot 
 
 
 ## nmap scan
