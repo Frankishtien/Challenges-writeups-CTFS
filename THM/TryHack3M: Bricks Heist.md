@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/c5587086-cad7-4cce-9db5-00a49b8c98b7)# TryHack3M: Bricks Heist
+# TryHack3M: Bricks Heist
 
 * ## Nmap scan
 
