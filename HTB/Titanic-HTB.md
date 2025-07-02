@@ -264,6 +264,7 @@ find /opt/app/static/assets/images/ -type f -name "*.jpg" | xargs /usr/bin/magic
 
 > #### This means that any ``.jpg`` file in this directory will be automatically processed by ``identify`` when the script runs. Given this behavior, I decided to investigate whether ``ImageMagick`` had any known vulnerabilities.
 
+[CVE-2024-41817](https://github.com/ImageMagick/ImageMagick/security/advisories/GHSA-8rxc-922v-phg8)
 
 on ``/opt/app/static/assets/images`` do :
 
@@ -430,7 +431,7 @@ run it :
 ---
 check this writeup
 
-https://xhuntr3ss.gitbook.io/xhuntr3sss-hack-vault/usd-vault/vaultusd-walkthroughs/htb-titanic#exploit
+
 
 
 
