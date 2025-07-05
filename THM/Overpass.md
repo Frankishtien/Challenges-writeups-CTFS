@@ -94,7 +94,7 @@ so i will create new cookie :
 ![image](https://github.com/user-attachments/assets/4354e8f3-e37c-412f-8e15-fa4002a0d204)
 
 
-**``SessionToken:anything``**
+### **``SessionToken:anything``**
 
 and refresh page:
 
