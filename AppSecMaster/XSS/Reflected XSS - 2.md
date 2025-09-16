@@ -383,6 +383,7 @@ bob : NewPass123
 ### 🔹 In short:
 
 > XSS + CSRF = Full Account Takeover.
+> 
 > XSS allows you to bypass CSRF restrictions and act as if you were the victim yourself.
 
 
