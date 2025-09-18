@@ -6,7 +6,7 @@
 
 
 ```
-hashcat -a 0 -m 16500 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c /usr/share/seclists/Passwords/scraped-JWT-secrets.txt
+hashcat -a 0 -m 16500 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsaWNlIiwiZW1haWwiOiJhbGljZUBleGFtcGxlLmNvbSIsImlhdCI6MTc1ODE5NTYxOSwiZXhwIjoxNzU4MTk5MjE5fQ.2gIOTaxaTg31ApTAvPi7_LW8SG5QsPryi9GQThGNwOk /usr/share/seclists/Passwords/scraped-JWT-secrets.txt
 ```
 
 
