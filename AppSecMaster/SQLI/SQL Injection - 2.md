@@ -169,12 +169,14 @@ Electronics') AND SUBSTR((SELECT key_value FROM masterkeys LIMIT 1),1,1)='a' --
 
 ```
 [1]  [2]  [3]  [4]  [5]  [6]  [7]  [8]  [9]  [10]  [11]  [12]  [13]  [14]  [15]  [16]  [17]  [18]  [19]  [20]  [21]  [22]  [23]  [24]  [25]  [26]  [27]  [28]  [29]  [30]  [31]  [32]  [33]  [34]  [35]  [36]
-A     S     M   _    M     A   S    T    E     R     _     K     E     Y     {     d     1     s     c     o     v     3     r     _     t     h     3           s     3     c     r     3     t     !    }
+A     S     M   _    M     A   S    T    E     R     _     K     E     Y     {     d     1     s     c     o     v     3     r     _     t     h     3     _     s     3     c     r     3     t     !    }
                                            
 ```
 
 
-
+```
+ASM_MASTER_KEY{d1scov3r_th3_s3cr3t!}
+```
 
 
 
