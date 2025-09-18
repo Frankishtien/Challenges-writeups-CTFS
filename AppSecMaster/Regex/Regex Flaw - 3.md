@@ -29,7 +29,7 @@ pattern = r'^https:\/\/www.appsecmaster\.net$'
 - **`.`** : It means any character (except a newline).
 - **`appsecmaster\.net$`** : it must end with `appsecmaster.net`
 
-> the trick here is **`.`** we can but one letter to get : 
+> the trick here is **`.`** we can Put one letter to get the master key but : 
 
 <img width="915" height="241" alt="image" src="https://github.com/user-attachments/assets/afd34021-b492-4bda-8b6f-d1acf2b1c387" />
 
