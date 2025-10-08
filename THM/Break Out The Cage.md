@@ -258,11 +258,9 @@ THM{M37AL_0R_P3N_T35T1NG}
 
 
 
-## linpeas
 
-<img width="799" height="154" alt="image" src="https://github.com/user-attachments/assets/508bdfc7-b378-4c6d-b684-05c7fa92956b" />
 
-## found the private key i used it to get better shell 
+## using linpeas found the private key i used it to get better shell 
 
 
 <img width="1177" height="630" alt="image" src="https://github.com/user-attachments/assets/2e271d49-8f74-4bca-96c3-3e83b0f412fe" />
