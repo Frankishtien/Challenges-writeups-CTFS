@@ -341,6 +341,14 @@ PGltZyBzcmM9ImRvZ3MvPD9waHAgZWNobyByYW5kKDEsIDEwKTsgPz4uanBnIiAvPg0K
 ```
 
 
+### 🔸 Summary of the difference:
+
+| status | Implementation | Result |
+| --- | --- | --- |
+| `php://filter/resource=dog` | The code executes | You will see the output after execution
+| `php://filter/convert.base64-encode/resource=dog` | The code | You will see the code itself in Base64 | format
+
+
 > ## now try to see `index` main page
 
 ```
@@ -438,7 +446,7 @@ http://10.10.43.88/?view=dog/../../../../../../../../../var/log/apache2/access.l
 
 <img width="1496" height="822" alt="image" src="https://github.com/user-attachments/assets/da6282b0-ab1b-4b68-9ebf-8ec4a4e61ab1" />
 
-
+> notice that we can see `user agant` `Mozilla/5.0 `
 
 
 
