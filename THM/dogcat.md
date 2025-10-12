@@ -1,4 +1,4 @@
-<img width="1469" height="245" alt="image" src="https://github.com/user-attachments/assets/a779d5a9-afae-41a1-975a-241e79bbeaea" /># dogcat
+# dogcat
 
 <details>
     <summary></summary>
@@ -435,8 +435,8 @@ proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
 www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
 backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
 list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin
-irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin gnats:x:41:41:Gnats
-Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin
+irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin
+gnats:x:41:41:GnatsBug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin
 nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
 _apt:x:100:65534::/nonexistent:/usr/sbin/nologin 
 ```
