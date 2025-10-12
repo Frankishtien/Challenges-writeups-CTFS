@@ -162,7 +162,7 @@ retrieved: comte
 > ### tryed to hash password but not found crack to it so try to found another way to get in system
 
 
-## ``path traversal``
+## ``LFI``
 
 after bypass login page found :
 
