@@ -1,14 +1,13 @@
 # Eavesdropper
 
-## **`Nmap`** scan
+## `Connect to ssh`
 
 ```ruby
-namap -sCV 10.10.10.10
+chmod 600 id-rsa-1647296932800.id-rsa
+ssh -i id-rsa-1647296932800.id-rsa frank@10.10.226.16
 ```
 
-```ruby
-
-```
+<img width="1041" height="472" alt="image" src="https://github.com/user-attachments/assets/84448f96-ac05-48a2-bc42-201fcf49f342" />
 
 
 
