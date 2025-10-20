@@ -1,150 +1,105 @@
 ## Linuxcmd 101
 
 
-
 ```
 tar -xvzf linux_chal.tar.gz
 ```
 
+<img width="1204" height="673" alt="image" src="https://github.com/user-attachments/assets/cd2bce02-c2ab-4a77-8d3c-07a7faaea800" />
+
 ```
-strings ./- | egrep -i "flag|FLAG|key|secret|CTF|you|flag{" | head
-strings ./- | head -n 80
+2434237800
 ```
 
-<img width="989" height="541" alt="image" src="https://github.com/user-attachments/assets/7f97a982-d812-41fb-b3cb-981a3185e75a" />
+<img width="797" height="378" alt="image" src="https://github.com/user-attachments/assets/118d6f4f-eee5-4d7f-8a34-678b0153781a" />
+
+```
+strings ./-
+```
+
+<img width="676" height="111" alt="image" src="https://github.com/user-attachments/assets/f24e4101-4ff7-4700-be27-2f4b336d07c6" />
 
 ```
 passforasciiii
 ```
 
-
----
-
-
-<img width="822" height="589" alt="image" src="https://github.com/user-attachments/assets/7a5bf869-b042-4b79-9547-2fe547ab2b75" />
-
-
----
-
-### شوف أول بايتات كل ملف (تدور لو فيه تواقيع زي PK أو 7z أو ELF):
+<img width="1290" height="558" alt="image" src="https://github.com/user-attachments/assets/21484e7e-b405-4de4-b01e-ed7979eb2962" />
 
 ```
-for f in f*; do echo "== $f =="; xxd -l 16 "$f"; done
+file *
 ```
 
-<img width="891" height="526" alt="image" src="https://github.com/user-attachments/assets/7cbf9d61-ebde-47f8-acef-97c29791e07e" />
+<img width="1290" height="558" alt="image" src="https://github.com/user-attachments/assets/1aa326fe-a349-4860-bdfd-17f92b7f8ac2" />
 
 
 ```
 thisisasciiiiiprintapleeeee
 ```
 
-<img width="885" height="753" alt="image" src="https://github.com/user-attachments/assets/4b3663ce-f0d3-43bb-bc9e-ed7595ebfc72" />
+<img width="1312" height="499" alt="image" src="https://github.com/user-attachments/assets/27ff4272-5290-47a7-864b-9e55b8e5cb5a" />
 
----
-
-```
-# تجربة كل ملف كـ password (كل ملف فيه كلمة سر واحدة)
-for f in test*; do pw=$(cat "$f"); echo "trying: $pw"; unzip -P "$pw" next.zip && break; done
-
-```
-
-<img width="1148" height="497" alt="image" src="https://github.com/user-attachments/assets/328a5754-2d2e-4662-acc4-4d8e070aa522" />
 
 ```
 thissssisssthepasswordfornexxtfileeee
 ```
 
-
-----
-
-<img width="898" height="361" alt="image" src="https://github.com/user-attachments/assets/fce9c165-176b-4bea-8f68-03fb093bd343" />
-
-```
-strings -a -n 4 decodeme1.zip | head -n 60
-# أو افحص لو فيه base64 ظاهر
-xxd -p decodeme1.zip | tr -d '\n' | fold -w 64 | grep -E '^[A-Za-z0-9+/=]{40,}$' -m1 || echo "no obvious base64"
-
-```
-
-
-<img width="1124" height="296" alt="image" src="https://github.com/user-attachments/assets/ea88f163-1c34-457a-bddb-46fc873082c5" />
-
-
-
----------------
-
-
-```
-7z x decodeme1.zip -p$(zip2john decodeme1.zip > hash; john -w=One hash | tail -n 4 | cut -d " " -f 1 | tail -n 1)
-
-```
-
-<img width="1248" height="577" alt="image" src="https://github.com/user-attachments/assets/5a55f741-6416-4e58-ade8-8f5291bd5cc5" />
-
-
 ---
 
+```
+cat nexttocybertalents| grep cybertalents
+```
+
+<img width="1139" height="283" alt="image" src="https://github.com/user-attachments/assets/8d141a20-c417-4a46-bf7d-12c47c6309ce" />
 
 
+```
+orderby1337
+```
+
+<img width="1329" height="440" alt="image" src="https://github.com/user-attachments/assets/e658758f-515d-4316-9195-30088a9e32c5" />
+
+```
+zip2john decodeme1.zip | tee crackme 
+```
+
+```
+john crackme --wordlist one 
+```
 
 
+<img width="1261" height="300" alt="image" src="https://github.com/user-attachments/assets/f9a81345-f0b6-4aa8-958c-b6999ce585de" />
 
 
+```
+rocky
+```
+
+<img width="967" height="311" alt="image" src="https://github.com/user-attachments/assets/1c451aa0-93cb-48c4-925a-f7bef995a346" />
 
 
+```
+dXNlbWVhc3Bhc3N3b3Jk
+```
+
+<img width="1851" height="438" alt="image" src="https://github.com/user-attachments/assets/c6b2d4bd-e7f0-49ba-b9ef-7624a067fa3f" />
 
 
+```
+usemeaspassword
+```
 
-
-
-
-
-
-
+<img width="1120" height="315" alt="image" src="https://github.com/user-attachments/assets/4a2fae9c-7a62-4713-abcd-437c3f0c6e88" />
 
 
 ```
 synt{f1zcyr_yvahk_101}
 ```
 
+<img width="1566" height="401" alt="image" src="https://github.com/user-attachments/assets/a6b876e5-ebd9-4bd0-ab0e-a09d0b44e4f7" />
 
 ```
 flag{s1mple_linux_101}
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
