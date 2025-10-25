@@ -62,7 +62,7 @@ curl -s -D - \
 ```
 
 
-
+ 
 ```
 FLAG{InSiDe_ShOcK_WaVe_StAy_HoMe_StAy_SaFe}
 ```
