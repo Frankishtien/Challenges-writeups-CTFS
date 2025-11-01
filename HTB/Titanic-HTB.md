@@ -27,7 +27,8 @@ Service detection performed. Please report any incorrect results at https://nmap
 Nmap done: 1 IP address (1 host up) scanned in 22.34 seconds
 ```
 
-![image](https://github.com/user-attachments/assets/de0fc03e-a91e-445f-a93c-c33b34ed21c2)
+<img src="https://github.com/user-attachments/assets/de0fc03e-a91e-445f-a93c-c33b34ed21c2" alt="Funny Monkey GIF" style="display: block; margin: auto;">
+
 
 
 open ``/etc/hosts``  put ``titanic.htb    10.10.11.55``
