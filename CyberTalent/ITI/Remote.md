@@ -15,6 +15,8 @@ searchsploit HttpFileServer 2.3
 
 ## edit script
 
+https://github.com/thepedroalves/HFS-2.3-RCE-Exploit/blob/main/exploit.py
+
 ```
 # Exploit Title: HFS (HTTP File Server) 2.3.x - Remote Command Execution (3)
 # Google Dork: intext:"httpfileserver 2.3"
