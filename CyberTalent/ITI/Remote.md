@@ -79,11 +79,14 @@ os.system(f'nc -nlvp {lport}')
 
 ```
 
+https://vk9-sec.com/exploiting-mremoteng/
 
 
+## **`password`**
 
-
-
+```
+aw3s0m3_r3m0te_fl4g
+```
 
 
 
