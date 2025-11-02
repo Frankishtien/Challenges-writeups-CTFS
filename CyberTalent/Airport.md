@@ -1,4 +1,4 @@
-<img width="1808" height="806" alt="image" src="https://github.com/user-attachments/assets/85a76ae7-e961-4cdf-99ca-7050d94972b6" /># Airport (OSINT)
+# Airport (OSINT)
 
 <img width="1359" height="361" alt="image" src="https://github.com/user-attachments/assets/8bf9de79-04ff-4a09-8cb2-fa0d2a1aa9a7" />
 
