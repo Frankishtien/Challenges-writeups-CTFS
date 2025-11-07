@@ -34,7 +34,10 @@ print(priv[-1]%(priv[1]-1))
 
 
 
+```
+nc 0.cloud.chals.io 11902
 
+```
 
 
 ```python
