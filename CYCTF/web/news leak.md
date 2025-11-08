@@ -14,7 +14,7 @@ Accept-Encoding: gzip, deflate, br
 Content-Type: application/x-www-form-urlencoded
 Content-Length: 39
 Origin: https://cyctf-349239b6a9cd-leaks-0-0.chals.io
-Referer: https://cyctf-349239b6a9cd-leaks-0-0.chals.io/login.php
+Referer: https://cyctf-349239b6a9cd-leaks-0-0.chals.io/admin.php
 Upgrade-Insecure-Requests: 1
 Sec-Fetch-Dest: document
 Sec-Fetch-Mode: navigate
