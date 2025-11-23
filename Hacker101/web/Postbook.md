@@ -14,7 +14,7 @@
 <img width="1282" height="575" alt="image" src="https://github.com/user-attachments/assets/2932f2ba-1534-4900-8310-6658c9aea9ca" />
 
 ```
-^FLAG^de303cbf3655f9ddbe847c5-----------2ab17fc40971a9849c3906c6a48$FLAG$
+^FLAG^de303cbf3655f9ddbe847c5-----------2ab17fc4097-=--------906c6a48$FLAG$
 ```
 
 ---
@@ -30,7 +30,7 @@ user : password
 
 
 ```
-^FLAG^6ef36fe95b8e385486------------ecf04f5f228e478713e5c447205c96$FLAG$
+^FLAG^6ef36fe95b8e385486------------ecf04f5f228e-------205c96$FLAG$
 ```
 
 ---
@@ -44,7 +44,7 @@ user : password
 
 
 ```
-^FLAG^a85741ae6938470033ea96c851286df-------------7bbc946b9424$FLAG$
+^FLAG^a85741ae6938470033ea96c851286df-------------7------6b9424$FLAG$
 ```
 
 ---
@@ -62,7 +62,7 @@ user : password
 
 
 ```
-^FLAG^1deeed50f1ee9659eb0b16fb874------e0d6a0395e5567a8b5b98eafa511cd$FLAG$
+^FLAG^1deeed50f1ee9659eb0b16fb874------e0d6a0395e556---------fa511cd$FLAG$
 ```
 
 
@@ -89,7 +89,7 @@ c4ca4238a0b923820dcc509a6f75849b
 
 
 ```
-^FLAG^e378f5e5215c4017553036-------------edf4249dcad978951a2be9436cb$FLAG$
+^FLAG^e378f5e5215c4017553036-------------edf4249dcad9----------36cb$FLAG$
 ```
 
 
@@ -119,7 +119,7 @@ user : password
 
 
 ```
-^FLAG^df1fb560f3b7808a166a6edbdea48cb496f5a3d71b0ffe786b0fc3a1dfe547c9$FLAG$
+^FLAG^df1fb560f3b7808a166a6edbdea48cb496f5a3d71b0ffe786b---------c9$FLAG$
 ```
 
 
@@ -148,7 +148,7 @@ user : password
 
 
 ```
-^FLAG^06df51ceaea141a9460a-----------------4ea2eed1cdb7a51ebcc95e$FLAG$
+^FLAG^06df51ceaea141a9460a-----------------4ea2eed1---------95e$FLAG$
 ```
 
 
