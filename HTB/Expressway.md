@@ -132,7 +132,7 @@ hashcat -m 5400 -a 0 output.txt /usr/share/wordlists/rockyou.txt
 
 ```
 ssh ike@MACHINE_IP
-freakingrockstarontheroad
+
 ```
 
 <img width="1037" height="449" alt="image" src="https://github.com/user-attachments/assets/75d827f7-d625-4e86-b231-04db94945e31" />
