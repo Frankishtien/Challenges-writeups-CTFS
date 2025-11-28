@@ -308,7 +308,7 @@ sudo /usr/sbin/needrestart
 
 
 
-<img width="855" height="383" alt="image" src="https://github.com/user-attachments/assets/795c4ea7-f303-4307-b7b3-91d8a48d6ece" />
+<img width="1127" height="376" alt="image" src="https://github.com/user-attachments/assets/a192e975-44f1-40dc-9d50-92345aba9834" />
 
 
 
