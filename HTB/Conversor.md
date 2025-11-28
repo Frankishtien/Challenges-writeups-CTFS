@@ -311,7 +311,14 @@ sudo /usr/sbin/needrestart
 <img width="1127" height="376" alt="image" src="https://github.com/user-attachments/assets/a192e975-44f1-40dc-9d50-92345aba9834" />
 
 
+a summary
+-----
 
+- **Vulnerability**: Downloading a malicious library with root privileges via `needrestart`.
+
+- **Exploit**: Writing a malicious C library that executes root code.
+
+- **Root access**: By running the SUID shell (`/tmp/poc` file) it gives you root privileges.
 
 
 
