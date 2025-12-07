@@ -5,13 +5,13 @@
 
 This application has a critical information disclosure vulnerability in the restaurant details API endpoint. The vulnerability exists in
 
-```
+```php
 api/restaurants.php
 ```
 
 where the
 
-```
+```php
 getRestaurantDetails
 ```
 
@@ -19,13 +19,13 @@ function retrieves restaurant information along with all orders associated wit
 
 The problematic code fetches orders using only the
 
-```
+```php
 restaurant_id
 ```
 
 as a filter without checking if those orders belong to the authenticated user:
 
-```
+```php
 $orders = $db->query("SELECT * FROM orders WHERE restaurant_id = {$restaurant_id}");
 ```
 
