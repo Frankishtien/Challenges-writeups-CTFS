@@ -15,11 +15,15 @@ This was a web/network security challenge that involved bypassing an eBPF-bas
 
     -   The firewall filters both incoming (ingress) and outgoing (egress) traffic
 
-2.  The eBPF Firewall Rules:
+2.  The eBPF Firewall Rules: in `firwall.c`
 
     -   Blocks any TCP packet containing the substring "flag" (case-sensitive)
 
     -   Blocks any TCP packet containing the '%' character
+
+  
+    <img width="664" height="247" alt="image" src="https://github.com/user-attachments/assets/1002919e-a79c-40f3-a1d2-08931fa35805" />
+
 
     -   Rejects all fragmented IP packets
 
