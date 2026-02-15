@@ -1,4 +1,4 @@
-<img width="1227" height="425" alt="image" src="https://github.com/user-attachments/assets/0a1ffb47-4b19-49d2-8153-0e6c647241a9" /># TryHeartMe
+# TryHeartMe
 
 
 ---
