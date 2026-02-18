@@ -174,7 +174,141 @@ Nmap done: 1 IP address (1 host up) scanned in 146.15 seconds
 
 
 
+## Ftp Anonymous
 
+
+```
+ftp 192.168.92.149
+```
+
+
+<img width="1088" height="342" alt="image" src="https://github.com/user-attachments/assets/250e3b4b-de26-49ef-85b2-fd99f0a0cf62" />
+
+
+
+> ## found file called **`note`** let's get it in our machine
+
+```
+get note
+```
+
+<img width="727" height="165" alt="image" src="https://github.com/user-attachments/assets/68aa63b4-8128-4084-a94a-68011882ee7c" />
+
+<img width="977" height="139" alt="image" src="https://github.com/user-attachments/assets/06158259-66a7-4408-a063-1297e209a060" />
+
+
+```
+Elly, make sure you update the payload information. Leave it in your FTP account once your are done, John.
+```
+
+## till now we have 3 possible usernames :
+
+- harry
+- elly
+- john
+
+
+
+
+---
+
+## Smb 
+
+### since we found smb opend
+
+```
+139/tcp   open   netbios-ssn Samba smbd 4.3.9-Ubuntu (workgroup: WORKGROUP)
+```
+
+### let's enumrate some info about it 
+
+```
+enum4linux 192.168.92.149
+```
+
+### we found the version
+
+<img width="998" height="241" alt="image" src="https://github.com/user-attachments/assets/8fa3c511-f953-422c-b339-7cfe0eeeabf8" />
+
+### found aslo sharenames and comment on kathy share
+
+<img width="1026" height="562" alt="image" src="https://github.com/user-attachments/assets/dc751bf0-2245-47b8-882d-67873ba4af5c" />
+
+```ruby
+//192.168.92.149/kathy  Mapping: OK Listing: OK Writing: N/A
+//192.168.92.149/tmp    Mapping: OK Listing: OK Writing: N/A
+```
+
+<img width="1013" height="185" alt="image" src="https://github.com/user-attachments/assets/9b53ec17-a4d5-425d-bdf3-3ed6b901d576" />
+
+
+
+### weak password policy 
+
+
+<img width="1177" height="490" alt="image" src="https://github.com/user-attachments/assets/2962fd6b-1a7a-414b-8824-8c3ea758ebac" />
+
+
+### found alot of users 
+
+<img width="802" height="652" alt="image" src="https://github.com/user-attachments/assets/448bca7d-a52f-45ce-b1e2-a7d56f2e2bfe" />
+
+
+## **`let's get into kathy share`**
+
+
+```
+smbclient //192.168.92.149/kathy -N
+```
+
+#### found two directories called **`backup`** and **`kathy_staff`**
+
+<img width="1061" height="654" alt="image" src="https://github.com/user-attachments/assets/d616f49e-6462-4763-b327-fce45c8e588d" />
+
+#### in katty _staff we found another file let's get this files
+
+```
+get todo-list.txt
+```
+
+#### in backup directory we found another two files 
+
+<img width="1038" height="225" alt="image" src="https://github.com/user-attachments/assets/4d95da79-077d-4eaf-b615-469c86e6116a" />
+
+```
+get vsftpd.conf
+get wordpress-4.tar.gz
+```
+
+
+## in share **`/tmp`** found another file called `ls`
+
+<img width="980" height="400" alt="image" src="https://github.com/user-attachments/assets/53a82d04-8adb-42bc-9cb0-1bb2c28c4eaa" />
+
+
+
+## on port **`666`** found image
+
+
+```
+nc 192.168.92.149 666 > msg
+```
+
+<img width="836" height="108" alt="image" src="https://github.com/user-attachments/assets/202290a8-834d-405c-95b8-e02a1973a0a0" />
+
+```
+unzip msg
+```
+
+<img width="439" height="161" alt="image" src="https://github.com/user-attachments/assets/b8ffdceb-61de-4c90-8349-b964661244f0" />
+
+#### found cookie
+
+```
+exiftool message2.jpg
+```
+
+<img width="945" height="572" alt="image" src="https://github.com/user-attachments/assets/025f5e44-5c35-4eb8-b867-d6bbbd968319" />
 
 
 
@@ -184,25 +318,21 @@ Nmap done: 1 IP address (1 host up) scanned in 146.15 seconds
 
 
 ```
-mysql -h 192.168.92.149 -u root
+hydra -l elly -P /usr/share/wordlists/rockyou.txt ftp://192.168.92.149 
+```
+
+```
+elly : ylle
 ```
 
 
+```
+hydra -L users -e nsr ssh://192.168.15.151
+```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+```
+SHayslett : SHayslett
+```
 
 
 
