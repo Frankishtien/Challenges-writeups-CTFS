@@ -302,13 +302,112 @@ unzip msg
 
 <img width="439" height="161" alt="image" src="https://github.com/user-attachments/assets/b8ffdceb-61de-4c90-8349-b964661244f0" />
 
-#### found cookie
 
 ```
 exiftool message2.jpg
 ```
 
 <img width="945" height="572" alt="image" src="https://github.com/user-attachments/assets/025f5e44-5c35-4eb8-b867-d6bbbd968319" />
+
+
+## ON PORT **`12380`** found web page but can't find anything 
+- when go to **`/robots.txt`** it return same page i change http to **`https`** and found this
+
+<img width="882" height="118" alt="image" src="https://github.com/user-attachments/assets/bb4f21c4-2e44-469a-a2b7-66e339a6b412" />
+
+
+## **`robots.txt`**
+
+```
+User-agent: *
+Disallow: /admin112233/
+Disallow: /blogblog/
+```
+
+<img width="758" height="161" alt="image" src="https://github.com/user-attachments/assets/92f080d3-0bf6-42c1-b10d-e123242a23db" />
+
+
+## on **`/blogblog`** found wordpress website
+
+```
+https://192.168.92.149:12380/blogblog/
+```
+
+<img width="1919" height="708" alt="image" src="https://github.com/user-attachments/assets/5b686774-cf0f-4e78-a034-e8d5663f140d" />
+
+
+## Wp-scan
+
+```
+wpscan --url https://192.168.92.149:12380/blogblog/ --plugins-detection aggressive --disable-tls-checks
+```
+
+
+<img width="1320" height="434" alt="image" src="https://github.com/user-attachments/assets/8c90f08c-912d-4ebd-86e6-e9014fc91219" />
+
+## found plugin called **`advanced video`**
+
+> ### i search on it to find exploit to it and i found this 
+
+
+<img width="1256" height="154" alt="image" src="https://github.com/user-attachments/assets/9fe5a885-c140-4980-9ef8-685a0234ed64" />
+
+### [exploit_code](https://github.com/gtech/39646/blob/master/39646.py)
+
+<img width="1331" height="437" alt="image" src="https://github.com/user-attachments/assets/058324f1-fed1-442d-96fe-242c523e9e84" />
+
+> ## boom found password of **`root`** of mysql database
+
+
+```
+root : plbkac
+```
+
+
+```
+mysql -u root -p plbkac -h 192.168.92.149 --skip-ssl
+```
+
+<img width="1043" height="451" alt="image" src="https://github.com/user-attachments/assets/4732722a-1108-4c00-8acb-9c20af7cabb6" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -337,6 +436,9 @@ SHayslett : SHayslett
 
 
 
+```
+mysql -u root -pplbkac -h 192.168.92.149 --skip-ssl
+```
 
 
 
