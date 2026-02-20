@@ -222,6 +222,21 @@ elly : ylle
 ```
 
 
+## found file passwd  
+
+<img width="936" height="173" alt="image" src="https://github.com/user-attachments/assets/45cb68de-a01c-41ca-abd3-ce4a06c017e1" />
+
+## same user and pass for ssh  
+
+
+<img width="637" height="239" alt="image" src="https://github.com/user-attachments/assets/b551c767-02c7-4a11-9334-96952013c46c" />
+
+
+
+
+
+
+
 ---
 
 ## Smb 
