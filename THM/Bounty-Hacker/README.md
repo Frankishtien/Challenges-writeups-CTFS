@@ -1,4 +1,4 @@
-# Bounty Hacker
+# TryHackMe Bounty Hacker writeup
 
 ## ``Nmap Scan``
 
