@@ -1,4 +1,4 @@
-# Blaster
+# TryHackMe Blaster writeup
 
 --- 
 
