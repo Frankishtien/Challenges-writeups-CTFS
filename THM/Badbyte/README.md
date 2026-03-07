@@ -1,4 +1,4 @@
-# Badbyte
+# TryHackMe Badbyte writeup
 
 ``room link``
 
