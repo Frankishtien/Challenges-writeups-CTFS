@@ -115,7 +115,7 @@ We downloaded all the files for analysis.
   ```
 - Found `user.txt`:
   ```
-  b03d975e8c92a7c04146cfa7a5a313c7
+  b03d975e8c92a7c0414*************
   ```
 
 - Noticed `Alien_autospy.jpg`, searched online and found:
@@ -142,7 +142,7 @@ We downloaded all the files for analysis.
 
 - Found `root.txt`:
   ```
-  b53a02f55b57d4439e3341834d70c062
+  b53a02f55b57d4439e3*************
   ```
 
 - Agent R’s name:
@@ -156,5 +156,5 @@ We downloaded all the files for analysis.
 
 | Flag Type | Hash |
 |------------|----------------------------------|
-| User Flag  | `b03d975e8c92a7c04146cfa7a5a313c7` |
-| Root Flag  | `b53a02f55b57d4439e3341834d70c062` |
+| User Flag  | `b03d975e8c92a7c041**************` |
+| Root Flag  | `b53a02f55b57d4439e**************` |
