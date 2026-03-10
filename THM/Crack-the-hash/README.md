@@ -1,4 +1,4 @@
-# Crack the hash
+# TryHackMe Crack the hash Writeup
 
 https://hashcat.net/wiki/doku.php?id=example_hashes
 
