@@ -1,4 +1,4 @@
-# Corp Website
+# TryHackMe Corp Website Writeup
 
 ---
 
