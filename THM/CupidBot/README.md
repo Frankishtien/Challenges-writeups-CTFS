@@ -1,4 +1,4 @@
-# CupidBot
+# TryHackMe CupidBot Writeup
 
 
 ```
