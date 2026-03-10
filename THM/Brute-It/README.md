@@ -1,4 +1,4 @@
-# Brute It
+# TryHackMe Brute It Writeup
 
 ## ``Nmap``
 
