@@ -1,4 +1,4 @@
-# Cat Pictures 2
+# TryHackMe Cat Pictures 2 Writeup
 
 ## ``Nmap``
 
