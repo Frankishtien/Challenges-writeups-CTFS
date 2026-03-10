@@ -1,4 +1,4 @@
-# Cheese CTF 🧀
+# TryHackMe Cheese CTF 🧀 Writeup
 
 # Important Notices <!-- omit in toc -->
 
