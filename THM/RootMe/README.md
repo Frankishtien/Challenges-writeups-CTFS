@@ -149,8 +149,6 @@ python -c 'import os; os.execl("/bin/sh", "sh", "-p")'
 
 
 
-![YayMinionsGIF](https://github.com/user-attachments/assets/a3e8b787-e306-44fc-ac44-c3815498ea29)
-
 
 
 
