@@ -1,4 +1,4 @@
-# Hacker vs. Hacker
+# TryHackMe Hacker vs. Hacker Writeup
 
 
 <img width="1906" height="349" alt="image" src="https://github.com/user-attachments/assets/6cffac5d-2edd-4db9-a390-038a719b517c" />
