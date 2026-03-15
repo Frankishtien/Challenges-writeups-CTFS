@@ -1,4 +1,4 @@
-# Ignite
+# TryHackMe Ignite Writeup
 
 ## `Nmap` scan
 
