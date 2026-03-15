@@ -1,4 +1,4 @@
-# Hammer
+# TryHackMe Hammer Writeup
 
 <img width="1901" height="350" alt="image" src="https://github.com/user-attachments/assets/4c4d110f-b9a4-4298-b82b-de6509fe2dbf" />
 
