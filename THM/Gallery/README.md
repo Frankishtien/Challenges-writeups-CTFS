@@ -1,4 +1,4 @@
-# Gallery
+# TryHackMe Gallery Writeup
 
 ## **`Nmap`** Scan
 
