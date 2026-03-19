@@ -1,4 +1,4 @@
-# LazyAdmin
+# TryHackMe LazyAdmin Writeup
 
 ## Nmap scan
 
