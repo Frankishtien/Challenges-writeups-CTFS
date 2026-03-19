@@ -1,4 +1,4 @@
-# Padelify
+# TryHackMe Padelify Writeup
 
 
 
