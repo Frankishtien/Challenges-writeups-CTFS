@@ -1,4 +1,4 @@
-# Startup
+# TryHackMe Startup Writeup
 
 
 ## Nmap scan
