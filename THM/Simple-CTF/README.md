@@ -1,5 +1,5 @@
 
-# TryHackMe SimpleCTF | Capture The Flag Challenge  
+# TryHackMe SimpleCTF | Capture The Flag Challenge Writeup
 
 [TOC]  
 
