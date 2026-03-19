@@ -1,4 +1,4 @@
-# Love Letter Locker
+# TryHackMe Love Letter Locker Writeup
 
 
 ## create account and login
