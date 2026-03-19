@@ -1,4 +1,4 @@
-# Mr.Robot 
+# TryHackMe Mr.Robot Writeup
 
 
 ## nmap scan
