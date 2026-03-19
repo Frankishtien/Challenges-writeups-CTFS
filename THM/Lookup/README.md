@@ -1,4 +1,4 @@
-# Lookup (inComplete)
+# TryHackMe Lookup Writeup
 
 ```
 nmap -sCV 10.10.184.175
