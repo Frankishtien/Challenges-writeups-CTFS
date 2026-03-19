@@ -1,4 +1,4 @@
-# Ollie
+# TryHackMe Ollie Writeup
 
 ## `Nmap` scan
 
