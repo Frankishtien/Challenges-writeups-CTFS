@@ -1,4 +1,4 @@
-# Speed Chatting
+# TryHackMe Speed Chatting Writeup
 
 
 <img width="1733" height="781" alt="image" src="https://github.com/user-attachments/assets/9a72c31c-89ae-4f93-962d-15af41f5c8dc" />
