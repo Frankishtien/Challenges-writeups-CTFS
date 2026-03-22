@@ -87,7 +87,7 @@ di8rrtpci30gndif971ouhn8ks
 http://10.130.129.203/live.php?page=match.php
 ```
 
-> ## i try alot of lfi payloads but all faild but when i try this that we found in logs
+> ## i try alot of lfi payloads and waf bypasses but all faild but when i try this that we found in logs
 
 ```
 http://10.130.129.203/live.php?page=%2Fconfig%2Fapp%2Econf
