@@ -1,4 +1,4 @@
-# Tech_Supp0rt: 1
+# TryHackMe Tech_Supp0rt: 1 Writeup
 
 
 ## namp scan
