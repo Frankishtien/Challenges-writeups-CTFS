@@ -1,5 +1,10 @@
 # TryHackMe Panda King Of The Hill Writeup
 
+
+<img width="1133" height="634" alt="image" src="https://github.com/user-attachments/assets/bf4c2c9f-1fb9-477b-a3ae-e8f4ff0550eb" />
+
+
+
 ---
 
 ## Nmap Scan
