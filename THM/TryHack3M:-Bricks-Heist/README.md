@@ -1,4 +1,4 @@
-# TryHack3M: Bricks Heist
+# TryHackMe TryHack3M: Bricks Heist Writeup
 
 * ## Nmap scan
 
