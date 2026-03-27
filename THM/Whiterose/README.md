@@ -1,4 +1,4 @@
-# Whiterose
+# TryHackMe Whiterose Writeup
 
 ## namp scan
 
