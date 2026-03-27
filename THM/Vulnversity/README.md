@@ -1,4 +1,4 @@
-# Vulnversity
+# TryHackMe Vulnversity Writeup
 
 
 ## ``Nmap Scan``
