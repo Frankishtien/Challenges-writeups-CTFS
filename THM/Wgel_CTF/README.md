@@ -1,4 +1,4 @@
-# Wgel Writeup
+# TryHackMe Wgel Writeup
 
 
 -----
