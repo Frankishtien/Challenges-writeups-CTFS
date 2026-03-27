@@ -1,4 +1,4 @@
-# lo-fi
+# TryHackMe lo-fi Writeup
 
 
 ---
