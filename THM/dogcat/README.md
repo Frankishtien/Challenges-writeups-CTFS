@@ -1,4 +1,4 @@
-# dogcat
+# TryHackMe dogcat Writep
 
 <details>
     <summary></summary>
