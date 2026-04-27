@@ -1,6 +1,6 @@
-# Interpreter
+# Pterodactyl
 
-<img width="1592" height="293" alt="image" src="https://github.com/user-attachments/assets/bc3dc2c7-8afd-47bb-8cbb-44956cbc6c6c" />
+<img width="1588" height="294" alt="image" src="https://github.com/user-attachments/assets/b48fab9e-a93a-4163-ad90-d7b90c843794" />
 
 ---
 
