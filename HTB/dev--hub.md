@@ -61,7 +61,7 @@ http://devhub.htb:6274/
 systemctl list-units | grep -i mcp
 ```
 
-<img width="919" height="357" alt="image" src="https://github.com/user-attachments/assets/d8c1be03-477c-4f8b-82c0-3f33d6ae7888" />
+<img width="1292" height="134" alt="image" src="https://github.com/user-attachments/assets/f8c5fb94-b25c-441c-b089-f44cf9ef5c4d" />
 
 
 ```
@@ -69,10 +69,13 @@ cat /etc/systemd/system/opsmcp.service
 ```
 
 
-<img width="1718" height="343" alt="image" src="https://github.com/user-attachments/assets/1097b5e2-7d95-4fbd-9a18-d2dd37b5e4bf" />
+<img width="919" height="357" alt="image" src="https://github.com/user-attachments/assets/d8c1be03-477c-4f8b-82c0-3f33d6ae7888" />
 
 
 > Key finding: The service runs as root!
+
+
+
 
 
 
@@ -96,7 +99,11 @@ ss -tulpn
 ps aux | grep jupyter
 ```
 
-<img width="1702" height="262" alt="image" src="https://github.com/user-attachments/assets/576a1935-cdbb-4b42-a407-9995565d91cc" />
+
+
+<img width="1718" height="343" alt="image" src="https://github.com/user-attachments/assets/1097b5e2-7d95-4fbd-9a18-d2dd37b5e4bf" />
+
+
 
 
 > Critical discovery: JupyterLab is running with a visible token!
@@ -125,9 +132,12 @@ curl -X POST "http://localhost:8888/api/terminals?token=a7f3b2c9d8e1f4a5b6c7d8e9
 <img width="1072" height="115" alt="image" src="https://github.com/user-attachments/assets/f9626116-3b0a-4d0f-9d99-7a4b4b82ec91" />
 
 
-### Establish WebSocket Connection and do reverseshell
+### Establish WebSocket Connection 
 
-Use Python to establish a WebSocket connection to the terminal:
+- Use Python to establish a WebSocket connection to the terminal:
+- Send a reverse shell command through the WebSocket:
+
+
 
 ```python
 
