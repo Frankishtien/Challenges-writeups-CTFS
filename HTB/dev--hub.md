@@ -236,7 +236,7 @@ cat /opt/opsmcp/server.py
 ### Key findings in server.py:
 
 ```json
-VALID_API_KEY = "opsmcp_secret_key_4f5a6b7c8d9e0f1a"
+VALID_API_KEY = ******************
 
 HIDDEN_TOOLS = {
     "ops._admin_dump": {
@@ -253,9 +253,7 @@ elif tool_name == "ops._admin_dump":
 ```
 
 
-<img width="1156" height="330" alt="image" src="https://github.com/user-attachments/assets/b942247e-0c10-4dbb-92a6-ebaed41752c3" />
-
-<img width="938" height="232" alt="image" src="https://github.com/user-attachments/assets/55c76a26-45be-4e59-b457-49953f27377c" />
+<img width="1316" height="583" alt="image" src="https://github.com/user-attachments/assets/e9feae4b-d894-485e-b0ec-3f210512fc12" />
 
 
 
@@ -269,7 +267,7 @@ First, test the API with the discovered key:
 
 ```
 curl -X GET http://localhost:5000/tools/list \
-  -H "X-API-Key: opsmcp_secret_key_4f5a6b7c8d9e0f1a"
+  -H "X-API-Key: opsmcp_secret_key_*************"
 ```
 
 <img width="1688" height="114" alt="image" src="https://github.com/user-attachments/assets/c2e81a36-73e7-4a6e-892f-f8e879333c58" />
@@ -284,7 +282,7 @@ Call the hidden admin tool:
 ```
 curl -X POST http://localhost:5000/tools/call \
   -H "Content-Type: application/json" \
-  -H "X-API-Key: opsmcp_secret_key_4f5a6b7c8d9e0f1a" \
+  -H "X-API-Key: opsmcp_secret_key_************" \
   -d '{"name": "ops._admin_dump", "arguments": {"target": "ssh_keys", "confirm": true}}'
 ```
 
