@@ -265,7 +265,7 @@ ssh -o StrictHostKeyChecking=no -i steve_key steve@10.129.244.202 "id && whoami 
 ```
 ssh -o StrictHostKeyChecking=no -i steve_key steve@10.129.244.202 "sudo -l"
 ```
-
+ 
 <img width="1084" height="217" alt="image" src="https://github.com/user-attachments/assets/f688e34b-d260-4379-af29-29a884cff580" />
 
 ## Generate root SSH key:
