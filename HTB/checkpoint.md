@@ -89,6 +89,66 @@ Nmap done: 1 IP address (1 host up) scanned in 197.18 seconds
 
 
 
+```
+smbclient -L //10.129.22.67 -U "alex.turner" -p 'Checkpoint2024!'
+```
+
+
+<img width="1332" height="310" alt="image" src="https://github.com/user-attachments/assets/2cb7ae8d-9201-4471-819e-4690c2f75841" />
+
+
+```
+smbclient //10.129.22.67/SYSVOL -U alex.turner
+```
+
+```
+recurse ON
+prompt OFF
+ls
+```
+
+----
+
+## get users
+
+```
+netexec smb checkpoint.htb -u alex.turner -p 'Checkpoint2024!' --users
+```
+
+<img width="1577" height="469" alt="image" src="https://github.com/user-attachments/assets/7e88ea4b-77e7-4012-848c-af937ac2da61" />
+
+```
+netexec smb checkpoint.htb -u alex.turner -p 'Checkpoint2024!' --rid-brute
+```
+
+
+<img width="1480" height="501" alt="image" src="https://github.com/user-attachments/assets/54120fb2-628b-49de-8c65-726a56f06a71" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
