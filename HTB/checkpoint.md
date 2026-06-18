@@ -72,6 +72,11 @@ Nmap done: 1 IP address (1 host up) scanned in 105.85 seconds
 
 The machine provides initial credentials: `alex.turner / Checkpoint2024!`
 
+
+<img width="1357" height="167" alt="image" src="https://github.com/user-attachments/assets/e9a2f723-15e5-4c8f-89d4-4e3bc0a3698e" />
+
+
+
 **Command:**
 
 ```
