@@ -537,11 +537,6 @@ Get-Content C:\Users\max.palmer\Desktop\root.txt
 
 
 
-<img width="498" height="278" alt="HrithikHrithikRoshanGIF" src="https://github.com/user-attachments/assets/1d657b59-0944-4a91-816e-67c20784f7f2" />
-
-
-
-
 
 
 
