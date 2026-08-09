@@ -180,11 +180,7 @@ curl -s -X POST http://127.0.0.1:9000/jobs/export\
  -d '{"report":"x.tgz /var/automation/data; id #"}'
 ```
 
-<img width="1673" height="179" alt="image" src="https://github.com/user-attachments/assets/40c18746-6d61-49a7-8a8d-72b04380613f" />
-
-
-<img width="1685" height="171" alt="image" src="https://github.com/user-attachments/assets/57fd5b95-ee89-442d-942d-f86e091b852a" />
-
+<img width="1639" height="302" alt="image" src="https://github.com/user-attachments/assets/9a539586-0565-47b0-976f-697e2413240e" />
 
 
 
