@@ -1,4 +1,4 @@
-<img width="1660" height="248" alt="image" src="https://github.com/user-attachments/assets/0a0b768b-0687-4558-8f2f-4705d0ef5ffe" /># CryptoCabana
+# CryptoCabana
 
 
 <img width="1910" height="353" alt="image" src="https://github.com/user-attachments/assets/7f5d7c96-36f9-4582-b5d5-61fbc4442297" />
