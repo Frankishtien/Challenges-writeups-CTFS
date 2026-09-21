@@ -88,7 +88,10 @@ http://stock.nahamstore.thm/
 
 <img width="1856" height="235" alt="image" src="https://github.com/user-attachments/assets/fc3506d5-4275-4b1e-ab18-a0d125a0ac5b" />
 
+## on port 8000 found login page at `/admin` i try username and password `admin and it work`
 
+
+<img width="1919" height="487" alt="image" src="https://github.com/user-attachments/assets/4e00575f-1a3b-4f34-bc00-90583441af82" />
 
 
 
