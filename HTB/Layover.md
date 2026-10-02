@@ -148,6 +148,94 @@ It captures traffic for two minutes and looks for **HTTP POST requests**, then a
 <img width="1022" height="118" alt="image" src="https://github.com/user-attachments/assets/2388fdfe-1a69-4d5c-90d7-6a9011236a35" />
 
 
+<details>
+  <summary>explain🟠</summary>
+
+
+
+### The Core Reason
+
+It comes down to **what mode the wireless card is in** and **what the card's firmware filters out**.
+
+|Mode|What the card delivers to the OS|
+|---|---|
+|**Managed** (what `wlan2` is in)|Only frames **addressed to your MAC**, plus broadcasts/multicasts|
+|**Monitor** (what `wlan3` becomes)|**Every single frame** on the channel, regardless of destination|
+
+When `wlan2` is associated with an AP in managed mode, the card's firmware **filters out frames not addressed to it**. This is by design — in normal usage, you don't want your laptop to process every neighbor's packet. So:
+
+- If `jenny` at `10.13.37.132` sends a login POST to `portal.international.htb`, that frame is addressed to the **AP**, then relayed to the **portal server** — not to you.
+    
+- Your `wlan2` card sees the frame in the air, but the firmware says "this isn't for me" and drops it before the OS ever sees it.
+    
+- `tshark -i wlan2` therefore only captures **your own traffic** + broadcasts.
+    
+
+### 🛠️ Why Not Just Use `wlan2` in Monitor Mode?
+
+Because if you switch `wlan2` to monitor mode, **it loses its association with the AP**. That means:
+
+- ❌ You lose your IP `10.13.37.182`.
+    
+- ❌ You lose your route to `portal.international.htb`.
+    
+- ❌ You can't reach the target to exploit it.
+    
+- ❌ You can't even resolve DNS.
+    
+
+Monitor mode is a **passive listening mode** — it doesn't participate in the network at all. So if you switch `wlan2`, you can sniff but you can no longer connect.
+
+
+
+```
+                ┌─────────────────────────────────┐
+                │  HTB International WiFi (AP)     │
+                │  Channel 6, open network         │
+                └──────────────┬──────────────────┘
+                               │
+              ┌────────────────┴────────────────┐
+              │                                  │
+        ┌─────▼──────┐                    ┌──────▼──────┐
+        │  wlan2     │                    │  wlan3       │
+        │  MANAGED   │                    │  MONITOR     │
+        │            │                    │              │
+        │ - IP addr  │                    │ - No IP      │
+        │ - Connect  │                    │ - Passively  │
+        │   to AP    │                    │   listens    │
+        │ - Send/    │                    │   to ALL     │
+        │   receive  │                    │   frames     │
+        └────────────┘                    └──────────────┘
+        
+        Used for:                         Used for:
+        - Reaching portal                 - Capturing
+        - Running exploit                   OTHER clients'
+        - DNS resolution                    traffic (jenny)
+```
+
+
+
+- **`wlan2`** stays in managed mode: your working connection. You use it for everything practical.
+    
+- **`wlan3`** goes into monitor mode: a dedicated sniffer. It doesn't need an IP, it doesn't connect, it just listens.
+
+
+# how i know the channel 
+
+```
+iw dev wlan2 info
+```
+
+<img width="1087" height="275" alt="image" src="https://github.com/user-attachments/assets/d91043ea-c749-41c8-b565-61082520e1e4" />
+
+
+
+  
+</details>
+
+
+
+
 ```
 jenny : Fl1ghtDeck2026!
 ```
