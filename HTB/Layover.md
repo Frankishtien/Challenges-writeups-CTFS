@@ -334,6 +334,13 @@ SELECT * FROM htbairways_settings;
 <img width="1106" height="400" alt="image" src="https://github.com/user-attachments/assets/7a03d87f-196a-4775-a9b2-48e5f88e1027" />
 
 
+> ### Craft is a self-hosted PHP application, built on Yii 2.
+> - Yii2 has Security::encryptByKey / decryptByKey
+> - how do I run Yii's decrypt method?
+> - PHP needs to know where Yii's classes live
+> - That's what vendor/autoload.php does → require it
+> - Call decryptByKey(ciphertext, key) → plaintext
+
 ## we will use `CRAFT_SECURITY_KEY` that we found and `vendor/autoload.php` to decrypt it
 
 ```
@@ -350,6 +357,8 @@ echo \$security->decryptByKey(
 
 
 <img width="1018" height="306" alt="image" src="https://github.com/user-attachments/assets/4a334cb0-6a74-4f72-b7fb-8fca8fc82137" />
+
+
 
 
 
