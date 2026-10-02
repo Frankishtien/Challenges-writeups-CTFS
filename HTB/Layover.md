@@ -237,3 +237,46 @@ ssh aporter@10.13.37.10
 
 <img width="1113" height="358" alt="image" src="https://github.com/user-attachments/assets/9d59140c-e468-411a-a973-b8adebc562fc" />
 
+
+## find services 
+
+```
+ss -tlnp
+```
+
+<img width="1094" height="263" alt="image" src="https://github.com/user-attachments/assets/739d1b65-a7cd-467a-849f-d7fd0bca4c9a" />
+
+
+> ## Port 631 is used for the Internet Printing Protocol (IPP), which allows computers and devices to send print jobs, check printer status, and manage queues over a network.
+
+<img width="1498" height="644" alt="image" src="https://github.com/user-attachments/assets/e6d42220-d69f-4cad-887b-e17fafca1911" />
+
+
+
+## find cups version
+
+```
+cups-config --version 2>/dev/null
+```
+
+<img width="693" height="77" alt="image" src="https://github.com/user-attachments/assets/3d729d1a-9c44-4ff1-83f8-0a9b45fd898e" />
+
+
+## search for CVES 
+
+<img width="1809" height="657" alt="image" src="https://github.com/user-attachments/assets/9fdf6245-4742-44e7-bd12-137a861597b8" />
+
+
+# [CVE-2026-34990](https://github.com/predyy/CVE-2026-34990)
+
+```
+python3 poc.py
+sudo -i
+```
+
+<img width="1142" height="259" alt="image" src="https://github.com/user-attachments/assets/6201f1fc-4c45-4524-8e42-0af4e4ea5204" />
+
+
+
+
+
