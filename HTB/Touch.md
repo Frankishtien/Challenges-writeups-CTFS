@@ -38,7 +38,7 @@ Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
 
 <img width="1918" height="444" alt="image" src="https://github.com/user-attachments/assets/f1205573-0086-49db-bd67-e7a4a3fe93fa" />
 
-## found endpoint `/api` but i got `403` then i try `/api/status` 
+## found endpoint `/api` but i got `403` then i try fuzz and found `/api/status` 
 
 <img width="1222" height="296" alt="image" src="https://github.com/user-attachments/assets/b44a5569-3ade-4d6f-a0cb-b4944048f212" />
 
