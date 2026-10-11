@@ -283,7 +283,7 @@ curl -s -X POST http://<TARGET_IP>:8081/feeds/aidx \
 ```
 
 
-## trigger XXE :
+## Query XXE :
 
 
 ```
