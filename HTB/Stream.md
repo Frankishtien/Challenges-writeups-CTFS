@@ -608,6 +608,20 @@ curl -s -X POST http://$TARGET:8081/feeds/aidx \
 
 
 
+| #   | Stage                         | What we found                                                                                              |
+| --- | ----------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| 1   | Recon                         | Found `api.htb-airport.htb`, `db.htb-airport.htb`, ingest on 8081                                          |
+| 2   | Initial XXE discovery         | `<Airline>&xxe;</Airline>` → output lands in ClickHouse `partner_feed.flightleg_json`                      |
+| 3   | `svc_events` credentials      | Extracted from Spring Boot **heap dump** (`/actuator/heapdump`, 52 MB) → `<PASSWORD>`                      |
+| 4   | XXE file reads                | `/etc/passwd`, Kafka `server.properties`, `/etc/environment` — all via XXE → ClickHouse                    |
+| 5   | `svc-infra` SSH               | SASL password from Kafka config ('<PASSWORD>') reused as OS password                                       |
+| 6   | `martin_cole`                 | `su` brute-force → `tinkerbell` (rockyou) → **user flag**                                                  |
+| 7   | Root path discovery           | `/opt/ops/dlq_drainer.py` + systemd unit confirmed `User=root`                                             |
+| 8   | Kopia backup                  | Passwordless repo in `~/backups/` → restored ClickHouse logs                                               |
+| 9   | ClickHouse `default` password | Leaked in a failed `ALTER USER` error log line → `<PASSWORD>`                                              |
+| 10  | **UDF-style overwrite**       | ClickHouse `FILE` write → overwrote `/var/lib/clickhouse/user_files/aidx_quarantine.py` with reverse shell |
+| 11  | **Trigger**                   | Malformed XML → DLQ topic → drainer ran our script **as root**                                             |
+
 
 
 
