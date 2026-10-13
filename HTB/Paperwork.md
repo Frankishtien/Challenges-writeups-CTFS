@@ -1,5 +1,7 @@
 # Paperwork
 
+<img width="1587" height="277" alt="image" src="https://github.com/user-attachments/assets/5b41718d-9864-46b4-b9e8-37441958cd23" />
+
 
 
 ## nmap scan
