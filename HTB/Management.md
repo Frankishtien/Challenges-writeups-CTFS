@@ -233,7 +233,7 @@ sudo -l
 
 
 ```
-rm -rf /tmp/rflag
+
 rdiff-backup \
   --remote-schema 'sudo /usr/bin/rdiff-backup --server --restrict-path /opt/backup --restrict-mode read-only --restrict-path / --restrict-mode read-write # %s' \
   backup --include /root/root.txt --exclude '**' \
