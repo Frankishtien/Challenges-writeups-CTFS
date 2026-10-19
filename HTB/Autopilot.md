@@ -59,13 +59,13 @@ deborah.hernandez / 8F5cgp@tC8g@
 
 <img width="1919" height="448" alt="image" src="https://github.com/user-attachments/assets/76f2569f-b918-4786-b288-891154ff7dd1" />
 
-## but here it's uploaded path i checked :
+## but where it's uploaded path i checked :
 
 ```
 https://grommunio.autopilot.htb/files/index.php/apps/files/files
 ```
 
-**`and found the path `**
+**`and found the path in settings`**
 
 <img width="1916" height="580" alt="image" src="https://github.com/user-attachments/assets/958a3940-11b5-43fb-92e5-1306fdb79906" />
 
