@@ -506,7 +506,7 @@ EOF
 
 <img width="833" height="217" alt="image" src="https://github.com/user-attachments/assets/b0a4952c-a382-42ac-b697-c7c2109e7e9e" />
 
-
+## but shell disconnected so fast we still need to pivote to internal windows server
 
 
 
