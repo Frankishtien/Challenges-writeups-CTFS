@@ -14,27 +14,16 @@
 ## Table of Contents
 
 1. Machine Overview
-    
-2. Reconnaissance
-    
-3. Understanding the XFS Bridge Protocol
-    
+2. Reconnaissance  
+3. Understanding the XFS Bridge Protocol  
 4. The Web Console & Service Tool
-    
 5. Supervisor Arming
-    
 6. Defeating the Fraud Monitor
-    
 7. The Dispense Primitive
-    
 8. Full Cash-Out
-    
 9. Retrieving the Flag
-    
 10. Root Cause Analysis
-    
 11. Remediation
-    
 12. Appendix: Full Scripts
 
 
