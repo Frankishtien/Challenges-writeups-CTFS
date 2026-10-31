@@ -126,7 +126,7 @@ So the "append what it asks for" oracle won't work here — there's no `expected
 
 Standard IATA BCBP (which this parser implements) with `M` (mandatory single-leg) format code:
 
-| Field                        | Offset | Length | Your value          |
+| Field                        | Offset | Length | our value          |
 | ---------------------------- | ------ | ------ | ------------------- |
 | Format Code                  | 0      | 1      | `M`                 |
 | Number of Legs               | 1      | 1      | `1`                 |
@@ -192,9 +192,9 @@ That's 79 total. The parser's "needs ≥ 60" at item 6 is satisfied because by i
 <img width="1560" height="410" alt="image" src="https://github.com/user-attachments/assets/25192d1e-847b-4ba0-b889-12ae91fdc80a" />
 
 
-- **`audit_ref`** — the server wrote a row to `bp_scan_audit`. That means your string was parsed and **inserted into the database**. This is the table the SQLi will target.
+- **`audit_ref`** — the server wrote a row to `bp_scan_audit`. That means our string was parsed and **inserted into the database**. This is the table the SQLi will target.
     
-- **`dest: "JFK"`** — confirms the parser read your `JFK` at the "to airport" offset correctly. Your field boundaries are right.
+- **`dest: "JFK"`** — confirms the parser read our `JFK` at the "to airport" offset correctly. our field boundaries are right.
     
 - **`eligibility_token`** 
     
@@ -234,9 +234,9 @@ add ` ' ` at end we got **`500 INTERNAL SERVER ERROR`**
 
 
 
-1. **`LINE 1: ...`** — the server is echoing the SQL it tried to run. we can see the column values it extracted from your BCBP string:
+1. **`LINE 1: ...`** — the server is echoing the SQL it tried to run. we can see the column values it extracted from our BCBP string:
     
-    - `'DOE/JOHN'` — passenger name (your field, correctly parsed)
+    - `'DOE/JOHN'` — passenger name (our field, correctly parsed)
         
     - `'BA'` — operating carrier
         
