@@ -286,7 +286,9 @@ Now that we know:
 2. PostgreSQL errors are returned
     
 3. The app's DB role has `pg_execute_server_program` (we'll confirm this with the `COPY TO PROGRAM` attempt)
-    
+
+    "If the role lacked this privilege, `COPY TO PROGRAM` would return `permission denied to COPY to or from an external program`. A 200/500 with no permission error confirms the role has it."
+   
 
 we construct a payload that:
 
