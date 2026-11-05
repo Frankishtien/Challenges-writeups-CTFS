@@ -1,4 +1,4 @@
-# Bedside
+# bBedside
 
 
 <img width="1585" height="280" alt="image" src="https://github.com/user-attachments/assets/6591fc51-bd26-4590-a012-4708027f0c3a" />
@@ -247,5 +247,46 @@ The `datastore` folder is **run by the `datawrangler` container** — the same c
         
 
 **Why it works:** Same pickle deserialization flaw, different library (`torch` vs `pdfminer`). The shared `/datastore` is the bridge between the two privilege levels.
+
+
+
+```
+[External]
+   │
+   ▼
+research.bedside.htb (PDF upload)
+   │
+   ▼
+pdfminer.six pickle deserialization (CVE-2025-64512)
+   │
+   ▼
+Shell as datawrangler (inside Docker container)
+   │
+   ├─────────────────────────────────────┐
+   │                                     │
+   ▼                                     ▼
+172.17.0.1:3000 (host from container)   /datastore (shared volume)
+   │                                     │
+   ▼                                     │
+esm.sh path traversal (CVE-2025-59341)  │
+   │                                     │
+   ▼                                     │
+Read /etc/passwd → identify developer   │
+   │                                     │
+   ▼                                     │
+Steal ~/.ssh/id_rsa                     │
+   │                                     │
+   ▼                                     │
+SSH as developer → user.txt             │
+   │                                     │
+   ▼                                     │
+sudo -l → root Python trainer ──────────┘
+   │
+   ▼
+torch.load malicious .pt → root
+   │
+   ▼
+root.txt
+```
 
 
