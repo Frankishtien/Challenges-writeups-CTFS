@@ -432,7 +432,7 @@ dutyfre+    1771  ... /usr/bin/openbox ...
 - **`openbox`** — the WM that owns the keyboard shortcuts. **This is  tells us Ctrl+Alt+T will work.** Without Openbox, keyboard shortcuts do nothing; X just passes raw key events to the focused window.
     
 
-**For the writeup:** "Openbox runs as `dutyfree-kiosk` and manages the kiosk session. Openbox's default `rc.xml` binds `Ctrl+Alt+T` to `xterm`. Because the WM belongs to the kiosk user, any terminal spawned by that binding runs as `dutyfree-kiosk`."
+ "Openbox runs as `dutyfree-kiosk` and manages the kiosk session. Openbox's default `rc.xml` binds `Ctrl+Alt+T` to `xterm`. Because the WM belongs to the kiosk user, any terminal spawned by that binding runs as `dutyfree-kiosk`."
 
 
 ---
