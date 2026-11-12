@@ -9,25 +9,15 @@ The root cause lies in the `deepMerge` function:
 ```javascript
 
 function deepMerge(target, source) {
-
-  for (let key in source) {
-
-    if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
-
-      if (!target[key]) target[key] = {};
-
-      deepMerge(target[key], source[key]);  // Recursive merge, no key filtering
-
-    } else {
-
-      target[key] = source[key];  // Direct assignment, no key filtering
-
-    }
-
-  }
-
-  return target;
-
+  for (let key in source) {
+    if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+      if (!target[key]) target[key] = {};
+      deepMerge(target[key], source[key]);  // Recursive merge, no key filtering
+    } else {
+      target[key] = source[key];  // Direct assignment, no key filtering
+    }
+  }
+  return target;
 }
 
 ```
@@ -55,27 +45,16 @@ To pass the challenge, you need to modify `routes/profile.js` and add key filter
 const DANGEROUS_KEYS = ['__proto__', 'constructor', 'prototype'];
 
 function deepMerge(target, source) {
-
-  for (let key in source) {
-
-    if (DANGEROUS_KEYS.includes(key)) continue;  // Skip dangerous keys
-
-    if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
-
-      if (!target[key]) target[key] = {};
-
-      deepMerge(target[key], source[key]);
-
-    } else {
-
-      target[key] = source[key];
-
-    }
-
-  }
-
-  return target;
-
+  for (let key in source) {
+    if (DANGEROUS_KEYS.includes(key)) continue;  // Skip dangerous keys
+    if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+      if (!target[key]) target[key] = {};
+      deepMerge(target[key], source[key]);
+    } else {
+      target[key] = source[key];
+    }
+  }
+  return target;
 }
 
 ```
